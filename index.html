@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="zh-CN"><head><meta name="robots" content="noindex, nofollow"><link rel="icon" href="./favicon.ico"><script id="__gySeed">window.__GY_SEED__={"gy_tgts_v1":"{\"202606\":{\"zibo\":350000,\"dabo\":520000,\"zy_shelf\":100000,\"dy_short\":50000},\"202607\":{\"zibo\":350000,\"dabo\":0,\"zy_shelf\":100000,\"dy_short\":60000}}","gy_imp_concl":"{}","gy_candidate_change_kind":"feishu_live_sync_candidate","gy_candidate_base_business_sha256":"1FF40BE30B06AB4959A0A9F82E3F9A1B59BFA4249B8F26E8F9B635B35A6BFE54"};window.__GY_SEED_VER__="aweme_names_20260721_035730";</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="zh-CN"><head><meta name="robots" content="noindex, nofollow"><link rel="icon" href="./favicon.ico"><script id="__gySeed">window.__GY_SEED__={"gy_tgts_v1":"{\"202606\":{\"zibo\":350000,\"dabo\":520000,\"zy_shelf\":100000,\"dy_short\":50000},\"202607\":{\"zibo\":350000,\"dabo\":0,\"zy_shelf\":100000,\"dy_short\":60000}}","gy_imp_concl":"{}"};window.__GY_SEED_VER__="manual_20260709_124745";</script><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>国韵护肤 · 电商协同看板 · 数据导入版</title>
 <script>/* SheetJS */
 /*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
@@ -199,14 +199,14 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
     <div class="weekchips" id="weekchips"><span class="wchip">正在读取完整自然周…</span></div>
     <div id="dataCheck"></div>
   </div>
-  <input type="file" id="fileInput" multiple="" accept=".xlsx,.xls" style="display:none">
+  <input type="file" id="fileInput" multiple="" accept=".xlsx,.xls,.json" style="display:none">
   <button class="imp-btn" onclick="document.getElementById('fileInput').click()">选择文件</button>
 </div>
 <div class="role-tabs" id="roleTabs" style="display: flex;"><div class="role-tab on" onclick="setRole('boss')">📊 全域销售</div><div class="role-tab " onclick="setRole('ops')">🛒 电商</div><div class="role-tab " onclick="setRole('ad')">💰 投流</div><div class="role-tab " onclick="setRole('content')">📝 内容策略</div></div>
 <div class="main-wrap" id="mainWrap" style="display: block;">
   <div class="ctrls"><span class="lbl">月份</span><div class="grp" id="mg"><span class="lbl">正在读取自然月…</span></div><span class="lbl">周</span><div class="grp" id="pg"><span class="lbl">正在读取完整自然周…</span></div><span class="lbl">触点</span><div class="grp" id="cg"><button class="btn on" onclick="setC('all')">全部</button><button class="btn" onclick="setC('zibo')">🎙自播</button><button class="btn" onclick="setC('dabo')">📢达播</button><button class="btn" onclick="setC('zy_shelf')">🛒自营货架</button><button class="btn" onclick="setC('dy_short')">📹达人短视频</button></div></div>
   <div class="tgts" id="tg"><select onchange="setTgtMonth(this.value)" title="选择要设置目标的月份" style="font-size:12px;font-weight:700;color:#a9760a;border:1px solid #e0cfa0;border-radius:5px;padding:2px 4px;background:#fff;margin-right:4px;cursor:pointer"><option value="202606">6月目标</option><option value="202607" selected="">7月目标</option><option value="202608">8月目标</option><option value="202609">9月目标</option><option value="202610">10月目标</option><option value="202611">11月目标</option></select><div class="tgt"><span class="dot" style="background:#2f6fd6"></span>自播<input type="number" step="10000" value="350000" oninput="setT('zibo',this.value)"></div><div class="tgt"><span class="dot" style="background:#8e44ad"></span>达播<input type="number" step="10000" value="0" oninput="setT('dabo',this.value)"></div><div class="tgt"><span class="dot" style="background:#2e8b57"></span>自营货架<input type="number" step="10000" value="100000" oninput="setT('zy_shelf',this.value)"></div><div class="tgt"><span class="dot" style="background:#d97706"></span>达人短视频<input type="number" step="10000" value="60000" oninput="setT('dy_short',this.value)"></div><div class="tgt-tot" id="ttot">总目标 ¥51.00万</div></div>
-  <div class="rrow" id="kpi"><div class="kpi main"><div class="kl">▶ 成交 GMV</div><div class="kv">¥9346</div><div class="ks">目标 ¥6.00万 · 完成 15.6%</div><div class="pb"><div class="pf" style="width:15.57695%"></div></div><div class="dod dn">↓78.9% vs 上期</div><div class="pace">按日均 ¥1869，月末预计 ¥5.61万，达成率 93%</div><div class="chp"><div class="it"><span style="color:#2f6fd6">自播</span><div class="bar"><div class="fl" style="width:11.92846857142857%;background:#2f6fd6"></div></div>12%</div><div class="it"><span style="color:#8e44ad">达播</span><div class="bar"><div class="fl" style="width:0%;background:#8e44ad"></div></div>0%</div><div class="it"><span style="color:#2e8b57">自营货架</span><div class="bar"><div class="fl" style="width:10.31049%;background:#2e8b57"></div></div>10%</div><div class="it"><span style="color:#d97706">达人短视</span><div class="bar"><div class="fl" style="width:15.57695%;background:#d97706"></div></div>16%</div></div></div><div class="kpi"><div class="kl">净 GMV (退款后)</div><div class="kv">¥7667</div><div class="ks">成交GMV−退款金额</div><div class="dod dn">↓69.7% vs 上期</div></div><div class="kpi"><div class="kl">退款金额(支付时间)</div><div class="kv" style="color:#c0392b">¥1679</div><div class="ks">金额退货率 17.96% · 订单退货率 18.49%</div><div style="font-size:9px;color:#b3a890;margin-top:1px;line-height:1.4">退款 22 单 · 支付时间口径(金额÷成交GMV·订单÷成交单)</div><div class="dod up">↓54.7% vs 上期</div></div><div class="kpi"><div class="kl">成交订单数</div><div class="kv">119</div><div class="ks">成交笔数</div><div class="dod dn">↓50.4% vs 上期</div></div><div class="kpi"><div class="kl">成交人数</div><div class="kv">109</div><div class="ks">独立买家</div><div class="dod dn">↓51.8% vs 上期</div></div><div class="kpi"><div class="kl">客单价</div><div class="kv">¥86</div><div class="ks">GMV/人</div></div></div>
+  <div class="rrow" id="kpi"><div class="kpi main"><div class="kl">▶ 成交 GMV</div><div class="kv">¥9346</div><div class="ks">目标 ¥6.00万 · 完成 15.6%</div><div class="pb"><div class="pf" style="width:15.57695%"></div></div><div class="dod dn">较上期 下降 78.9%</div><div class="pace">按日均 ¥1869，月末预计 ¥5.61万，达成率 93%</div><div class="chp"><div class="it"><span style="color:#2f6fd6">自播</span><div class="bar"><div class="fl" style="width:11.92846857142857%;background:#2f6fd6"></div></div>12%</div><div class="it"><span style="color:#8e44ad">达播</span><div class="bar"><div class="fl" style="width:0%;background:#8e44ad"></div></div>0%</div><div class="it"><span style="color:#2e8b57">自营货架</span><div class="bar"><div class="fl" style="width:10.31049%;background:#2e8b57"></div></div>10%</div><div class="it"><span style="color:#d97706">达人短视</span><div class="bar"><div class="fl" style="width:15.57695%;background:#d97706"></div></div>16%</div></div></div><div class="kpi"><div class="kl">净 GMV (退款后)</div><div class="kv">¥7667</div><div class="ks">成交GMV−退款金额</div><div class="dod dn">较上期 下降 69.7%</div></div><div class="kpi"><div class="kl">退款金额(支付时间)</div><div class="kv" style="color:#c0392b">¥1679</div><div class="ks">金额退货率 17.96% · 订单退货率 18.49%</div><div style="font-size:9px;color:#b3a890;margin-top:1px;line-height:1.4">退款 22 单 · 支付时间口径(金额÷成交GMV·订单÷成交单)</div><div class="dod up">较上期 下降 54.7%</div></div><div class="kpi"><div class="kl">成交订单数</div><div class="kv">119</div><div class="ks">成交笔数</div><div class="dod dn">较上期 下降 50.4%</div></div><div class="kpi"><div class="kl">成交人数</div><div class="kv">109</div><div class="ks">独立买家</div><div class="dod dn">较上期 下降 51.8%</div></div><div class="kpi"><div class="kl">客单价</div><div class="kv">¥86</div><div class="ks">GMV/人</div></div></div>
   <div data-mod="mgoals" id="mgoalsMod" style="margin-bottom:10px" class="mod-hide"><div style="background:#fff;border:1px solid #ece2cf;border-radius:9px;padding:10px 14px"><div style="font-size:12px;color:#a9760a;font-weight:600;margin-bottom:8px">📅 各月目标达成一览 <span style="font-weight:400;color:#b3a890;font-size:11px">目标在上方下拉选月份填写</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12px"><span style="width:38px;font-weight:600;flex-shrink:0">6月</span><div style="flex:1;height:15px;background:#f1e9d8;border-radius:4px;overflow:hidden"><div style="width:60.5%;height:100%;background:#c0392b"></div></div><span style="width:175px;text-align:right;color:#8a7d66;flex-shrink:0">成交 ¥61.76万 / 目标 ¥102.00万</span><span style="width:46px;text-align:right;font-weight:700;color:#c0392b;flex-shrink:0">61%</span></div><div style="display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12px"><span style="width:38px;font-weight:600;flex-shrink:0">7月</span><div style="flex:1;height:15px;background:#f1e9d8;border-radius:4px;overflow:hidden"><div style="width:12.3%;height:100%;background:#c0392b"></div></div><span style="width:175px;text-align:right;color:#8a7d66;flex-shrink:0">成交 ¥6.30万 / 目标 ¥51.00万</span><span style="width:46px;text-align:right;font-weight:700;color:#c0392b;flex-shrink:0">12%</span></div></div></div>
   <div data-mod="tlsum" id="tlSum" style="margin-bottom:10px"><div style="background:#ffffff;border:1px solid #ece2cf;border-radius:9px;padding:10px 14px"><div style="font-size:12px;color:#a9760a;font-weight:600;margin-bottom:6px">💰 投流概览 · 分触点整体ROI（触点总成交 ÷ 投流消耗，含自然量）</div><table class="inv-tbl"><tbody><tr><th>触点</th><th>投流消耗</th><th>触点成交</th><th>整体ROI</th></tr><tr><td style="color:#d97706">达人短视频</td><td>¥421</td><td>¥9346</td><td style="color:#2e8b57;font-weight:600">22.20</td></tr></tbody></table></div></div>
   <div class="action-section" data-mod="live" id="liveMod"></div>
@@ -227,7 +227,7 @@ body{font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;backgr
     <div class="action-add"><input type="text" id="actInput" placeholder="输入行动项…"><input type="text" id="actProposer" placeholder="提出人" style="width:70px"><input type="text" id="actOwner" placeholder="负责人" style="width:70px"><select id="actStatus"><option value="wait">待执行</option><option value="doing">进行中</option><option value="done">已完成</option></select><input type="date" id="actDeadline" style="width:130px"><button class="add-btn" onclick="addAction()">+ 添加</button></div>
     <div style="overflow-x:auto"><table class="act-tbl" id="actTbl"><tbody><tr><th>行动项</th><th>提出人</th><th>负责人</th><th>状态</th><th>截止日期</th><th>操作</th></tr><tr><td colspan="6" style="text-align:center;color:#b3a890;padding:14px">还没有行动项，开会时在上方添加</td></tr></tbody></table></div>
   </div>
-  <div class="note" id="srcnote">数据来源与业务口径将在中央数据加载后显示。</div>
+  <div class="note" id="srcnote">数据来源：抖音电商罗盘 + 经营版商品列表（人工导出导入） + 千川API日报（投流模块） · 时间口径：周=完整自然周（可跨月）；月=自然月；跨月周会在相关两个月视图重复出现，但月总只计本月日期，因此月内周加总可不等于月总 · 业务口径：成交GMV(含平台补贴)，退款率=金额退货率(退款额÷成交GMV)·订单退货率(退款单÷成交单)，支付时间口径，净GMV=成交GMV−退款金额 · 素材身份口径（自营货架+自播视频+达人短视频；自播投流面霜/面膜互斥查看，无两账户合并视图；直播间画面单独列示且不参与视频素材分母）：推商品达人户按账户来源全部归达人素材；其余素材中，ID和创建时间均为“-”或平台标题为“AIGC动态创意视频素材集合”归AI素材；普通 .mp4 中名称含马溶/马蓉且名称日期晚于2026-07-10归自制2组（07-10不算），其余归自制1组（波波）；其他正常内容标题归达人素材；空标题或无法识别归待确认；未返回项继续按当前统一素材优先级判定，STAR/平台标签只作审计旁证且不覆盖归类 · 触点=自营/合作×载体；千川API触点按 advertiser_id/account_touchpoints 显式映射 · 已导入周期由中央数据运行时生成</div>
 </div>
 <div class="empty" id="emptyState" style="display: none;"><h2>还没有数据</h2><p>把完整批次从抖音罗盘 / 经营版导出的 xlsx 拖进上方虚线框，看板就会生成。<br>日明细进入纯自然月，完整周按周一至周日累积；跨月周会同时关联起始月和结束月。</p></div>
 <script>
@@ -420,8 +420,18 @@ function touliuChan(name){name=String(name||'');if(name.indexOf('自播')>=0)ret
 function touliuPeriod(sheets){var sh=sheets[Object.keys(sheets)[0]]||[];for(var i=0;i<sh.length;i++){var d=gyDate(sh[i]['日期']);if(d)return periodOf(d);}return '000000_wk00000000';}
 function qcHas(r,k){return r&&r[k]!=null&&r[k]!=='';}
 function qcDate(v){var d=gyDate(String(v||'').replace(/-/g,'/'));return d||String(v||'').replace(/[^0-9]/g,'').slice(0,8);}
-var QC_ACCOUNT_CHAN={'1841581240024778':'zy_shelf','1710621310336004':'zy_shelf','1841581403523785':'dy_short','1863165213655306':'dy_short','1866142023488967':'zibo','1843956002771338':'zibo','1867496463829068':'dabo','1855098207338508':'dabo','1855731657470983':'dabo'};
-function qcChan(r){return QC_ACCOUNT_CHAN[cleanApiText(r&&r.advertiser_id)]||'';}
+/* GENERATED_QIANCHUAN_ACCOUNT_REGISTRY_START: source=config/account_touchpoints.json */
+var QC_ACCOUNT_REGISTRY={"schema":"gy-qianchuan-account-registry-v1","source":"config/account_touchpoints.json","source_updated_at":"2026-07-02","updated_at":"2026-07-02","scopes":{"self_shelf":{"channel":"zy_shelf","label":"自营货架","accounts":[{"advertiser_id":"1710621310336004","name":"自营-国韵GUNYUN护肤-千川"},{"advertiser_id":"1841581240024778","name":"国韵&微甜-自营户"}]},"self_live":{"channel":"zibo","label":"自营直播","accounts":[{"advertiser_id":"1843956002771338","name":"国韵&微甜-直播账户"},{"advertiser_id":"1866142023488967","name":"国韵&微甜-面膜直播"}]},"creator_short_video":{"channel":"dy_short","label":"达人短视频","accounts":[{"advertiser_id":"1841581403523785","name":"国韵&微甜-达人户"},{"advertiser_id":"1863165213655306","name":"国韵&微甜-达人2户"}]}},"sha256":"62DF3956040809395F3798969E567E5FC2E7E903976B49DB42F85489DC0A36EB"};
+/* GENERATED_QIANCHUAN_ACCOUNT_REGISTRY_END */
+/* GENERATED_QIANCHUAN_API_NONVIDEO_CONTRACT_START: source=config/guoyun_data_completeness_contract.json */
+var QC_API_NONVIDEO_CONTRACT={"schema":"gy-qianchuan-browser-api-nonvideo-contract-v1","source":"config/guoyun_data_completeness_contract.json","source_schema":"gy-data-completeness-contract-v1","source_version":"2026-07-28.1","room_map_source":"config/material_identity_self_live.json","scopes":{"self_shelf":{"required_api_source_specs":["account_daily","product_daily","ad_daily","material_image_daily"],"required_console_source_specs":["material_video_daily","platform_material_labels"]},"self_live":{"required_api_source_specs":["live_plan_anchors","authorized_aweme_anchor_bridge","live_room_daily","live_other_daily"],"required_console_source_specs":["material_video_daily","platform_material_labels"]},"creator_short_video":{"required_api_source_specs":["account_daily","product_daily","ad_daily","material_image_daily"],"required_console_source_specs":["material_video_daily","platform_material_labels"]}},"self_live_room_map":{"1843956002771338":"面霜正装","1866142023488967":"面膜"},"sha256":"9535C10584720721891BFD5DDB29096B089D05960A41F9F0184E7F03F59755F6"};
+/* GENERATED_QIANCHUAN_API_NONVIDEO_CONTRACT_END */
+/* GENERATED_QIANCHUAN_MATERIAL_IDENTITY_CONTRACT_START: source=config/material_identity_*.json */
+var QC_MATERIAL_IDENTITY_CONTRACT={"schema":"gy-qianchuan-browser-material-identity-contract-v1","sources":{"self_live":"config/material_identity_self_live.json","self_shelf":"config/material_identity_self_shelf.json","creator_short_video":"config/material_identity_creator_short_video.json"},"model":"unified_material_identity_v1","config_schema_version":5,"buckets":["AI素材","自制1组","自制2组","达人素材","待确认"],"stored_fields":["身份","分类规则ID","身份报警"],"scope_config_sha256":{"self_live":"F1ED10AA76DAAD5D5DE2AC6CAF6AE24D5459980D8654F2DDDFFDB0220114FDAA","self_shelf":"9FCED189869D144C7FCF437251CD854580EA804D3CA2AA27471E9F3F7B3A5098","creator_short_video":"769FCE92A36B3CC315EC7E6E9CFDE1E10EA160044538DAED6E986B2A5D5581EB"},"sha256":"541AD1CCB674EC56553B77D16E0FF10F0EA89434A9086ECF6163B18EE5009D5C"};
+/* GENERATED_QIANCHUAN_MATERIAL_IDENTITY_CONTRACT_END */
+var QC_SCOPE_CHANNEL={self_shelf:'zy_shelf',self_live:'zibo',creator_short_video:'dy_short',creator_live:'dabo'};
+var QC_ACCOUNT_INDEX={};Object.keys(QC_ACCOUNT_REGISTRY.scopes).forEach(function(sc){var cfg=QC_ACCOUNT_REGISTRY.scopes[sc];(cfg.accounts||[]).forEach(function(a){QC_ACCOUNT_INDEX[String(a.advertiser_id)]={scope:sc,channel:cfg.channel,name:String(a.name||'')};});});
+function qcChan(r,bundle){var id=cleanApiText(r&&r.advertiser_id),hit=QC_ACCOUNT_INDEX[id];return (hit&&hit.channel)||QC_SCOPE_CHANNEL[String(bundle&&bundle.scope||'')]||cleanApiText(r&&r.channel);}
 var QC_PRODUCT_ALIAS={'3724828755085099401':'面霜正装','3775307299539780019':'面霜中样','3806796676988010635':'冰感面膜'};
 function cleanApiText(v){var s=S(v);return (!s||/^null$/i.test(s)||/^undefined$/i.test(s)||s==='-')?'':s;}
 function normTouliuProductName(name,id){var pid=cleanApiText(id),nm=cleanApiText(name);if(QC_PRODUCT_ALIAS[pid])return QC_PRODUCT_ALIAS[pid];if(QC_PRODUCT_ALIAS[nm])return QC_PRODUCT_ALIAS[nm];if(/^\d{12,}$/.test(nm))return '';if(nm.indexOf('红鹤')>=0)return '面霜正装';if(nm.indexOf('多维修护')>=0||nm.indexOf('中样')>=0||nm.indexOf('小样')>=0)return '面霜中样';if(nm.indexOf('冰感')>=0)return '冰感面膜';return nm;}
@@ -446,8 +456,91 @@ function qcCopyIdentity(row,r){
   if(hv===true||/^(true|1|是|yes)$/i.test(hs)||row['报警类型'])row['身份报警']='是';
   return row;
 }
-function qianchuanPayloads(bundle,name){var facts=(bundle&&bundle.facts)||{},g={},bundleScope=cleanApiText(bundle&&bundle.scope),bundleWindow=(bundle&&bundle.window)||{},planWindow=(bundle&&bundle.plan_window_reconciliation)||{},platformValidation=(bundle&&bundle.material_identity_summary&&bundle.material_identity_summary.platform_validation)||null,planByAccount={};(planWindow.accounts||[]).forEach(function(x){var aid=cleanApiText(x&&x.advertiser_id);if(aid)planByAccount[aid]=x;});var hasLiveDaily=Object.prototype.hasOwnProperty.call(facts,'live_daily')&&Array.isArray(facts.live_daily),liveRows=hasLiveDaily?facts.live_daily:[],hasMaterialDaily=Object.prototype.hasOwnProperty.call(facts,'material_daily')&&Array.isArray(facts.material_daily),videoRows=hasMaterialDaily?facts.material_daily:[],hasOtherDaily=Object.prototype.hasOwnProperty.call(facts,'other_daily')&&Array.isArray(facts.other_daily),otherRows=hasOtherDaily?facts.other_daily:[],liveAccounts={};(facts.account_daily||[]).forEach(function(r){var aid=cleanApiText(r&&r.advertiser_id);if(aid)liveAccounts[aid]=1;});var allStatuses=(bundle&&bundle.statuses)||[],liveStatuses=allStatuses.filter(function(s){return cleanApiText(s&&s.spec)==='live_room_daily';}),videoStatuses=allStatuses.filter(function(s){return cleanApiText(s&&s.spec)==='live_video_daily';}),otherStatuses=allStatuses.filter(function(s){return cleanApiText(s&&s.spec)==='live_other_daily';}),liveStatusAccounts={},videoStatusAccounts={},otherStatusAccounts={};liveStatuses.forEach(function(s){var aid=cleanApiText(s&&s.advertiser_id);if(aid)liveStatusAccounts[aid]=s;});videoStatuses.forEach(function(s){var aid=cleanApiText(s&&s.advertiser_id);if(aid)videoStatusAccounts[aid]=s;});otherStatuses.forEach(function(s){var aid=cleanApiText(s&&s.advertiser_id);if(aid)otherStatusAccounts[aid]=s;});function reportStatusOk(s){if(!s||cleanApiText(s.status)!=='ok')return false;var ex=num(s.subcalls_expected),done=num(s.subcalls_completed);return ex>0&&done===ex;}function accountReturnState(rows,statusByAccount,fieldPresent,aid){if(!fieldPresent)return 'missing';if(rows.some(function(r){return cleanApiText(r&&r.advertiser_id)===aid;}))return 'returned';return reportStatusOk(statusByAccount[aid])?'returned_zero':'missing';}var liveReturnByAccount={},videoReturnByAccount={},otherReturnByAccount={};Object.keys(liveAccounts).forEach(function(aid){liveReturnByAccount[aid]=accountReturnState(liveRows,liveStatusAccounts,hasLiveDaily,aid);videoReturnByAccount[aid]=accountReturnState(videoRows,videoStatusAccounts,hasMaterialDaily,aid);otherReturnByAccount[aid]=accountReturnState(otherRows,otherStatusAccounts,hasOtherDaily,aid);});function trace(row,r){row['广告账户ID']=cleanApiText(r.advertiser_id);row['广告账户名称']=cleanApiText(r.account_name);return row;}function platformTrace(row){var p=platformValidation;if(!p||typeof p!=='object'){row['平台校验提供状态']='missing';return row;}row['平台校验提供状态']='provided';if(qcHas(p,'identity_label_coverage_ratio'))row['平台身份标签覆盖率']=num(p.identity_label_coverage_ratio);if(qcHas(p,'metadata_coverage_ratio'))row['平台元数据覆盖率']=num(p.metadata_coverage_ratio);if(qcHas(p,'current_materials'))row['平台当前素材数']=num(p.current_materials);if(qcHas(p,'identity_label_matched_materials'))row['平台身份标签命中数']=num(p.identity_label_matched_materials);if(qcHas(p,'matched_materials'))row['平台元数据命中数']=num(p.matched_materials);var w=p.source_window||{};row['平台快照起始日']=cleanApiText(w.start);row['平台快照结束日']=cleanApiText(w.end);if(qcHas(p,'snapshot_lag_days'))row['平台快照滞后天数']=num(p.snapshot_lag_days);row['平台快照新鲜度']=cleanApiText(p.freshness);row['平台校验状态']=cleanApiText(p.status);return row;}function planTrace(row,r){var aid=cleanApiText(r&&r.advertiser_id),p=planByAccount[aid]||null,d=p&&p.delta,authority=cleanApiText(planWindow.authority),trusted=authority==='qianchuan_uni_promotion_list_LIVE_PROM_GOODS'&&!!p,deltaComplete=!!(d&&qcHas(d,'cost')&&qcHas(d,'gmv')&&qcHas(d,'orders')),ok=trusted&&p.ok===true&&deltaComplete&&num(d.cost)===0&&num(d.gmv)===0&&num(d.orders)===0,otherState=otherReturnByAccount[aid]||'missing';row['独立计划窗口对账']=trusted?(ok?'通过':'未通过'):'未提供';row['独立计划窗口']=[cleanApiText(bundleWindow.start),cleanApiText(bundleWindow.end)].filter(Boolean).join('–');row['独立计划窗口权威']=authority;row['视频素材返回状态']=videoReturnByAccount[aid]||'missing';row['直播直投账户返回状态']=liveReturnByAccount[aid]||'missing';row['其他创意返回状态']=otherState;if(otherState!=='missing'){if(qcHas(r,'other_gmv'))row['其他创意成交金额']=num(r.other_gmv);if(qcHas(r,'other_orders'))row['其他创意成交订单数']=num(r.other_orders);if(qcHas(r,'other_row_count'))row['其他创意行数']=num(r.other_row_count);}if(d){if(qcHas(d,'cost'))row['计划对账消耗差额']=num(d.cost);if(qcHas(d,'gmv'))row['计划对账成交差额']=num(d.gmv);if(qcHas(d,'orders'))row['计划对账订单差额']=num(d.orders);}return platformTrace(row);}function directTrace(row,r,state){trace(row,r);row['直播间ID']=cleanApiText(r.anchor_id||r.room_id);row['直播间名称']=cleanApiText(r.room||r.room_name||r.anchor_name);row['直播场次ID']=cleanApiText(r.show_id||r.anchor_show_id||r.room_show_id);var fp=r&&r.filter_partitions;row['筛选分区']=Array.isArray(fp)?JSON.stringify(fp):cleanApiText(fp);row['直播直投返回状态']=state==='returned_zero'?'已返回0':'已返回';row['直播直投真零']=state==='returned_zero'?'是':'否';row['30日结算已返回']=qcHas(r,'settle_30d_amount')?'是':'否';return row;}(facts.account_daily||[]).forEach(function(r){var d=qcDate(r.date),chan=qcChan(r);if(!/^\d{8}$/.test(d)||!chan)return;if(bundleScope==='self_live'){var row=planTrace(trace(qcMetricRow(r,d),r),r);qcAdd(g,chan,'acct','rng'+d+'_'+d,row,'千川API直播账户总盘');}else{var types=chan==='dy_short'?['prod','video','daren']:['prod','video','car'];types.forEach(function(type){qcEnsure(g,chan,type,'rng'+d+'_'+d,qcSheet(type));});}});var liveFactDays={};liveRows.forEach(function(r){var d=qcDate(r.date),chan=qcChan(r),aid=cleanApiText(r.advertiser_id);if(bundleScope!=='self_live'||!/^\d{8}$/.test(d)||!chan||!aid)return;liveFactDays[aid+'|'+d]=1;var row=directTrace(qcMetricRow(r,d),r,'returned');qcAdd(g,chan,'direct','rng'+d+'_'+d,row,'千川API直播间画面直投');});if(bundleScope==='self_live'){var zeroSeen={},roomMap=(bundle&&bundle.advertiser_room_map)||{};(facts.account_daily||[]).forEach(function(r){var d=qcDate(r.date),chan=qcChan(r),aid=cleanApiText(r.advertiser_id),zk=aid+'|'+d,state=liveReturnByAccount[aid]||'missing';if(!/^\d{8}$/.test(d)||!chan||!aid||state==='missing'||liveFactDays[zk]||zeroSeen[zk])return;zeroSeen[zk]=1;var zr=directTrace(qcMetricRow({},d),r,'returned_zero');zr['直播间ID']='__RETURNED_ZERO__';zr['直播间名称']=cleanApiText(roomMap[aid]||r.room||r.room_name);zr['直播场次ID']='';zr['筛选分区']='[]';qcAdd(g,chan,'direct','rng'+d+'_'+d,zr,'千川API直播间画面直投');});}(facts.product_daily||[]).forEach(function(r){var d=qcDate(r.date),chan=qcChan(r);if(!/^\d{8}$/.test(d)||!chan)return;var row=trace(qcMetricRow(r,d),r),pid=cleanApiText(r.product_id||r.qianchuan_product_id);row['商品ID']=pid;row['商品名称']=normTouliuProductName(r.product_name,pid)||'未识别商品';qcAdd(g,chan,'prod','rng'+d+'_'+d,row,'千川API商品成交');});(facts.material_daily||[]).forEach(function(r){var d=qcDate(r.date),chan=qcChan(r);if(!/^\d{8}$/.test(d)||!chan)return;var mt=S(r.material_type).toLowerCase(),type=(mt==='image')?'car':'video';var row=trace(qcMetricRow(r,d),r);row['素材ID']=S(r.material_id)||S(r.ad_id)||S(r.material_name)||'未识别素材';row['素材创建时间']=S(r.material_upload_time);row['30日结算已返回']=qcHas(r,'settle_30d_amount')?'是':'否';if(type==='car'){row['图片名称']=S(r.material_name)||row['素材ID'];}else{row['素材视频名称']=S(r.material_name)||row['素材ID'];row['视频完播率']=num(r.video_finish_rate);if(qcHas(r,'video_3s_rate'))row['3秒播放率']=num(r.video_3s_rate);qcCopyIdentity(row,r);}qcAdd(g,chan,type,'rng'+d+'_'+d,row,qcSheet(type));});(facts.daren_daily||[]).forEach(function(r){var d=qcDate(r.date),chan=qcChan(r);if(!/^\d{8}$/.test(d)||chan!=='dy_short')return;var dn=cleanApiText(r.douyin_name||r.anchor_name||r.aweme_name),di=cleanApiText(r.douyin_id||r.anchor_id||r.aweme_id);if(!dn||!di)return;var row=trace(qcMetricRow(r,d),r);row['抖音号名称']=dn;row['抖音号ID']=di;qcAdd(g,chan,'daren','rng'+d+'_'+d,row,'千川API抖音号');});return Object.keys(g).sort().map(function(k){var x=g[k],s={};s[x.sheet]=x.rows;return {key:'tlapi::'+x.chan+'::'+x.type+'::'+x.period,payload:{sheets:s,_tl:{chan:x.chan,type:x.type,period:x.period,start:x.period.slice(3,11),end:x.period.slice(12,20),scope:cleanApiText(bundle&&bundle.scope),source:'qianchuan_api',source_window:(bundle&&bundle.window)||{},file:name||''}}};});}
-function selfLiveAccountKey(r){var aid=S(r&&r['广告账户ID']).trim(),txt=[S(r&&r['广告账户名称']),S(r&&r['直播间名称'])].join(' ');if(txt.indexOf('面膜')>=0||aid==='1866142023488967')return 'mask';if(txt.indexOf('面霜')>=0||aid==='1843956002771338')return 'cream';return '';}
+function qcHydrateCompactIdentity(r){
+  if(!r||!S(r['身份']).trim()||!S(r['分类规则ID']).trim()||S(r['判定依据']).trim())return r;
+  var api=typeof globalThis!=='undefined'?globalThis.GuoyunUnifiedMaterialIdentity:null;
+  var aid=S(r['广告账户ID']).trim(),hit=QC_ACCOUNT_INDEX[aid],scope=hit&&hit.scope;
+  function failClosed(code){
+    var prior=S(r['身份']).trim();
+    r['身份原值']=prior;
+    r['身份']='待确认';
+    r['身份一级']='待确认';
+    r['证据级别']='待确认';
+    r['判定依据']='精简身份合同运行时校验失败：'+code;
+    r['身份报警']='是';
+    var alerts=S(r['报警类型']).split(/[|｜,，;；]+/).map(function(x){return x.trim();}).filter(Boolean);
+    if(alerts.indexOf(code)<0)alerts.push(code);
+    r['报警类型']=alerts.join(',');
+    return r;
+  }
+  if(!api||typeof api.assertCompactMaterialized!=='function'||typeof api.toDashboardFields!=='function')return failClosed('identity_runtime_helper_missing');
+  if(!scope)return failClosed('identity_runtime_scope_missing');
+  try{
+    var full=api.toDashboardFields(api.assertCompactMaterialized(scope,r),{compact:false});
+    Object.keys(full).forEach(function(k){r[k]=full[k];});
+    return r;
+  }catch(e){
+    return failClosed((e&&e.code)||'identity_runtime_contract_invalid');
+  }
+}
+function qcIsPendingSelfLiveHybridBundle(bundle){return !!(bundle&&bundle.scope==='self_live'&&bundle.complete===true&&bundle.summary&&bundle.summary.account_daily_source==='live_direct_plus_other_conversion'&&bundle.summary.source_reconciled===false&&bundle.summary.reconciliation_status==='pending_console_video_merge'&&bundle.plan_window_reconciliation&&bundle.plan_window_reconciliation.reconciliation_status==='pending_console_video_merge');}
+function qcPendingSelfLiveHybridRuntimeAllowed(){return typeof globalThis!=='undefined'&&globalThis.__GY_QIANCHUAN_PENDING_SELF_LIVE_IMPORT__==='node_hybrid_reconciliation';}
+function qianchuanPayloads(bundle,name){
+  if(qcIsPendingSelfLiveHybridBundle(bundle)&&!qcPendingSelfLiveHybridRuntimeAllowed())qcFail('source_contract_violation','pending_console_video_merge_requires_node_hybrid_reconciliation',{file:name||'',scope:String(bundle&&bundle.scope||''),reconciliation_status:'pending_console_video_merge'});
+  var apiNonVideoContract=qcApiNonVideoContract(bundle,name);
+  if(apiNonVideoContract)qcValidateApiNonVideoBundle(bundle,name,apiNonVideoContract);
+  var facts=(bundle&&bundle.facts)||{},g={},bundleScope=cleanApiText(bundle&&bundle.scope),expectedSelfLiveAccountIds=["1843956002771338","1866142023488967"],roomMap=(bundle&&bundle.advertiser_room_map)||{},bundleWindow=(bundle&&bundle.window)||{},planWindow=(bundle&&bundle.plan_window_reconciliation)||{},platformValidation=(bundle&&bundle.material_identity_summary&&bundle.material_identity_summary.platform_validation)||null,planByAccount={};(planWindow.accounts||[]).forEach(function(x){var aid=cleanApiText(x&&x.advertiser_id);if(aid)planByAccount[aid]=x;});var hasLiveDaily=Object.prototype.hasOwnProperty.call(facts,'live_daily')&&Array.isArray(facts.live_daily),liveRows=hasLiveDaily?facts.live_daily:[],hasMaterialDaily=Object.prototype.hasOwnProperty.call(facts,'material_daily')&&Array.isArray(facts.material_daily),videoRows=hasMaterialDaily?facts.material_daily:[],hasOtherDaily=Object.prototype.hasOwnProperty.call(facts,'other_daily')&&Array.isArray(facts.other_daily),otherRows=hasOtherDaily?facts.other_daily:[],liveAccounts={};(facts.account_daily||[]).forEach(function(r){var aid=cleanApiText(r&&r.advertiser_id);if(aid)liveAccounts[aid]=1;});var allStatuses=(bundle&&bundle.statuses)||[],liveStatuses=allStatuses.filter(function(s){return cleanApiText(s&&s.spec)==='live_room_daily';}),videoStatuses=allStatuses.filter(function(s){return cleanApiText(s&&s.spec)==='live_video_daily';}),otherStatuses=allStatuses.filter(function(s){return cleanApiText(s&&s.spec)==='live_other_daily';}),liveStatusAccounts={},videoStatusAccounts={},otherStatusAccounts={};liveStatuses.forEach(function(s){var aid=cleanApiText(s&&s.advertiser_id);if(aid)liveStatusAccounts[aid]=s;});videoStatuses.forEach(function(s){var aid=cleanApiText(s&&s.advertiser_id);if(aid)videoStatusAccounts[aid]=s;});otherStatuses.forEach(function(s){var aid=cleanApiText(s&&s.advertiser_id);if(aid)otherStatusAccounts[aid]=s;});function reportStatusOk(s){if(!s||cleanApiText(s.status)!=='ok')return false;var ex=num(s.subcalls_expected),done=num(s.subcalls_completed);return ex>0&&done===ex;}function accountReturnState(rows,statusByAccount,fieldPresent,aid){if(!fieldPresent)return 'missing';if(rows.some(function(r){return cleanApiText(r&&r.advertiser_id)===aid;}))return 'returned';return reportStatusOk(statusByAccount[aid])?'returned_zero':'missing';}var liveReturnByAccount={},videoReturnByAccount={},otherReturnByAccount={};Object.keys(liveAccounts).forEach(function(aid){liveReturnByAccount[aid]=accountReturnState(liveRows,liveStatusAccounts,hasLiveDaily,aid);videoReturnByAccount[aid]=accountReturnState(videoRows,videoStatusAccounts,hasMaterialDaily,aid);otherReturnByAccount[aid]=accountReturnState(otherRows,otherStatusAccounts,hasOtherDaily,aid);});
+  function trace(row,r){var aid=cleanApiText(r.advertiser_id);row['广告账户ID']=aid;row['广告账户名称']=cleanApiText(r.account_name);if(bundleScope==='self_live')row['直播间名称']=cleanApiText(roomMap[aid]||r.room||r.room_name);return row;}
+  function platformTrace(row){var p=platformValidation;if(!p||typeof p!=='object'){row['平台校验提供状态']='missing';return row;}row['平台校验提供状态']='provided';if(qcHas(p,'identity_label_coverage_ratio'))row['平台身份标签覆盖率']=num(p.identity_label_coverage_ratio);if(qcHas(p,'metadata_coverage_ratio'))row['平台元数据覆盖率']=num(p.metadata_coverage_ratio);if(qcHas(p,'current_materials'))row['平台当前素材数']=num(p.current_materials);if(qcHas(p,'identity_label_matched_materials'))row['平台身份标签命中数']=num(p.identity_label_matched_materials);if(qcHas(p,'matched_materials'))row['平台元数据命中数']=num(p.matched_materials);var w=p.source_window||{};row['平台快照起始日']=cleanApiText(w.start);row['平台快照结束日']=cleanApiText(w.end);if(qcHas(p,'snapshot_lag_days'))row['平台快照滞后天数']=num(p.snapshot_lag_days);row['平台快照新鲜度']=cleanApiText(p.freshness);row['平台校验状态']=cleanApiText(p.status);return row;}
+  function planTrace(row,r){var aid=cleanApiText(r&&r.advertiser_id),p=planByAccount[aid]||null,d=p&&p.delta,authority=cleanApiText(planWindow.authority),trusted=authority==='qianchuan_uni_promotion_list_LIVE_PROM_GOODS'&&!!p,deltaComplete=!!(d&&qcHas(d,'cost')&&qcHas(d,'gmv')&&qcHas(d,'orders')),ok=trusted&&p.ok===true&&deltaComplete&&num(d.cost)===0&&num(d.gmv)===0&&num(d.orders)===0,otherState=otherReturnByAccount[aid]||'missing';row['独立计划窗口对账']=trusted?(ok?'通过':'未通过'):'未提供';row['独立计划窗口']=[cleanApiText(bundleWindow.start),cleanApiText(bundleWindow.end)].filter(Boolean).join('–');row['独立计划窗口权威']=authority;row['视频素材返回状态']=videoReturnByAccount[aid]||'missing';row['直播直投账户返回状态']=liveReturnByAccount[aid]||'missing';row['其他创意返回状态']=otherState;if(otherState!=='missing'){if(qcHas(r,'other_gmv'))row['其他创意成交金额']=num(r.other_gmv);if(qcHas(r,'other_orders'))row['其他创意成交订单数']=num(r.other_orders);if(qcHas(r,'other_row_count'))row['其他创意行数']=num(r.other_row_count);}if(d){if(qcHas(d,'cost'))row['计划对账消耗差额']=num(d.cost);if(qcHas(d,'gmv'))row['计划对账成交差额']=num(d.gmv);if(qcHas(d,'orders'))row['计划对账订单差额']=num(d.orders);}return platformTrace(row);}
+  function directTrace(row,r,state){trace(row,r);row['直播间ID']=cleanApiText(r.anchor_id||r.room_id);row['直播间名称']=cleanApiText(r.room||r.room_name||r.anchor_name);row['直播场次ID']=cleanApiText(r.show_id||r.anchor_show_id||r.room_show_id);var fp=r&&r.filter_partitions;row['筛选分区']=Array.isArray(fp)?JSON.stringify(fp):cleanApiText(fp);row['直播直投返回状态']=state==='returned_zero'?'已返回0':'已返回';row['直播直投真零']=state==='returned_zero'?'是':'否';row['30日结算已返回']=qcHas(r,'settle_30d_amount')?'是':'否';return row;}
+  if(bundleScope==='self_live'){var actualSelfLiveRoomIds=Object.keys(roomMap).sort();if(JSON.stringify(actualSelfLiveRoomIds)!==JSON.stringify(expectedSelfLiveAccountIds))throw new Error('account_scope_drift: self_live_room_map_keyset_mismatch');var selfLiveRoomRoles={};expectedSelfLiveAccountIds.forEach(function(aid){var label=cleanApiText(roomMap[aid]),role=label.indexOf('面膜')>=0?'mask':(label.indexOf('面霜')>=0?'cream':'');if(!role||selfLiveRoomRoles[role])throw new Error('account_scope_drift: self_live_room_label_invalid');selfLiveRoomRoles[role]=aid;});if(!selfLiveRoomRoles.mask||!selfLiveRoomRoles.cream)throw new Error('account_scope_drift: self_live_room_label_incomplete');}(facts.account_daily||[]).forEach(function(r){
+    var d=qcDate(r.date),chan=qcChan(r,bundle);if(!/^\d{8}$/.test(d)||!chan)return;
+    if(bundleScope==='self_live'){var row=planTrace(trace(qcMetricRow(r,d),r),r);qcAdd(g,chan,'acct','rng'+d+'_'+d,row,'千川API直播账户总盘');}else{var ownedTypes=apiNonVideoContract?(bundleScope==='creator_short_video'?['prod','car','daren']:['prod','car']):['prod','video','car'];ownedTypes.forEach(function(type){qcEnsure(g,chan,type,'rng'+d+'_'+d,qcSheet(type));});}
+  });
+  var liveFactDays={};liveRows.forEach(function(r){
+    var d=qcDate(r.date),chan=qcChan(r,bundle),aid=cleanApiText(r.advertiser_id);if(bundleScope!=='self_live'||!/^\d{8}$/.test(d)||!chan||!aid)return;liveFactDays[aid+'|'+d]=1;
+    var row=directTrace(qcMetricRow(r,d),r,'returned');qcAdd(g,chan,'direct','rng'+d+'_'+d,row,'千川API直播间画面直投');
+  });
+  if(bundleScope==='self_live'){var zeroSeen={};(facts.account_daily||[]).forEach(function(r){var d=qcDate(r.date),chan=qcChan(r,bundle),aid=cleanApiText(r.advertiser_id),zk=aid+'|'+d,state=liveReturnByAccount[aid]||'missing';if(!/^\d{8}$/.test(d)||!chan||!aid||state==='missing'||liveFactDays[zk]||zeroSeen[zk])return;zeroSeen[zk]=1;var zr=directTrace(qcMetricRow({},d),r,'returned_zero');zr['直播间ID']='__RETURNED_ZERO__';zr['直播间名称']=cleanApiText(roomMap[aid]||r.room||r.room_name);zr['直播场次ID']='';zr['筛选分区']='[]';qcAdd(g,chan,'direct','rng'+d+'_'+d,zr,'千川API直播间画面直投');});}
+  (facts.product_daily||[]).forEach(function(r){
+    var d=qcDate(r.date),chan=qcChan(r,bundle);if(!/^\d{8}$/.test(d)||!chan)return;
+    var row=trace(qcMetricRow(r,d),r),pid=cleanApiText(r.product_id||r.qianchuan_product_id);
+    row['商品ID']=pid;row['商品名称']=normTouliuProductName(r.product_name,pid)||'未识别商品';
+    qcAdd(g,chan,'prod','rng'+d+'_'+d,row,'千川API商品成交');
+  });
+  (facts.material_daily||[]).forEach(function(r){
+    var d=qcDate(r.date),chan=qcChan(r,bundle);if(!/^\d{8}$/.test(d)||!chan)return;
+    var mt=S(r.material_type).toLowerCase(),type=(mt==='image')?'car':'video';
+    var row=trace(qcMetricRow(r,d),r);
+    row['素材ID']=S(r.material_id)||S(r.ad_id)||S(r.material_name)||'未识别素材';
+    row['素材创建时间']=S(r.material_upload_time);
+    row['30日结算已返回']=qcHas(r,'settle_30d_amount')?'是':'否';
+    if(type==='car'){
+      row['图片名称']=S(r.material_name)||row['素材ID'];
+    }else{
+      row['素材视频名称']=S(r.material_name)||row['素材ID'];
+      row['视频完播率']=num(r.video_finish_rate);
+      if(qcHas(r,'video_3s_rate'))row['3秒播放率']=num(r.video_3s_rate);
+      qcCopyIdentity(row,r);
+    }
+    qcAdd(g,chan,type,'rng'+d+'_'+d,row,qcSheet(type));
+  });
+  (facts.daren_daily||[]).forEach(function(r){
+    var d=qcDate(r.date),chan=qcChan(r,bundle);if(!/^\d{8}$/.test(d)||chan!=='dy_short')return;
+    var dn=cleanApiText(r.douyin_name||r.anchor_name||r.aweme_name),di=cleanApiText(r.douyin_id||r.anchor_id||r.aweme_id);
+    if(!dn||!di)return;
+    var row=trace(qcMetricRow(r,d),r);
+    row['抖音号名称']=dn;row['抖音号ID']=di;
+    qcAdd(g,chan,'daren','rng'+d+'_'+d,row,'千川API抖音号');
+  });
+  var payloads=Object.keys(g).sort().map(function(k){
+    var x=g[k],s={};s[x.sheet]=x.rows;
+    return {key:'tlapi::'+x.chan+'::'+x.type+'::'+x.period,payload:{sheets:s,_tl:{chan:x.chan,type:x.type,period:x.period,start:x.period.slice(3,11),end:x.period.slice(12,20),scope:cleanApiText(bundle&&bundle.scope),source:'qianchuan_api',source_window:(bundle&&bundle.window)||{},file:name||''}}};
+  });
+  return qcApiRoleOwnedPayloads(apiNonVideoContract,payloads);
+}
+function selfLiveAccountKey(r){var aid=S(r&&r['广告账户ID']).trim(),roomMap=QC_API_NONVIDEO_CONTRACT&&QC_API_NONVIDEO_CONTRACT.self_live_room_map||{},authoritative=S(roomMap[aid]),txt=[authoritative,S(r&&r['广告账户名称']),S(r&&r['直播间名称'])].join(' ');if(txt.indexOf('面膜')>=0)return 'mask';if(txt.indexOf('面霜')>=0)return 'cream';return '';}
 function buildSelfLiveAccountViews(b,D){var types=['acct','direct','video'],by={};types.forEach(function(type){(b[type]||[]).forEach(function(r){var key=selfLiveAccountKey(r);if(!key)return;by[key]=by[key]||{prod:[],video:[],car:[],daren:[],acct:[],direct:[]};by[key][type].push(r);});});var views={};Object.keys(by).forEach(function(key){var t=buildTouliu(by[key],D);t.accountKey=key;t.accountLabel=key==='cream'?'面霜':'面膜';views[key]=t;});return views;}
 function buildTouliu(b,D){
   function metricRows(rows){rows=rows||[];var dated=rows.filter(function(r){return !!gyDate(r['日期']);});return dated.length?dated:rows.filter(function(r){return S(r['日期'])==='全部'||!S(r['日期']);});}
@@ -466,6 +559,7 @@ function buildTouliu(b,D){
   function splitVAlerts(v){return S(v).split(/[|｜,，;；]+/).map(function(x){return x.trim();}).filter(Boolean);}
   var videoCost=0,aigcCost=0,vmap={};
   metricRows(b.video).forEach(function(r){
+    r=qcHydrateCompactIdentity(r);
     var c=tlnum(r['整体消耗']),nm=S(r['素材视频名称']).replace(/\s+/g,' ').trim();
     var id=S(r['素材ID'])||nm||'未识别素材',rowIdentity=S(r['身份']),aigc=rowIdentity?rowIdentity==='AI素材':((S(r['素材ID'])==='-'&&S(r['素材创建时间'])==='-')||nm==='AIGC动态创意视频素材集合');
     if(c>0){if(aigc)aigcCost+=c;else videoCost+=c;}
@@ -511,7 +605,7 @@ function buildTouliu(b,D){
   var actionableVideos=videos.filter(function(v){return v.cost>0&&!v.isAigc;});
   var vtot=actionableVideos.reduce(function(s,v){return s+v.cost;},0);var low=actionableVideos.filter(function(v){return v.payRoi<1.2;}).reduce(function(s,v){return s+v.cost;},0);
   var dset={};totalAll.forEach(function(r){var d=gyDate(r['日期']);if(d)dset[d]=1;});
-  var hasEng=actionableVideos.some(function(v){return v.finish>0||v.p3!=null;});var hasSettle=actionableVideos.some(function(v){return v.roi30>0;});var dmap={};metricRows(b.daren).filter(function(r){return tlnum(r['整体消耗'])>0;}).forEach(function(r){var id=S(r['抖音号ID']),nm=S(r['抖音号名称'])||id,key=id||nm;if(!dmap[key])dmap[key]={id:id,n:nm,cost:0,gmv:0,ord:0,s30:0};var dd=dmap[key];dd.cost+=tlnum(r['整体消耗']);dd.gmv+=tlnum(r['整体成交金额']);dd.ord+=tlnum(r['整体成交订单数']);dd.s30+=tlnum(r['30日结算金额']);});var darens=Object.keys(dmap).map(function(k){var d=dmap[k];return {n:d.n,cost:d.cost,gmv:d.gmv,ord:d.ord,payRoi:d.cost?d.gmv/d.cost:0,roi30:d.cost?d.s30/d.cost:0,cpa:d.ord?d.cost/d.ord:0,aov:d.ord?d.gmv/d.ord:0};}).sort(function(a,b){return b.cost-a.cost;});
+  var hasEng=actionableVideos.some(function(v){return v.finish>0||v.p3!=null;});var hasSettle=actionableVideos.some(function(v){return v.roi30>0;});var dmap={};metricRows(b.daren).filter(function(r){return tlnum(r['整体消耗'])>0;}).forEach(function(r){var nm=S(r['抖音号名称'])||S(r['抖音号ID']);if(!dmap[nm])dmap[nm]={n:nm,cost:0,gmv:0,ord:0,s30:0};var dd=dmap[nm];dd.cost+=tlnum(r['整体消耗']);dd.gmv+=tlnum(r['整体成交金额']);dd.ord+=tlnum(r['整体成交订单数']);dd.s30+=tlnum(r['30日结算金额']);});var darens=Object.keys(dmap).map(function(k){var d=dmap[k];return {n:d.n,cost:d.cost,gmv:d.gmv,ord:d.ord,payRoi:d.cost?d.gmv/d.cost:0,roi30:d.cost?d.s30/d.cost:0,cpa:d.ord?d.cost/d.ord:0,aov:d.ord?d.gmv/d.ord:0};}).sort(function(a,b){return b.cost-a.cost;});
   var carRows=metricRows(b.car);var carCost=carRows.reduce(function(ss,r){return ss+tlnum(r['整体消耗']);},0);
   var cmap={};carRows.filter(function(r){return tlnum(r['整体消耗'])>0;}).forEach(function(r){var id=S(r['素材ID']);if(!cmap[id])cmap[id]={id:id,cost:0,gmv:0,exp:0,click:0,ord:0,s30:0};var cc=cmap[id];var x=tlnum(r['整体消耗']);cc.cost+=x;cc.gmv+=tlnum(r['整体成交金额']);cc.exp+=tlnum(r['整体展示次数']);cc.click+=tlnum(r['整体点击次数']);cc.ord+=tlnum(r['整体成交订单数']);cc.s30+=tlnum(r['30日结算金额']);});
   var cars=Object.keys(cmap).map(function(k){var c=cmap[k];return {id:c.id,cost:c.cost,payRoi:c.cost?c.gmv/c.cost:0,roi30:c.cost?c.s30/c.cost:0,ctr:c.exp?c.click/c.exp*100:0,cvr:c.click?c.ord/c.click*100:0};}).sort(function(a,b){return b.cost-a.cost;});
@@ -589,7 +683,284 @@ function setCustomRange(k,v){customRange[k]=fromHtmlDate(v);if(customRange.start
 function applyCustomRange(){initCustomRange();curMonth='custom';per='custom';render();}
 
 /* ===== Import ===== */
-function readFileAsWorkbook(file){return new Promise(function(res,rej){var fr=new FileReader();if(/\.json$/i.test(file.name)||/json/i.test(file.type||'')){fr.onload=function(e){try{var txt=String(e.target.result||'').replace(/^\uFEFF/,'');res({name:file.name,qianchuan:JSON.parse(txt)});}catch(err){rej(err);}};fr.onerror=rej;fr.readAsText(file,'utf-8');return;}fr.onload=function(e){try{var wb=XLSX.read(e.target.result,{type:'array'});var isDanmu=/弹幕|评论/.test(file.name);var isLive=wb.SheetNames.some(function(n){return /^\d+月$/.test(n);});var sheets={},arr=null,danmu=null;if(isDanmu){danmu={};wb.SheetNames.forEach(function(n){danmu[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:false});});}else if(isLive){arr={};wb.SheetNames.forEach(function(n){if(/^\d+月$/.test(n))arr[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:false});});}else{wb.SheetNames.forEach(function(n){sheets[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:null});});}res({name:file.name,sheets:sheets,arr:arr,danmu:danmu});}catch(err){rej(err);}};fr.onerror=rej;fr.readAsArrayBuffer(file);});}
+function qcImportError(code,reason,details){var e=new Error('['+code+'] '+reason);e.code=code;e.reason=reason;e.details=details||{};return e;}
+function qcFail(code,reason,details){throw qcImportError(code,reason,details);}
+var QC_API_VIDEO_SPECS={material_video_daily:1,live_video_daily:1};
+function qcSameJson(a,b){return JSON.stringify(a)===JSON.stringify(b);}
+function qcApiRegisteredIds(scope){var cfg=QC_ACCOUNT_REGISTRY&&QC_ACCOUNT_REGISTRY.scopes&&QC_ACCOUNT_REGISTRY.scopes[scope];return (cfg&&cfg.accounts||[]).map(function(a){return String(a&&a.advertiser_id||'');}).filter(Boolean).sort();}
+function qcStrictMetric(v,label){if(v==null||v===''||['-','--','—'].indexOf(String(v).trim())>=0)throw new Error(label+' is missing; missing API metrics cannot be coerced to zero.');var n=Number(v);if(!Number.isFinite(n))throw new Error(label+' is not numeric.');return n;}
+function qcStrictMoneyCents(v,label){return Math.round((qcStrictMetric(v,label)+Number.EPSILON)*100);}
+function qcApiCore(rows,label){return (rows||[]).reduce(function(sum,row,i){sum.cost+=qcStrictMoneyCents(row&&row.cost,label+'['+i+'].cost');sum.gmv+=qcStrictMoneyCents(row&&row.gmv,label+'['+i+'].gmv');sum.orders+=qcStrictMetric(row&&row.orders,label+'['+i+'].orders');return sum;},{cost:0,gmv:0,orders:0});}
+function qcApiObjectCore(v,label){return {cost:qcStrictMoneyCents(v&&v.cost,label+'.cost'),gmv:qcStrictMoneyCents(v&&v.gmv,label+'.gmv'),orders:qcStrictMetric(v&&v.orders,label+'.orders')};}
+function qcAddDay(d){var y=Number(d.slice(0,4)),m=Number(d.slice(4,6)),day=Number(d.slice(6,8)),dt=new Date(Date.UTC(y,m-1,day+1,12));return String(dt.getUTCFullYear())+String(dt.getUTCMonth()+1).padStart(2,'0')+String(dt.getUTCDate()).padStart(2,'0');}
+function qcApiNonVideoContract(bundle,fileName){
+  var declared=bundle&&bundle.source_contract;if(!declared)return null;
+  var api=declared.api||{},consoleSource=declared.console||{},scope=String(bundle&&bundle.scope||''),scopeContract=QC_API_NONVIDEO_CONTRACT&&QC_API_NONVIDEO_CONTRACT.scopes&&QC_API_NONVIDEO_CONTRACT.scopes[scope],expectedSpecs=Array.isArray(scopeContract&&scopeContract.required_api_source_specs)?scopeContract.required_api_source_specs.map(String):[];
+  var owns=Array.isArray(api.owns)?api.owns.map(String):[],excludes=Array.isArray(api.excludes)?api.excludes.map(String):[],consoleOwns=Array.isArray(consoleSource.owns)?consoleSource.owns.map(String):[];
+  var missingOwnedSpecs=expectedSpecs.filter(function(spec){return owns.indexOf(spec)<0;}),ownsVideo=owns.filter(function(spec){return !!QC_API_VIDEO_SPECS[spec];});
+  var labelOwnedByConsole=consoleOwns.indexOf('same_batch_platform_labels')>=0||consoleOwns.indexOf('platform_material_labels')>=0;
+  if(!scopeContract||QC_API_NONVIDEO_CONTRACT.schema!=='gy-qianchuan-browser-api-nonvideo-contract-v1'||api.source_kind!=='qianchuan_api'||consoleSource.source_kind!=='qianchuan_console_export'||missingOwnedSpecs.length||ownsVideo.length||Object.keys(QC_API_VIDEO_SPECS).some(function(spec){return excludes.indexOf(spec)<0;})||consoleOwns.indexOf('material_video_daily')<0||!labelOwnedByConsole){
+    qcFail('source_contract_violation','api_non_video_contract_invalid',{file:fileName||'',scope:scope,expected_api_specs:expectedSpecs,missing_api_specs:missingOwnedSpecs,api_owns_video_specs:ownsVideo,api_excludes:excludes.slice().sort(),console_owns:consoleOwns.slice().sort()});
+  }
+  return {expectedSpecs:expectedSpecs.slice(),scope:scope,scopeContract:scopeContract};
+}
+function qcValidateSelfLiveApiNonVideoBridge(bundle,fileName,lockedIds,statuses){
+  var roomMap=QC_API_NONVIDEO_CONTRACT.self_live_room_map||{},actualRoomMap={};Object.keys(bundle.advertiser_room_map||{}).forEach(function(id){actualRoomMap[String(id)]=String(bundle.advertiser_room_map[id]||'');});
+  function pairs(o){return Object.keys(o).sort().map(function(k){return [k,o[k]];});}
+  if(!qcSameJson(pairs(actualRoomMap),pairs(roomMap)))qcFail('source_contract_violation','self_live_room_map_invalid',{file:fileName||''});
+  var accounts=Array.isArray(bundle.accounts)?bundle.accounts:[];
+  var actualAccountIds=accounts.map(function(a){return String(a&&a.advertiser_id||'');}).sort();
+  if(!qcSameJson(actualAccountIds,lockedIds))qcFail('source_contract_violation','self_live_anchor_accounts_incomplete',{file:fileName||'',expected_advertiser_ids:lockedIds,actual_advertiser_ids:actualAccountIds});
+  accounts.forEach(function(account){
+    var advertiserId=String(account&&account.advertiser_id||'');
+    if(String(account&&account.room||'')!==roomMap[advertiserId])qcFail('source_contract_violation','self_live_anchor_room_mismatch',{file:fileName||'',advertiser_id:advertiserId});
+    var reportAnchors=Array.isArray(account&&account.anchors)?account.anchors:[],anchorIds=reportAnchors.map(function(r){return String(r&&r.anchor_id||'').trim();}).filter(Boolean);
+    var planAnchors=Array.isArray(account&&account.plan_anchors)?account.plan_anchors:[],planAnchorIds=planAnchors.map(function(r){return String(r&&r.anchor_id||'').trim();}).filter(Boolean).sort();
+    var configuredPlanAnchorIds=(Array.isArray(account&&account.plan_evidence&&account.plan_evidence.configured_plan_anchor_ids)?account.plan_evidence.configured_plan_anchor_ids:[]).map(String).sort();
+    var discoveredPlanAnchorIds=new Set((Array.isArray(account&&account.plan_evidence&&account.plan_evidence.discovered_plan_anchor_ids)?account.plan_evidence.discovered_plan_anchor_ids:[]).map(String));
+    var bridgeRows=Array.isArray(account&&account.anchor_bridge&&account.anchor_bridge.bridges)?account.anchor_bridge.bridges:[],bridgePlanIds=bridgeRows.map(function(r){return String(r&&r.plan_anchor_id||'');}).sort(),bridgeReportIds=bridgeRows.map(function(r){return String(r&&r.report_anchor_id||'');}).sort();
+    var bridgeRowsValid=bridgeRows.length>0&&bridgeRows.every(function(r){var planId=String(r&&r.plan_anchor_id||''),reportId=String(r&&r.report_anchor_id||''),expectedPair={plan_anchor_id:planId,authorization_aweme_show_id:planId,authorization_aweme_id:reportId,report_anchor_id:reportId};return !!(planId&&reportId)&&String(r&&r.authorization_aweme_show_id||'')===planId&&String(r&&r.authorization_aweme_id||'')===reportId&&qcSameJson(r&&r.configured||{},expectedPair)&&qcSameJson(r&&r.resolved||{},expectedPair)&&r.aweme_has_live_permission===true&&r.aweme_has_video_permission===true&&r.aweme_status==='NORMAL'&&r.selection_evidence==='full_authorized_snapshot_unique_plan_show_id_bridge';});
+    var reportAnchorsValid=reportAnchors.every(function(r){var reportId=String(r&&r.anchor_id||''),planId=String(r&&r.plan_anchor_id||'');return String(r&&r.anchor_show_id||'')===planId&&bridgeRows.some(function(b){return String(b&&b.plan_anchor_id||'')===planId&&String(b&&b.report_anchor_id||'')===reportId;});});
+    var bridgeStatus=statuses.filter(function(r){return String(r&&r.advertiser_id||'')===advertiserId&&r.spec==='authorized_aweme_anchor_bridge';})[0];
+    var bridgeStatusValid=Number(bridgeStatus&&bridgeStatus.row_count)===anchorIds.length&&Number(bridgeStatus&&bridgeStatus.authorized_row_count)===Number(account&&account.anchor_bridge&&account.anchor_bridge.authorized_row_count)&&Number.isInteger(Number(bridgeStatus&&bridgeStatus.page_count))&&Number(bridgeStatus&&bridgeStatus.page_count)>=1&&Number(bridgeStatus&&bridgeStatus.declared_total_page)===Number(bridgeStatus&&bridgeStatus.page_count);
+    if(!anchorIds.length||new Set(anchorIds).size!==anchorIds.length||!planAnchorIds.length||new Set(planAnchorIds).size!==planAnchorIds.length||!qcSameJson(configuredPlanAnchorIds,planAnchorIds)||!planAnchorIds.every(function(id){return discoveredPlanAnchorIds.has(id);})||!qcSameJson(bridgePlanIds,planAnchorIds)||!qcSameJson(bridgeReportIds,anchorIds.slice().sort())||!account.anchor_bridge||account.anchor_bridge.method!=='plan_display_id_to_full_authorized_snapshot_unique_aweme_id'||!Number.isInteger(Number(account.anchor_bridge.authorized_row_count))||Number(account.anchor_bridge.authorized_row_count)<bridgeRows.length||!bridgeRowsValid||!reportAnchorsValid||!bridgeStatusValid||!Number.isFinite(Number(account&&account.plan_evidence&&account.plan_evidence.plan_count))||Number(account.plan_evidence.plan_count)<1)qcFail('source_contract_violation','authorized_aweme_anchor_bridge_invalid',{file:fileName||'',advertiser_id:advertiserId});
+  });
+}
+function qcValidateApiNonVideoBundle(bundle,fileName,contract){
+  if(!bundle||typeof bundle!=='object'||bundle.source!=='qianchuan_report_data_get')qcFail('source_contract_violation','api_bundle_source_invalid',{file:fileName||'',source:bundle&&bundle.source||''});
+  if(bundle.complete!==true)qcFail('source_contract_violation','api_bundle_incomplete',{file:fileName||''});
+  var statuses=Array.isArray(bundle.statuses)?bundle.statuses:[],expectedCalls=bundle.expected_calls==null?null:Number(bundle.expected_calls);
+  if(!statuses.length||statuses.some(function(item){return !item||item.status!=='ok';})||(expectedCalls!=null&&(!Number.isInteger(expectedCalls)||expectedCalls!==statuses.length))){
+    qcFail('source_contract_violation','api_call_evidence_incomplete',{file:fileName||'',status_count:statuses.length,expected_calls:bundle.expected_calls==null?null:bundle.expected_calls});
+  }
+  var prohibitedStatuses=statuses.filter(function(status){return !!QC_API_VIDEO_SPECS[String(status&&status.spec||'')];}).map(function(status){return {advertiser_id:String(status&&status.advertiser_id||''),spec:String(status&&status.spec||'')};});
+  if(prohibitedStatuses.length)qcFail('source_contract_violation','api_video_status_present',{file:fileName||'',statuses:prohibitedStatuses});
+  var scope=String(bundle.scope||''),lockedIds=qcApiRegisteredIds(scope);if(!lockedIds.length)qcFail('account_scope_drift','api_scope_not_registered',{file:fileName||'',scope:scope});
+  var statusKeys={},duplicates=[];statuses.forEach(function(status){var advertiserId=String(status&&status.advertiser_id||''),spec=String(status&&status.spec||''),key=advertiserId+'|'+spec;if(statusKeys[key])duplicates.push(key);statusKeys[key]=1;if(advertiserId&&lockedIds.indexOf(advertiserId)<0)qcFail('account_scope_drift','api_status_account_out_of_scope',{file:fileName||'',scope:scope,advertiser_id:advertiserId,spec:spec});});
+  if(duplicates.length)qcFail('source_contract_violation','api_status_duplicate',{file:fileName||'',status_keys:Array.from(new Set(duplicates)).sort()});
+  var missingStatusKeys=[];lockedIds.forEach(function(id){contract.expectedSpecs.forEach(function(spec){var key=id+'|'+spec;if(!statusKeys[key])missingStatusKeys.push(key);});});
+  if(missingStatusKeys.length)qcFail('source_contract_violation','api_required_status_missing',{file:fileName||'',scope:scope,status_keys:missingStatusKeys});
+  var start=qcValidDate(bundle&&bundle.window&&bundle.window.start),end=qcValidDate(bundle&&bundle.window&&bundle.window.end);
+  if(!start||!end||start>end)qcFail('source_contract_violation','api_source_window_invalid',{file:fileName||'',start:start,end:end});
+  var dates=[];for(var day=start;day<=end;day=qcAddDay(day))dates.push(day);
+  var facts=bundle.facts||{},materialRows=Array.isArray(facts.material_daily)?facts.material_daily:[],apiVideoRows=materialRows.filter(function(row){return String(row&&row.material_type||'video').trim().toLowerCase()!=='image';});
+  var factArrays={account_daily:'account_daily',product_daily:'product_daily',ad_daily:'ad_daily',material_image_daily:'material_daily',live_room_daily:'live_daily',live_other_daily:'other_daily'},missingFactArrays=contract.expectedSpecs.map(function(spec){return factArrays[spec];}).filter(Boolean).filter(function(name){return !Array.isArray(facts[name]);});
+  if(!Array.isArray(facts.account_daily)||missingFactArrays.length)qcFail('source_contract_violation','api_required_fact_array_missing',{file:fileName||'',fact_arrays:Array.from(new Set((!Array.isArray(facts.account_daily)?['account_daily']:[]).concat(missingFactArrays))).sort()});
+  var leakedVideoRows=apiVideoRows.concat(Array.isArray(facts.material_video_daily)?facts.material_video_daily:[],Array.isArray(facts.video_daily)?facts.video_daily:[],Array.isArray(facts.live_video_daily)?facts.live_video_daily:[]);
+  if(leakedVideoRows.length)qcFail('source_contract_violation','api_video_facts_present',{file:fileName||'',scope:scope,video_row_count:leakedVideoRows.length});
+  [['account_daily',facts.account_daily],['product_daily',facts.product_daily],['ad_daily',facts.ad_daily],['material_daily',facts.material_daily],['live_daily',facts.live_daily],['other_daily',facts.other_daily],['daren_daily',facts.daren_daily]].forEach(function(group){var name=group[0],rows=group[1];if(rows==null)return;if(!Array.isArray(rows))qcFail('source_contract_violation','api_fact_group_invalid',{file:fileName||'',fact_group:name});rows.forEach(function(row,i){var advertiserId=String(row&&row.advertiser_id||''),date=qcValidDate(row&&row.date);if(lockedIds.indexOf(advertiserId)<0)qcFail('account_scope_drift','api_fact_account_out_of_scope',{file:fileName||'',fact_group:name,row_index:i,advertiser_id:advertiserId});if(!date||date<start||date>end)qcFail('source_contract_violation','api_fact_date_out_of_window',{file:fileName||'',fact_group:name,row_index:i,date:date});if(row&&row.source_kind==='qianchuan_console_export')qcFail('source_contract_violation','console_fact_leaked_into_api_bundle',{file:fileName||'',fact_group:name,row_index:i});});});
+  var accountDays={};facts.account_daily.forEach(function(row){var key=String(row&&row.advertiser_id||'')+'|'+qcValidDate(row&&row.date);if(accountDays[key])qcFail('source_contract_violation','api_account_day_duplicate',{file:fileName||'',business_key:key});accountDays[key]=row;});
+  var missingAccountDays=[];lockedIds.forEach(function(id){dates.forEach(function(date){var key=id+'|'+date;if(!accountDays[key])missingAccountDays.push(key);});});
+  if(missingAccountDays.length)qcFail('source_contract_violation','api_account_day_incomplete',{file:fileName||'',business_keys:missingAccountDays});
+  if(scope==='self_live'){
+    if(facts.account_daily.some(function(row){return String(row&&row.source_kind||'')==='video_plus_live_direct_plus_other_conversion';}))qcFail('source_contract_violation','api_account_fact_claims_video_composition',{file:fileName||''});
+    qcValidateSelfLiveApiNonVideoBridge(bundle,fileName,lockedIds,statuses);
+  }else{
+    var productSums={};(facts.product_daily||[]).forEach(function(row,i){var key=String(row&&row.advertiser_id||'')+'|'+qcValidDate(row&&row.date),sum=productSums[key]||{cost:0,gmv:0,orders:0};sum.cost+=qcStrictMoneyCents(row&&row.cost,'reconciliation['+i+'].cost');sum.gmv+=qcStrictMoneyCents(row&&row.gmv,'reconciliation['+i+'].gmv');sum.orders+=qcStrictMetric(row&&row.orders,'reconciliation['+i+'].orders');productSums[key]=sum;});
+    Object.keys(accountDays).forEach(function(key){var row=accountDays[key],product=productSums[key]||{cost:0,gmv:0,orders:0},account={cost:qcStrictMoneyCents(row&&row.cost,'account/'+key+'.cost'),gmv:qcStrictMoneyCents(row&&row.gmv,'account/'+key+'.gmv'),orders:qcStrictMetric(row&&row.orders,'account/'+key+'.orders')};if(!qcSameJson(account,product))qcFail('source_contract_violation','api_account_product_reconciliation_failed',{file:fileName||'',business_key:key});});
+  }
+  var accountCore=qcApiCore(facts.account_daily,'account_daily');if(bundle.summary!=null&&!qcSameJson(accountCore,qcApiObjectCore(bundle.summary,'summary')))qcFail('source_contract_violation','api_summary_reconciliation_failed',{file:fileName||''});
+  return {scope:scope,start:start,end:end,days:dates.length,accountIds:lockedIds,accountCost:accountCore.cost/100,accountGmv:accountCore.gmv/100,sourceRole:'api_non_video'};
+}
+function qcApiRoleOwnedPayloads(contract,payloads){
+  if(!contract)return payloads;
+  return (payloads||[]).filter(function(item){return String(item&&item.key||'').indexOf('::video::')<0;});
+}
+var QC_CONSOLE_FIELD_ALIASES={
+  material_id:['素材ID','素材 Id','素材id','material_id'],
+  material_name:['素材名称','素材视频名称','视频素材名称','material_name'],
+  cost:['整体消耗','消耗','cost'],
+  gmv:['整体成交金额','成交金额','gmv'],
+  orders:['整体成交订单数','成交订单数','orders'],
+  material_upload_time:['素材创建时间','创建时间','material_upload_time'],
+  material_source:['素材来源','来源','material_source'],
+  platform_label:['标签','平台标签','platform_label'],
+  material_video_type:['视频素材类型','素材视频类型','material_video_type'],
+  pay_roi:['整体支付ROI','支付ROI','pay_roi'],
+  net_roi:['净成交ROI','net_roi'],
+  net_gmv:['净成交金额','net_gmv'],
+  net_orders:['净成交订单数','net_orders'],
+  refund_1h_amount:['1小时内退款金额','refund_1h_amount'],
+  refund_1h_orders:['1小时内退款订单数','refund_1h_orders'],
+  settle_7d_amount:['7日结算金额','settle_7d_amount'],
+  settle_14d_amount:['14日结算金额','settle_14d_amount'],
+  settle_30d_amount:['30日结算金额','settle_30d_amount'],
+  show_count:['整体展现次数','整体展示次数','show_count'],
+  click_count:['整体点击次数','click_count'],
+  play_count:['视频播放数','play_count'],
+  play_3s_rate:['3秒播放率','play_3s_rate'],
+  completion_rate:['视频完播率','completion_rate']
+};
+var QC_CONSOLE_CORE_FIELDS=['material_id','material_name','cost','gmv','orders'];
+function qcNormText(v){return String(v==null?'':v).normalize('NFKC').replace(/[\u200B-\u200D\uFEFF]/g,'').trim();}
+function qcNormHeader(v){return String(v==null?'':v).normalize('NFKC').replace(/[\u200B-\u200D\uFEFF\r\n\t]/g,'').replace(/\s+/g,'').replace(/[：:]/g,'').trim();}
+function qcCanonical(v){if(v===null||typeof v!=='object')return v;if(Array.isArray(v))return v.map(qcCanonical);var out={};Object.keys(v).sort().forEach(function(k){if(typeof v[k]!=='undefined')out[k]=qcCanonical(v[k]);});return out;}
+function qcCanonicalStringify(v){return JSON.stringify(qcCanonical(v));}
+function qcShaBuffer(buf){if(!(window.crypto&&window.crypto.subtle))return Promise.reject(qcImportError('sha_unavailable','browser_webcrypto_unavailable'));return window.crypto.subtle.digest('SHA-256',buf).then(function(hash){return Array.from(new Uint8Array(hash)).map(function(b){return ('0'+b.toString(16)).slice(-2);}).join('').toUpperCase();});}
+function qcShaText(text){return qcShaBuffer(new TextEncoder().encode(String(text)).buffer);}
+function qcFieldMapping(headers){var lookup={},mapping={},unknown=[];Object.keys(QC_CONSOLE_FIELD_ALIASES).forEach(function(field){QC_CONSOLE_FIELD_ALIASES[field].forEach(function(alias){lookup[qcNormHeader(alias)]=field;});});(headers||[]).forEach(function(raw){var norm=qcNormHeader(raw),field=lookup[norm];if(field&&!mapping[field])mapping[field]=raw;else if(norm)unknown.push(raw);});return {mapping:mapping,unknown:unknown};}
+function qcHeaderState(headers){var fm=qcFieldMapping(headers).mapping,hs=(headers||[]).map(qcNormHeader),present=QC_CONSOLE_CORE_FIELDS.filter(function(k){return fm[k];}),identity=!!(fm.material_id&&fm.material_name),metrics=['cost','gmv','orders'].filter(function(k){return fm[k];}).length,signals=['素材评估','视频播放数','7日结算ROI','追投调控消耗','净成交金额结算率'].filter(function(k){return hs.indexOf(qcNormHeader(k))>=0;}).length,missing=QC_CONSOLE_CORE_FIELDS.filter(function(k){return !fm[k];});return {candidate:present.length===QC_CONSOLE_CORE_FIELDS.length||(identity&&(metrics>=2||(metrics>=1&&signals>=1))),exact:present.length===QC_CONSOLE_CORE_FIELDS.length,core_present:present,core_missing:missing,missing:missing};}
+function qcNormSource(v){return qcNormText(v).replace(/\\/g,'/').replace(/^\.\//,'').replace(/\/+/g,'/');}
+function qcExactSha(v,field){var sha=qcNormText(v).toUpperCase();if(!/^[A-F0-9]{64}$/.test(sha))qcFail('manifest_invalid',field+'_invalid',{field:field,actual:v});return sha;}
+function qcEnsureString(m,field){var v=qcNormText(m&&m[field]);if(!v)qcFail('manifest_invalid',field+'_missing',{field:field});return v;}
+function qcBaseName(v){return qcNormText(v).split(/[\\/]/).pop();}
+function qcManifestAccount(m){
+  if(!m||typeof m!=='object'||Array.isArray(m))qcFail('account_scope_drift','manifest_missing');
+  var source=qcNormSource(m.account_registry_source);if(!source)qcFail('account_scope_drift','manifest_registry_source_missing');if(source!==QC_ACCOUNT_REGISTRY.source)qcFail('account_scope_drift','manifest_registry_source_mismatch',{expected:QC_ACCOUNT_REGISTRY.source,actual:source});
+  var regSha=qcNormText(m.account_registry_sha256);if(!regSha)qcFail('account_scope_drift','manifest_registry_sha_missing');if(!/^[A-F0-9]{64}$/.test(regSha))qcFail('account_scope_drift','manifest_registry_sha_invalid',{actual:regSha});if(regSha!==QC_ACCOUNT_REGISTRY.sha256)qcFail('account_scope_drift','manifest_registry_sha_mismatch',{expected:QC_ACCOUNT_REGISTRY.sha256,actual:regSha});
+  var updated=qcNormText(m.account_registry_updated_at);if(!updated)qcFail('account_scope_drift','manifest_registry_updated_at_missing');if(updated!==QC_ACCOUNT_REGISTRY.source_updated_at)qcFail('account_scope_drift','manifest_registry_updated_at_mismatch',{expected:QC_ACCOUNT_REGISTRY.source_updated_at,actual:updated});
+  var sc=qcNormText(m.scope);if(!sc)qcFail('account_scope_drift','manifest_scope_missing');var cfg=QC_ACCOUNT_REGISTRY.scopes[sc];if(!cfg)qcFail('account_scope_drift','manifest_scope_unknown',{scope:sc,allowed_scopes:Object.keys(QC_ACCOUNT_REGISTRY.scopes)});
+  var channel=qcNormText(m.channel);if(!channel)qcFail('account_scope_drift','manifest_channel_missing',{scope:sc});if(channel!==cfg.channel)qcFail('account_scope_drift','manifest_channel_mismatch',{scope:sc,expected:cfg.channel,actual:channel});
+  var id=qcNormText(m.advertiser_id);if(!id)qcFail('account_scope_drift','manifest_advertiser_id_missing',{scope:sc});var acc=(cfg.accounts||[]).filter(function(a){return qcNormText(a.advertiser_id)===id;})[0];if(!acc){var owner=Object.keys(QC_ACCOUNT_REGISTRY.scopes).filter(function(s){return (QC_ACCOUNT_REGISTRY.scopes[s].accounts||[]).some(function(a){return qcNormText(a.advertiser_id)===id;});})[0]||null;qcFail('account_scope_drift','manifest_advertiser_scope_mismatch',{advertiser_id:id,manifest_scope:sc,registered_scope:owner});}
+  var name=qcNormText(m.advertiser_name);if(!name)qcFail('account_scope_drift','manifest_advertiser_name_missing',{scope:sc,advertiser_id:id});if(name!==qcNormText(acc.name))qcFail('account_scope_drift','manifest_advertiser_name_mismatch',{scope:sc,advertiser_id:id,expected:acc.name,actual:name});
+  return {scope:sc,channel:cfg.channel,advertiser_id:id,advertiser_name:acc.name,account_registry_sha256:QC_ACCOUNT_REGISTRY.sha256};
+}
+function qcCleanDate(v){var d=qcNormText(v).replace(/[^0-9]/g,'');return d.length>=8?d.slice(0,8):'';}
+function qcValidDate(v){var d=qcCleanDate(v);if(!/^\d{8}$/.test(d))return '';var y=Number(d.slice(0,4)),m=Number(d.slice(4,6)),day=Number(d.slice(6,8)),p=new Date(Date.UTC(y,m-1,day,12));return p.getUTCFullYear()===y&&p.getUTCMonth()===m-1&&p.getUTCDate()===day?d:'';}
+function qcManifestDate(m){var sd=qcValidDate(m&&m.statistic_date),st=qcValidDate(m&&m.start_date),en=qcValidDate(m&&m.end_date);if(!sd||!st||!en||sd!==st||sd!==en)qcFail('range_not_daily','manifest_range_is_not_one_natural_day',{statistic_date:m&&m.statistic_date,start_date:m&&m.start_date,end_date:m&&m.end_date});return sd;}
+function qcSourceFilenameDailyPair(name){var matches=[],re=/(^|[^0-9])(20\d{2})[-_]?(\d{2})[-_]?(\d{2})(?!\d)/g,mt;while((mt=re.exec(qcNormText(name))))matches.push(mt[2]+mt[3]+mt[4]);if(matches.length!==2)qcFail('range_not_daily','source_filename_date_pair_ambiguous',{source_file:qcNormText(name),date_groups:matches,expected_date_group_count:2});var invalid=matches.filter(function(v){return !qcValidDate(v);});if(invalid.length)qcFail('range_not_daily','source_filename_date_pair_invalid',{source_file:qcNormText(name),invalid_date_groups:invalid});if(matches[0]!==matches[1])qcFail('range_not_daily','source_filename_range_is_not_one_day',{source_file:qcNormText(name),start_date:matches[0],end_date:matches[1]});return {start_date:matches[0],end_date:matches[1],date_groups:matches};}
+function qcNum(v,field,row,options){options=options||{};if(v==null||qcNormText(v)==='')return 0;var t=qcNormText(v).replace(/[,￥¥]/g,''),hasPercent=/%$/.test(t),n=Number(t.replace(/%$/,''));if(!isFinite(n))qcFail('content_invalid','numeric_field_invalid',{field:field,row_number:row,value:v});var out=(options.percent||hasPercent)?n/100:n;if(options.integer&&(!Number.isInteger(out)||out<0))qcFail('content_invalid','integer_field_invalid',{field:field,row_number:row,value:v});return out;}
+function qcOptNum(r,H,field,row,options){return H[field]?qcNum(r[H[field]],field,row,options):null;}
+function qcMaterialVideoType(m,r,H){var rowValue=qcNormText(H.material_video_type&&r[H.material_video_type]);if(rowValue)return {value:rowValue,evidence:'source_column'};var f=m&&m.filters&&typeof m.filters==='object'&&!Array.isArray(m.filters)?m.filters:{},v;if(m.material_video_type!=null)v=m.material_video_type;else if(f.material_video_type!=null)v=f.material_video_type;else if(f.video_type!=null)v=f.video_type;else v=f.material_type;v=qcNormText(v);return {value:v,evidence:v?'manifest_filter':''};}
+function qcMaterialIdentityApi(){
+  var api=typeof globalThis!=='undefined'?globalThis.GuoyunUnifiedMaterialIdentity:null,c=QC_MATERIAL_IDENTITY_CONTRACT||{};
+  if(!api||typeof api.materializeDashboardRow!=='function'||typeof api.assertCompactMaterialized!=='function'||typeof api.summarizeMaterializedRows!=='function')qcFail('source_contract_violation','material_identity_runtime_helper_missing');
+  if(c.schema!=='gy-qianchuan-browser-material-identity-contract-v1'||c.model!==api.MODEL||Number(c.config_schema_version)!==Number(api.CONFIG_SCHEMA_VERSION)||qcCanonicalStringify(c.buckets)!==qcCanonicalStringify(Array.from(api.BUCKETS||[]))||qcCanonicalStringify(c.stored_fields)!==qcCanonicalStringify(Array.from(api.DASHBOARD_COMPACT_FIELDS||[])))qcFail('source_contract_violation','material_identity_runtime_contract_mismatch',{contract_model:c.model||'',runtime_model:api.MODEL||'',contract_schema_version:c.config_schema_version,runtime_schema_version:api.CONFIG_SCHEMA_VERSION});
+  return api;
+}
+function qcMaterializeConsoleIdentityPayload(payload){
+  var api=qcMaterialIdentityApi(),meta=payload&&payload._tl||{},scope=qcNormText(meta.scope),configSha=qcNormText(QC_MATERIAL_IDENTITY_CONTRACT.scope_config_sha256&&QC_MATERIAL_IDENTITY_CONTRACT.scope_config_sha256[scope]).toUpperCase();
+  if(!configSha||!/^[A-F0-9]{64}$/.test(configSha))qcFail('source_contract_violation','material_identity_scope_config_sha_missing',{scope:scope});
+  Object.keys(payload&&payload.sheets||{}).forEach(function(sheet){var rows=payload.sheets[sheet];if(!Array.isArray(rows))return;payload.sheets[sheet]=rows.map(function(row,index){try{return api.materializeDashboardRow(scope,row,{compact:true});}catch(e){qcFail(e&&e.code||'unified_material_identity_row_invalid','material_identity_browser_materialization_failed',{scope:scope,sheet:sheet,row_index:index,material_id:qcNormText(row&&row['素材ID']),cause:e&&e.message||String(e)});}});});
+  var materialRows=qcDashboardRows(payload);
+  meta.material_identity_model=api.MODEL;
+  meta.material_identity_config_schema_version=api.CONFIG_SCHEMA_VERSION;
+  meta.material_identity_config_sha256=configSha;
+  meta.material_identity_buckets=Array.from(api.BUCKETS);
+  meta.material_identity_fields=Array.from(api.DASHBOARD_COMPACT_FIELDS);
+  meta.material_identity_summary=api.summarizeMaterializedRows(scope,materialRows,{compact:true});
+  return qcValidateConsoleIdentityPayload(payload);
+}
+function qcValidateConsoleIdentityPayload(payload){
+  var api=qcMaterialIdentityApi(),meta=payload&&payload._tl||{},scope=qcNormText(meta.scope),configSha=qcNormText(QC_MATERIAL_IDENTITY_CONTRACT.scope_config_sha256&&QC_MATERIAL_IDENTITY_CONTRACT.scope_config_sha256[scope]).toUpperCase(),rows=qcDashboardRows(payload);
+  if(meta.material_identity_model!==api.MODEL||Number(meta.material_identity_config_schema_version)!==Number(api.CONFIG_SCHEMA_VERSION)||qcNormText(meta.material_identity_config_sha256).toUpperCase()!==configSha||qcCanonicalStringify(meta.material_identity_buckets)!==qcCanonicalStringify(Array.from(api.BUCKETS))||qcCanonicalStringify(meta.material_identity_fields)!==qcCanonicalStringify(Array.from(api.DASHBOARD_COMPACT_FIELDS)))qcFail('source_contract_violation','material_identity_payload_contract_mismatch',{scope:scope});
+  rows.forEach(function(row,index){try{api.assertCompactMaterialized(scope,row);}catch(e){qcFail(e&&e.code||'unified_material_identity_compact_row_invalid','material_identity_payload_row_invalid',{scope:scope,row_index:index,material_id:qcNormText(row&&row['素材ID']),cause:e&&e.message||String(e)});}});
+  var summary=api.summarizeMaterializedRows(scope,rows,{compact:true});if(qcCanonicalStringify(summary)!==qcCanonicalStringify(meta.material_identity_summary))qcFail('source_contract_violation','material_identity_payload_summary_mismatch',{scope:scope});
+  return payload;
+}
+function qcIsPlatformTotalRow(r,H){if(qcNormText(r[H.material_name])!=='全部')return false;var descriptors=[H.material_upload_time?qcNormText(r[H.material_upload_time]):'',H.material_source?qcNormText(r[H.material_source]):'',H.platform_label?qcNormText(r[H.platform_label]):''].filter(Boolean);return descriptors.length>=2&&descriptors.every(function(v){return v==='全部';});}
+function qcNormalizeConsole(parsed,mp){
+  var m=mp&&mp.qianchuanManifest;if(!m)qcFail('account_scope_drift','manifest_missing');
+  if(m.schema!=='gy-qianchuan-console-export-manifest-v1')qcFail('manifest_invalid','schema_mismatch',{expected:'gy-qianchuan-console-export-manifest-v1',actual:m.schema});
+  var acc=qcManifestAccount(m);
+  var reportType=qcEnsureString(m,'report_type');if(reportType!=='material_video_daily')qcFail('manifest_invalid','report_type_mismatch',{expected:'material_video_daily',actual:m.report_type});
+  var sourceSurface=qcEnsureString(m,'source_surface');if(sourceSurface!=='qianchuan_console')qcFail('manifest_invalid','source_surface_mismatch',{expected:'qianchuan_console',actual:m.source_surface});
+  if(!m.filters||typeof m.filters!=='object'||Array.isArray(m.filters))qcFail('manifest_invalid','filters_missing');
+  ['batch_id','export_requested_at','downloaded_at'].forEach(function(field){qcEnsureString(m,field);});
+  var day=qcManifestDate(m),actualFile=qcBaseName(parsed&&parsed.name),expectedFile=qcBaseName(qcEnsureString(m,'source_file'));
+  if(!actualFile||actualFile!==expectedFile)qcFail('manifest_mismatch','source_file_mismatch',{expected:expectedFile,actual:actualFile});
+  var filenamePair=qcSourceFilenameDailyPair(actualFile);if(filenamePair.start_date!==day)qcFail('range_not_daily','source_filename_range_conflicts_with_manifest',{source_file:actualFile,filename_dates:filenamePair.date_groups,statistic_date:day});
+  var expectedSourceSha=qcExactSha(m.source_sha256,'source_sha256'),actualSourceSha=qcExactSha(parsed&&parsed.qianchuanWorkbook&&parsed.qianchuanWorkbook.sourceSha256,'workbook_source_sha256');
+  if(expectedSourceSha!==actualSourceSha)qcFail('manifest_mismatch','source_sha256_mismatch',{expected:expectedSourceSha,actual:actualSourceSha});
+  var sheetName=qcEnsureString(m,'sheet_name'),sh=(parsed.qianchuanWorkbook.sheets||[]).filter(function(s){return qcNormText(s&&s.name)===sheetName;});
+  if(sh.length!==1)qcFail('manifest_mismatch','sheet_name_mismatch',{expected:sheetName,actual:(parsed.qianchuanWorkbook.sheets||[]).map(function(s){return s&&s.name;})});
+  sh=sh[0];var hs=qcHeaderState(sh.headers);if(!hs.candidate)qcFail('not_qianchuan_console_export','header_not_candidate',{sheet_name:sheetName,core_present:hs.core_present});if(!hs.exact)qcFail('header_drift','required_header_missing',{sheet_name:sheetName,missing:hs.core_missing});
+  var actualHeaderFingerprint=qcExactSha(sh.headerFingerprint,'workbook_header_fingerprint'),expectedHeaderFingerprint=qcExactSha(m.header_fingerprint,'header_fingerprint');
+  if(expectedHeaderFingerprint!==actualHeaderFingerprint)qcFail('header_drift','header_fingerprint_mismatch',{sheet_name:sheetName,expected:expectedHeaderFingerprint,actual:actualHeaderFingerprint});
+  var manifestSha=qcExactSha(mp.manifestSha256,'manifest_sha256'),H=qcFieldMapping(sh.headers).mapping,rawRows=(sh.rows||[]),rawRowShas=sh.rowSha256s||[],populated=rawRows.map(function(r,idx){return {row:r,rowSha:rawRowShas[idx],rowNumber:idx+2};}).filter(function(x){return x.row&&typeof x.row==='object'&&Object.keys(x.row).length;}),excludedAggregateRows=populated.filter(function(entry){return qcIsPlatformTotalRow(entry.row,H);}),factEntries=populated.filter(function(entry){return !qcIsPlatformTotalRow(entry.row,H);});
+  var rows=factEntries.map(function(entry){
+    var r=entry.row,rowNumber=entry.rowNumber,id=qcNormText(r[H.material_id]),nm=qcNormText(r[H.material_name]),cost=qcNum(r[H.cost],'cost',rowNumber),gmv=qcNum(r[H.gmv],'gmv',rowNumber),orders=qcNum(r[H.orders],'orders',rowNumber,{integer:true});
+    if(!id||!nm)qcFail('content_invalid','material_identity_missing',{row_number:rowNumber,material_id:id,material_name:nm});
+    if(id==='-'&&(Math.abs(cost)>1e-9||Math.abs(gmv)>1e-9||orders!==0))qcFail('unresolved_material_aggregate','material_id_dash_with_value',{row_number:rowNumber,material_name:nm,cost:cost,gmv:gmv,orders:orders});
+    var videoType=qcMaterialVideoType(m,r,H),vt=videoType.value;
+    if(acc.scope==='self_live'&&!vt)qcFail('material_video_type_missing','self_live_video_type_has_no_source_evidence',{row_number:rowNumber,advertiser_id:acc.advertiser_id});
+    var rowSha=qcExactSha(entry.rowSha,'source_row_sha256'),bk=[acc.scope,acc.advertiser_id,day,id].join('|');
+    return {
+      '日期':day,
+      '广告账户ID':acc.advertiser_id,
+      '广告账户名称':acc.advertiser_name,
+      '素材ID':id,
+      '素材视频名称':nm,
+      '素材创建时间':H.material_upload_time?qcNormText(r[H.material_upload_time]):'',
+      '素材来源':H.material_source?qcNormText(r[H.material_source]):'',
+      '平台标签':H.platform_label?qcNormText(r[H.platform_label]):'',
+      '视频素材类型':vt,
+      '整体消耗':cost,
+      '整体成交金额':gmv,
+      '整体成交订单数':orders,
+      '整体支付ROI':qcOptNum(r,H,'pay_roi',rowNumber),
+      '净成交ROI':qcOptNum(r,H,'net_roi',rowNumber),
+      '净成交金额':qcOptNum(r,H,'net_gmv',rowNumber),
+      '净成交订单数':qcOptNum(r,H,'net_orders',rowNumber,{integer:true}),
+      '1小时内退款金额':qcOptNum(r,H,'refund_1h_amount',rowNumber),
+      '1小时内退款订单数':qcOptNum(r,H,'refund_1h_orders',rowNumber,{integer:true}),
+      '7日结算金额':qcOptNum(r,H,'settle_7d_amount',rowNumber),
+      '14日结算金额':qcOptNum(r,H,'settle_14d_amount',rowNumber),
+      '30日结算金额':qcOptNum(r,H,'settle_30d_amount',rowNumber),
+      '整体展示次数':qcOptNum(r,H,'show_count',rowNumber,{integer:true}),
+      '整体点击次数':qcOptNum(r,H,'click_count',rowNumber,{integer:true}),
+      '视频播放数':qcOptNum(r,H,'play_count',rowNumber,{integer:true}),
+      '3秒播放率':qcOptNum(r,H,'play_3s_rate',rowNumber,{percent:true}),
+      '视频完播率':qcOptNum(r,H,'completion_rate',rowNumber,{percent:true}),
+      source_kind:'qianchuan_console_export',
+      batch_id:qcNormText(m.batch_id),
+      manifest_sha256:manifestSha,
+      source_xlsx_sha256:actualSourceSha,
+      account_registry_sha256:acc.account_registry_sha256,
+      field_mapping_version:'gy-qianchuan-console-video-v1',
+      source_row_ref:{sheet_name:sheetName,row_number:rowNumber,header_count:sh.headers.length,row_sha256:rowSha},
+      business_key:bk
+    };
+  });
+  var seen={};rows.forEach(function(r){if(seen[r.business_key])qcFail('duplicate_fact','duplicate_business_key_in_export',{business_key:r.business_key});seen[r.business_key]=1;});
+  var key='tlapi::'+acc.channel+'::video::rng'+day+'_'+day;
+  var payload={sheets:{'千川控制台视频素材':rows},_tl:{chan:acc.channel,type:'video',period:'rng'+day+'_'+day,scope:acc.scope,start:day,end:day,source:'qianchuan_console_export',source_kind:'qianchuan_console_export',batch_ids:[qcNormText(m.batch_id)],manifest_sha256s:[manifestSha],source_xlsx_sha256s:[actualSourceSha],account_registry_source:QC_ACCOUNT_REGISTRY.source,account_registry_sha256:QC_ACCOUNT_REGISTRY.sha256,account_registry_updated_at:QC_ACCOUNT_REGISTRY.source_updated_at,field_mapping_version:'gy-qianchuan-console-video-v1',header_fingerprint:actualHeaderFingerprint,source_row_count:populated.length,excluded_aggregate_row_count:excludedAggregateRows.length,row_count:rows.length,source_window:{start:day,end:day},advertiser_ids:[acc.advertiser_id]}};
+  return {key:key,payload:qcMaterializeConsoleIdentityPayload(payload)};
+}
+function qcPrepareConsoleFiles(parsed){
+  var manifests={},used={};parsed.forEach(function(p){if(!p.qianchuanManifest)return;var sf=qcBaseName(p.qianchuanManifest.source_file);if(!sf)qcFail('manifest_invalid','source_file_missing');if(manifests[sf])qcFail('manifest_invalid','duplicate_source_file_manifest',{source_file:sf});manifests[sf]=p;});
+  var groups={},skip={},units={};parsed.forEach(function(p){if(!p.qianchuanWorkbook)return;var mp=manifests[p.name];if(!p.qianchuanConsoleCandidate&&!mp)return;var out=qcNormalizeConsole(p,mp||{}),m=mp.qianchuanManifest,u=[m.scope,m.advertiser_id,qcValidDate(m.statistic_date),m.report_type].join('|');if(units[u])qcFail('coverage_incomplete','duplicate_account_day_manifest',{business_key:u,source_files:[units[u],p.name]});units[u]=p.name;used[mp&&mp.name]=1;(groups[out.key]=groups[out.key]||[]).push({parsed:p,out:out});});
+  Object.keys(manifests).forEach(function(sf){if(!used[manifests[sf].name])qcFail('manifest_mismatch','manifest_without_source_workbook',{source_file:sf});});
+  Object.keys(groups).forEach(function(key){var g=groups[key],base=g[0].out,rows=[],seen={},ids={},batches={},mshas={},xshas={},sourceCount=0,excludedCount=0,rowCount=0;g.forEach(function(it,gi){Object.values(it.out.payload.sheets).forEach(function(rs){rs.forEach(function(r){if(seen[r.business_key])qcFail('duplicate_fact','duplicate_business_key_across_exports',{business_key:r.business_key});seen[r.business_key]=1;ids[r['广告账户ID']]=1;rows.push(r);});});(it.out.payload._tl.advertiser_ids||[]).forEach(function(v){v=qcNormText(v);if(v)ids[v]=1;});(it.out.payload._tl.batch_ids||[]).forEach(function(v){batches[v]=1;});(it.out.payload._tl.manifest_sha256s||[]).forEach(function(v){mshas[v]=1;});(it.out.payload._tl.source_xlsx_sha256s||[]).forEach(function(v){xshas[v]=1;});sourceCount+=Number(it.out.payload._tl.source_row_count)||0;excludedCount+=Number(it.out.payload._tl.excluded_aggregate_row_count)||0;rowCount+=Number(it.out.payload._tl.row_count)||0;if(gi)skip[it.parsed.name]=1;});base.payload.sheets={'千川控制台视频素材':rows};base.payload._tl.advertiser_ids=Object.keys(ids).sort();base.payload._tl.batch_ids=Object.keys(batches).sort();base.payload._tl.manifest_sha256s=Object.keys(mshas).sort();base.payload._tl.source_xlsx_sha256s=Object.keys(xshas).sort();base.payload._tl.source_row_count=sourceCount;base.payload._tl.excluded_aggregate_row_count=excludedCount;base.payload._tl.row_count=rowCount;qcMaterializeConsoleIdentityPayload(base.payload);g[0].parsed.qianchuanConsole=base;});
+  return parsed.filter(function(p){return !p.qianchuanManifest&&!skip[p.name];});
+}
+function qcDashboardRows(payload){var out=[];Object.keys(payload&&payload.sheets||{}).forEach(function(k){var rows=payload.sheets[k];if(Array.isArray(rows))out=out.concat(rows);});return out;}
+function qcFactKey(payload,row){return [qcNormText(payload&&payload._tl&&payload._tl.scope),qcNormText(row&&row['广告账户ID']),qcCleanDate(row&&row['日期']),qcNormText(row&&row['素材ID'])].join('|');}
+function qcAssertNoVideoSourceConflict(store,incoming){
+  var existing=store&&store[incoming.key];if(!existing)return {ok:true,action:'insert_day_key'};
+  var existingSource=qcNormText(existing&&existing._tl&&(existing._tl.source_kind||existing._tl.source)),incomingSource=qcNormText(incoming&&incoming.payload&&incoming.payload._tl&&(incoming.payload._tl.source_kind||incoming.payload._tl.source));
+  if(existingSource==='qianchuan_console_export'&&incomingSource==='qianchuan_console_export')return {ok:true,action:'replace_day_key'};
+  var existingKeys={};qcDashboardRows(existing).forEach(function(r){existingKeys[qcFactKey(existing,r)]=1;});
+  var overlap=qcDashboardRows(incoming.payload).map(function(r){return qcFactKey(incoming.payload,r);}).filter(function(k){return existingKeys[k];}),uniqueOverlap=Object.keys(overlap.reduce(function(o,k){o[k]=1;return o;},{})).sort();
+  if(existingSource&&incomingSource&&existingSource!==incomingSource&&uniqueOverlap.length)qcFail('duplicate_source','same_video_fact_has_multiple_authorities',{store_key:incoming.key,existing_source:existingSource,incoming_source:incomingSource,overlapping_business_keys:uniqueOverlap});
+  qcFail('duplicate_source','video_day_key_has_multiple_authorities',{store_key:incoming.key,existing_source:existingSource||'unknown',incoming_source:incomingSource||'unknown',overlapping_business_keys:uniqueOverlap});
+}
+function qcUpsertVideoPayload(store,incoming){qcValidateConsoleIdentityPayload(incoming.payload);var gate=qcAssertNoVideoSourceConflict(store,incoming);store[incoming.key]=incoming.payload;return gate;}
+function readFileAsWorkbook(file){
+  return new Promise(function(res,rej){
+    var fr=new FileReader();
+    if(/\.json$/i.test(file.name)||/json/i.test(file.type||'')){
+      fr.onload=function(e){try{var ab=e.target.result;qcShaBuffer(ab).then(function(h){var txt=new TextDecoder('utf-8').decode(new Uint8Array(ab)).replace(/^\uFEFF/,''),obj=JSON.parse(txt);res(obj&&obj.schema==='gy-qianchuan-console-export-manifest-v1'?{name:file.name,qianchuanManifest:obj,manifestSha256:h}:{name:file.name,qianchuan:obj});}).catch(rej);}catch(err){rej(err);}};
+      fr.onerror=rej;fr.readAsArrayBuffer(file);return;
+    }
+    fr.onload=function(e){try{
+      var ab=e.target.result;
+      qcShaBuffer(ab).then(function(srcSha){
+        var wb=XLSX.read(ab,{type:'array'}),isDanmu=/弹幕|评论/.test(file.name),isLive=wb.SheetNames.some(function(n){return /^\d+月$/.test(n);}),qcs=[],hashJobs=[];
+        wb.SheetNames.forEach(function(n){var mx=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,blankrows:false}),hs=(mx[0]||[]).map(function(v){return String(v==null?'':v).trim();}).filter(Boolean),rs=XLSX.utils.sheet_to_json(wb.Sheets[n],{defval:null}),q={name:n,headers:hs,rows:rs,rowSha256s:[]};qcs.push(q);hashJobs.push(qcShaText(JSON.stringify(hs.map(qcNormHeader).filter(Boolean))).then(function(h){q.headerFingerprint=h;}));hashJobs.push(Promise.all(rs.map(function(r){return qcShaText(qcCanonicalStringify(r));})).then(function(hashes){q.rowSha256s=hashes;}));});
+        Promise.all(hashJobs).then(function(){
+          var qcw={sourceFile:file.name,sourceSha256:srcSha,sheets:qcs},candidate=qcs.some(function(q){return qcHeaderState(q.headers).candidate;}),sheets={},arr=null,danmu=null;
+          if(candidate){qcs.forEach(function(q){sheets[q.name]=q.rows;});}
+          else if(isDanmu){danmu={};wb.SheetNames.forEach(function(n){danmu[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:false});});}
+          else if(isLive){arr={};wb.SheetNames.forEach(function(n){if(/^\d+月$/.test(n))arr[n]=XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,defval:null,raw:false});});}
+          else{qcs.forEach(function(q){sheets[q.name]=q.rows;});}
+          res({name:file.name,sheets:sheets,arr:arr,danmu:danmu,qianchuanWorkbook:qcw,qianchuanConsoleCandidate:candidate});
+        }).catch(rej);
+      }).catch(rej);
+    }catch(err){rej(err);}};
+    fr.onerror=rej;fr.readAsArrayBuffer(file);
+  });
+}
 function parseRefund(sheets){
   var pr=sheets['退款商品']||[],bd=sheets['本店数据']||[];if(!pr.length&&!bd.length)return null;
   var info=periodInfoFromRows(pr,'日期')||periodInfoFromRows(bd,'日期')||{key:'000000_wk00000000',kind:'unknown',start:'',end:''};
@@ -602,8 +973,16 @@ function handleFiles(fileList){
   var files=Array.from(fileList);if(!files.length)return;
   setStatus('读取中…');
   Promise.all(files.map(readFileAsWorkbook)).then(function(parsed){
+    parsed=qcPrepareConsoleFiles(parsed);
     var store=loadStore();var added=[];
-    parsed.forEach(function(p){if(p.qianchuan){var qs=qianchuanPayloads(p.qianchuan,p.name);if(qs.length){qs.forEach(function(x){store[x.key]=x.payload;});added.push('千川API日报 '+p.name+' ('+qs.length+'组)');}else{added.push('(未识别千川API数据) '+p.name);}return;}if(p.danmu){var Dm=parseDanmu(p.danmu,p.name);if(Dm&&Dm.msgs.length){store['danmu::'+(Dm.room||'面霜正装')+'::'+Dm.month]={_danmu:Dm};added.push('弹幕·'+(Dm.room||'')+' '+p.name+' ('+Dm.msgs.length+'条)');return;}}if(p.arr){var Ls=parseLive(p.arr,p.name),LL=Array.isArray(Ls)?Ls:(Ls?[Ls]:[]);if(LL.length){LL.forEach(function(L){store['live::'+L.room+'::'+L.period]={_live:L};});var _mons=LL.map(function(L){return parseInt(String(L.period).slice(4,6),10)+'月';}).join('、');added.push('直播('+LL[0].room+') '+p.name+' ('+_mons+')');return;}}if(p.sheets&&p.sheets['退款商品']){var RF=parseRefund(p.sheets);if(RF){store['refund::'+RF.period]={_refund:RF};added.push('退款分析 '+p.name+' ('+RF.rows.length+'品)');return;}}var sh=p.sheets;var tt=touliuType(sh);if(tt==='tiao'){added.push('(忽略调控表) '+p.name);return;}if(tt){var chan=touliuChan(p.name),per=touliuPeriod(sh);var key='tl::'+chan+'::'+tt+'::'+per;store[key]={sheets:trim(sh),_tl:{chan:chan,type:tt,period:per}};added.push(key+' ('+p.name+')');return;}var key=detectKey(sh);store[key]={sheets:trim(sh)};added.push(key+' ('+p.name+')');});
+    parsed.forEach(function(p){
+      if(p.qianchuanConsole){var inc=p.qianchuanConsole;qcUpsertVideoPayload(store,inc);added.push('千川控制台视频日事实 '+inc.key);return;}
+      if(p.qianchuan){var qs=qianchuanPayloads(p.qianchuan,p.name);if(qs.length){qs.forEach(function(x){var isVideo=x.key.indexOf('::video::')>=0;if(isVideo)qcUpsertVideoPayload(store,x);else store[x.key]=x.payload;});added.push('千川API日报 '+p.name+' ('+qs.length+'组)');}else{added.push('(未识别千川API数据) '+p.name);}return;}
+      if(p.danmu){var Dm=parseDanmu(p.danmu,p.name);if(Dm&&Dm.msgs.length){store['danmu::'+(Dm.room||'面霜正装')+'::'+Dm.month]={_danmu:Dm};added.push('弹幕·'+(Dm.room||'')+' '+p.name+' ('+Dm.msgs.length+'条)');return;}}
+      if(p.arr){var Ls=parseLive(p.arr,p.name),LL=Array.isArray(Ls)?Ls:(Ls?[Ls]:[]);if(LL.length){LL.forEach(function(L){store['live::'+L.room+'::'+L.period]={_live:L};});var _mons=LL.map(function(L){return parseInt(String(L.period).slice(4,6),10)+'月';}).join('、');added.push('直播('+LL[0].room+') '+p.name+' ('+_mons+')');return;}}
+      if(p.sheets&&p.sheets['退款商品']){var RF=parseRefund(p.sheets);if(RF){store['refund::'+RF.period]={_refund:RF};added.push('退款分析 '+p.name+' ('+RF.rows.length+'品)');return;}}
+      var sh=p.sheets;var tt=touliuType(sh);if(tt==='tiao'){added.push('(忽略调控表) '+p.name);return;}if(tt){var chan=touliuChan(p.name),per=touliuPeriod(sh);var key='tl::'+chan+'::'+tt+'::'+per;store[key]={sheets:trim(sh),_tl:{chan:chan,type:tt,period:per}};added.push(key+' ('+p.name+')');return;}var key=detectKey(sh);store[key]={sheets:trim(sh)};added.push(key+' ('+p.name+')');
+    });
     saveStore(store);
     rebuildFromStore();
     setStatus('✓ 已导入：\n'+added.join('\n'));
@@ -955,7 +1334,7 @@ function renderTouliu(){
   var el=document.getElementById('touliuMod');if(!el||!D)return;
   var mo=/^(\d{6})_all$/.test(per)?per.slice(0,6):'',tlCross=mo&&D._touliuCrossMonth?D._touliuCrossMonth[mo]:null,tlNote=tlCross?'<div style="margin-bottom:8px;padding:7px 10px;background:#fff8e8;border:1px solid #ead49b;border-radius:6px;color:#8a6500;font-size:10px;line-height:1.55">口径提示：跨月周投流快照没有逐日明细，无法按天拆月；已从本月投流汇总中剔除，请在跨月周视图查看完整快照。</div>':'';
   var pdata=D.touliu&&D.touliu[per];var chan=ch;if(ch==='all'){chan=(pdata&&pdata.zy_shelf)?'zy_shelf':(pdata?Object.keys(pdata)[0]:'');}
-  var t=pdata&&pdata[chan],accountRoot=t;if(chan==='zibo'&&accountRoot){var accountViews=accountRoot.accountViews||{};if(!accountViews[tlSelfLiveAccount])tlSelfLiveAccount=accountViews.cream?'cream':(accountViews.mask?'mask':'cream');t=accountViews[tlSelfLiveAccount]||null;}
+  var t=pdata&&pdata[chan],accountRoot=t;if(chan==='zibo'&&accountRoot){var accountViews=accountRoot.accountViews||{};t=accountViews[tlSelfLiveAccount]||null;}
   if(!t){el.innerHTML=tlNote+'<div class="action-title">💰 投流视图</div><div style="color:#8a7d66;font-size:12px;line-height:1.9">'+(mo?'该触点当前月份暂无可精确按日归属的千川数据；跨月整周数据请切到对应完整自然周查看。':'该触点的千川数据还没导入。')+'</div>';return;}
   var directRoi=t.cost?t.gmv/t.cost:0;
   var pds=(D.periods[per]&&D.periods[per].dates)||t.dates;var fgmv=0;pds.forEach(function(d){if(D.daily[d]&&D.daily[d][chan])fgmv+=D.daily[d][chan].gmv;});
@@ -1099,7 +1478,7 @@ function render(){
   document.getElementById('cg').innerHTML=['all'].concat(CH).map(function(c){return '<button class="btn '+(c===ch?'on':'')+'" onclick="setC(\''+c+'\')">'+NAME[c]+'</button>';}).join('');
   var activePeriod=D.periods[per]||{};document.getElementById('sub').textContent=(activePeriod.range||'')+(activePeriod.crossMonth?' · 跨月完整自然周':'')+' · 触点：'+(NAME[ch].replace(/[^一-龥]/g,'')||'全部')+' · 视图：'+(ROLES.find(function(r){return r.id===role;})||{}).short;
   var src='抖音电商罗盘成交日明细 + 商品自然日明细 + 退款分析支付日事实'+(D._qcApi?' + 千川API日报（投流模块）':'');
-  document.getElementById('srcnote').textContent='数据来源：'+src+' · 时间口径：周=完整自然周（可跨月）；月=自然月；商品成交按日累积，历史聚合快照仅作切换日前兜底 · 退款口径：退款分析表为唯一权威源，每天按订单支付日覆盖历史，净GMV=成交GMV−退款金额；商品退款按支付日+商品ID+售卖类型+原始载体严格取交集 · 素材身份口径（自营货架+自播视频+达人短视频；自播投流面霜/面膜互斥查看，无两账户合并视图；直播间画面单独列示且不参与视频素材分母）：推商品达人户按账户来源全部归达人素材；其余素材中，ID和创建时间均为“-”或平台标题为“AIGC动态创意视频素材集合”归AI素材；普通 .mp4 中名称含马溶/马蓉且名称日期晚于2026-07-10归自制2组（07-10不算），其余归自制1组（波波）；其他正常内容标题归达人素材；空标题或无法识别归待确认；素材名称出现AI/AIGC、达人姓名或“达人拼自制/多达人混剪”等字样不改变普通 .mp4 的自制归类；STAR/平台标签只作审计旁证，不覆盖上述优先级；千川API触点按配置中的 advertiser_id/account_touchpoints 显式映射，禁止按账户名猜测 · 已导入：'+((D.months||[]).map(function(m){var pids=m.weekPeriods||m.weeks.map(function(w){return m.key+'_'+w;});return m.label+'('+pids.map(function(pid){return periodLabel(pid)+(isCrossMonthWeek(pid)?'[跨月]':'');}).join('+')+')';}).join(' / ')||'无');
+  document.getElementById('srcnote').textContent='数据来源：'+src+' · 时间口径：周=完整自然周（可跨月）；月=自然月；商品成交按日累积，历史聚合快照仅作切换日前兜底 · 退款口径：退款分析表为唯一权威源，每天按订单支付日覆盖历史，净GMV=成交GMV−退款金额；商品退款按支付日+商品ID+售卖类型+原始载体严格取交集 · 素材身份口径（自营货架+自播视频+达人短视频；自播投流面霜/面膜互斥查看，无两账户合并视图；直播间画面单独列示且不参与视频素材分母）：推商品达人户按账户来源全部归达人素材；其余素材中，ID和创建时间均为“-”或平台标题为“AIGC动态创意视频素材集合”归AI素材；普通 .mp4 中名称含马溶/马蓉且名称日期晚于2026-07-10归自制2组（07-10不算），其余归自制1组（波波）；其他正常内容标题归达人素材；空标题或无法识别归待确认；未返回项继续按当前统一素材优先级判定，STAR/平台标签只作审计旁证且不覆盖归类；千川API触点按 advertiser_id/account_touchpoints 显式映射 · 已导入：'+((D.months||[]).map(function(m){var pids=m.weekPeriods||m.weeks.map(function(w){return m.key+'_'+w;});return m.label+'('+pids.map(function(pid){return periodLabel(pid)+(isCrossMonthWeek(pid)?'[跨月]':'');}).join('+')+')';}).join(' / ')||'无');
   renderKPI();renderMonthGoals();renderFunnel();renderGA();renderConclCards();renderTrend();renderAnom();renderMtx();renderAcc();renderPrd();renderTouliu();renderTLSum();renderDataCheck();renderLive();renderRefund();renderActions();
   applyRoleVisibility();
 }
@@ -1554,11 +1933,504 @@ buildTgt();renderActions();
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
   else start();
 })();
-</script><script id="__gyDataCompletenessCore">(function (root, factory) {
+</script><script id="__gyUnifiedMaterialIdentityCore">(function initUnifiedMaterialIdentity(root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
+  else root.GuoyunUnifiedMaterialIdentity = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function unifiedMaterialIdentityFactory() {
+  "use strict";
+
+  const MODEL = "unified_material_identity_v1";
+  const CONFIG_SCHEMA_VERSION = 5;
+  const BUCKETS = Object.freeze(["AI素材", "自制1组", "自制2组", "达人素材", "待确认"]);
+  const SCOPES = Object.freeze(["self_live", "self_shelf", "creator_short_video"]);
+  const REQUIRED_EVIDENCE_FIELDS = Object.freeze([
+    "first_layer_identity",
+    "identity",
+    "evidence_level",
+    "classification_basis",
+    "category_rule_id",
+    "account_source_role",
+  ]);
+  const DASHBOARD_FIELD_MAP = Object.freeze({
+    "身份一级": "first_layer_identity",
+    "身份": "identity",
+    "证据级别": "evidence_level",
+    "判定依据": "classification_basis",
+    "桥接状态": "bridge_status",
+    "桥接方式": "bridge_method",
+    "授权命中数": "matched_auth_count",
+    "命中aweme_item_id": "matched_aweme_item_ids",
+    "授权状态": "matched_auth_statuses",
+    "平台标签": "platform_label",
+    "素材来源": "material_source",
+    "平台标签快照生成时间": "platform_snapshot_generated_at",
+    "平台标签快照来源": "platform_snapshot_source_file",
+    "平台标签快照哈希": "platform_snapshot_source_sha256",
+    "供应商关键词": "matched_supplier_keyword",
+    "组名关键词": "matched_team_keyword",
+    "疑似达人关键词": "matched_suspicious_keyword",
+    "报警类型": "alert_types",
+    "标题风格": "title_style",
+    "内容标题信号分": "content_title_signal_score",
+    "素材名称日期": "material_name_date",
+    "分类规则ID": "category_rule_id",
+    "账户来源角色": "account_source_role",
+  });
+  const DASHBOARD_REQUIRED_EVIDENCE_FIELDS = Object.freeze(
+    REQUIRED_EVIDENCE_FIELDS.map((field) => (
+      Object.entries(DASHBOARD_FIELD_MAP).find(([, source]) => source === field) || []
+    )[0]).filter(Boolean),
+  );
+  const DASHBOARD_IDENTITY_FIELDS = Object.freeze([
+    ...Object.keys(DASHBOARD_FIELD_MAP),
+    "身份报警",
+  ]);
+  const DASHBOARD_COMPACT_FIELDS = Object.freeze(["身份", "分类规则ID", "身份报警"]);
+  const CONFIG_PRECEDENCE = Object.freeze([
+    "creator_account_source",
+    "ai_sentinel",
+    "self_made_group_2",
+    "self_made_group_1",
+    "creator_content_title",
+    "pending",
+  ]);
+
+  function cleanText(value) {
+    return String(value == null ? "" : value)
+      .normalize("NFKC")
+      .replace(/[\u200B-\u200D\uFEFF]/gu, "")
+      .trim();
+  }
+
+  function field(row, canonicalName, dashboardName) {
+    if (row && row[canonicalName] != null) return row[canonicalName];
+    if (row && dashboardName && row[dashboardName] != null) return row[dashboardName];
+    return "";
+  }
+
+  function normalizeScope(value) {
+    const scope = cleanText(value);
+    if (scope === "zibo") return "self_live";
+    if (scope === "zy_shelf") return "self_shelf";
+    if (scope === "dy_short") return "creator_short_video";
+    return scope;
+  }
+
+  function materialNameDate(value) {
+    const text = cleanText(value);
+    const patterns = [
+      [/(?<!\d)(20\d{2})(\d{2})(\d{2})(?!\d)/gu, false],
+      [/(?<!\d)(20\d{2})[./_-](\d{1,2})[./_-](\d{1,2})(?!\d)/gu, false],
+      [/(?<!\d)(\d{2})(\d{2})(\d{2})(?!\d)/gu, true],
+      [/(?<!\d)(\d{2})[./_-](\d{1,2})[./_-](\d{1,2})(?!\d)/gu, true],
+    ];
+    const candidates = [];
+    for (const [pattern, shortYear] of patterns) {
+      for (const match of text.matchAll(pattern)) {
+        const year = Number(match[1]) + (shortYear ? 2000 : 0);
+        const month = Number(match[2]);
+        const day = Number(match[3]);
+        const candidate = `${String(year).padStart(4, "0")}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const parsed = new Date(`${candidate}T00:00:00Z`);
+        if (Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === candidate) {
+          candidates.push({ index: match.index, candidate });
+        }
+      }
+    }
+    candidates.sort((left, right) => left.index - right.index);
+    return candidates[0] ? candidates[0].candidate : "";
+  }
+
+  function recognizableContentTitle(value, materialId) {
+    const title = cleanText(value);
+    if (!title || ["-", "—", "未知", "未识别", "未识别素材"].includes(title)) return false;
+    const compact = title.replace(/\s+/gu, "");
+    if (compact === cleanText(materialId) || /^\d{6,30}$/u.test(compact)) return false;
+    return /[A-Za-z\u3400-\u9fff]/u.test(title);
+  }
+
+  function validateConfig(config, requestedScope) {
+    const scope = normalizeScope(requestedScope || (config && config.scope));
+    const errors = [];
+    if (!SCOPES.includes(scope)) errors.push("scope");
+    if (!config || typeof config !== "object" || Array.isArray(config)) errors.push("config");
+    else {
+      if (normalizeScope(config.scope) !== scope) errors.push("config.scope");
+      if (Number(config.schema_version) !== CONFIG_SCHEMA_VERSION) errors.push("schema_version");
+      if (cleanText(config.assignment_model) !== MODEL) errors.push("assignment_model");
+      if (JSON.stringify(config.identity_buckets || []) !== JSON.stringify(BUCKETS)) errors.push("identity_buckets");
+      if (JSON.stringify(config.classification_precedence || []) !== JSON.stringify(CONFIG_PRECEDENCE)) {
+        errors.push("classification_precedence");
+      }
+      if (cleanText(config.ai_rule && config.ai_rule.sentinel) !== "-") errors.push("ai_rule.sentinel");
+      if (!(config.ai_rule && Array.isArray(config.ai_rule.exact_titles)
+        && config.ai_rule.exact_titles.includes("AIGC动态创意视频素材集合"))) {
+        errors.push("ai_rule.exact_titles");
+      }
+      if (cleanText(config.self_made_rule && config.self_made_rule.extension).toLowerCase() !== ".mp4") {
+        errors.push("self_made_rule.extension");
+      }
+      if (cleanText(config.self_made_rule && config.self_made_rule.group_2_filename_date_after) !== "2026-07-10") {
+        errors.push("self_made_rule.group_2_filename_date_after");
+      }
+      const keywords = (config.self_made_rule && config.self_made_rule.group_2_name_keywords) || [];
+      if (JSON.stringify(keywords) !== JSON.stringify(["马溶", "马蓉"])) {
+        errors.push("self_made_rule.group_2_name_keywords");
+      }
+      if (scope === "creator_short_video"
+        && cleanText(config.creator_account_rule && config.creator_account_rule.identity) !== "达人素材") {
+        errors.push("creator_account_rule.identity");
+      }
+    }
+    if (errors.length) {
+      const error = new Error(`unified_material_identity_config_drift:${scope || "missing"}:${errors.join(",")}`);
+      error.code = "unified_material_identity_config_drift";
+      error.details = { scope, errors };
+      throw error;
+    }
+    return true;
+  }
+
+  function classify(scopeValue, row) {
+    const scope = normalizeScope(scopeValue);
+    if (!SCOPES.includes(scope)) {
+      const error = new Error(`unified_material_identity_scope_invalid:${scope || "missing"}`);
+      error.code = "unified_material_identity_scope_invalid";
+      throw error;
+    }
+    const materialId = cleanText(field(row, "material_id", "素材ID"));
+    const name = cleanText(field(row, "material_name", "素材视频名称"));
+    const createdAt = cleanText(field(row, "material_upload_time", "素材创建时间"));
+    const platformLabel = cleanText(field(row, "platform_label", "平台标签"));
+    const materialSource = cleanText(field(row, "material_source", "素材来源"));
+    const accountSourceRole = scope === "creator_short_video"
+      ? "creator_short_video_account"
+      : "self_operated_account";
+    const nameDate = materialNameDate(name);
+    const idAndTimeSentinel = materialId === "-" && createdAt === "-";
+    const exactAiTitle = name === "AIGC动态创意视频素材集合";
+    const mp4 = name.toLocaleLowerCase().endsWith(".mp4");
+    const matchedTeamKeyword = ["马溶", "马蓉"].find((keyword) => name.includes(keyword)) || "";
+
+    let identity;
+    let firstLayerIdentity;
+    let evidenceLevel;
+    let categoryRuleId;
+    let titleStyle;
+    let classificationBasis;
+    let materialNameDateValue = "";
+    let matchedTeamKeywordValue = "";
+
+    if (scope === "creator_short_video") {
+      identity = "达人素材";
+      firstLayerIdentity = "达人";
+      evidenceLevel = "账户硬证据";
+      categoryRuleId = "creator_account_source";
+      titleStyle = "creator_account_source";
+      classificationBasis = "推商品达人户按锁定 advertiser_id 归达人素材；名称不再拆分";
+    } else if (idAndTimeSentinel || exactAiTitle) {
+      identity = "AI素材";
+      firstLayerIdentity = "AI素材";
+      evidenceLevel = "平台明示";
+      categoryRuleId = "ai_sentinel";
+      titleStyle = "ai_sentinel";
+      const reasons = [];
+      if (idAndTimeSentinel) reasons.push("素材ID和创建时间均为-");
+      if (exactAiTitle) reasons.push("平台标题精确命中AIGC动态创意视频素材集合");
+      classificationBasis = reasons.join("；");
+    } else if (mp4 && matchedTeamKeyword && nameDate > "2026-07-10") {
+      identity = "自制2组";
+      firstLayerIdentity = "自制";
+      evidenceLevel = "规则推断";
+      categoryRuleId = "self_made_group_2";
+      titleStyle = "local_mp4";
+      materialNameDateValue = nameDate;
+      matchedTeamKeywordValue = matchedTeamKeyword;
+      classificationBasis = `普通.mp4成片；名称含${matchedTeamKeyword}；名称日期=${nameDate}，晚于2026-07-10`;
+    } else if (mp4) {
+      identity = "自制1组";
+      firstLayerIdentity = "自制";
+      evidenceLevel = "规则推断";
+      categoryRuleId = "self_made_group_1";
+      titleStyle = "local_mp4";
+      materialNameDateValue = nameDate;
+      classificationBasis = "其余普通.mp4自制成片；AI/达人字样不改变自制归属";
+    } else if (recognizableContentTitle(name, materialId)) {
+      identity = "达人素材";
+      firstLayerIdentity = "达人";
+      evidenceLevel = "规则推断";
+      categoryRuleId = "creator_content_title";
+      titleStyle = "normal_content_title";
+      classificationBasis = "非.mp4的正常内容标题，按达人素材";
+    } else {
+      identity = "待确认";
+      firstLayerIdentity = "待确认";
+      evidenceLevel = "待确认";
+      categoryRuleId = "pending";
+      titleStyle = "unrecognized";
+      classificationBasis = "标题为空、纯编号或无法识别";
+    }
+
+    const alertTypes = [];
+    if (identity === "待确认") alertTypes.push("material_title_unrecognized");
+    if (firstLayerIdentity === "达人" && platformLabel.includes("自制")) {
+      alertTypes.push("platform_label_conflict");
+    }
+    if (firstLayerIdentity === "自制" && platformLabel.includes("达人")) {
+      alertTypes.push("platform_label_conflict");
+    }
+    return {
+      first_layer_identity: firstLayerIdentity,
+      identity,
+      evidence_level: evidenceLevel,
+      classification_basis: classificationBasis,
+      bridge_status: "not_matched",
+      bridge_method: "none",
+      matched_auth_count: 0,
+      matched_aweme_item_ids: "",
+      matched_auth_statuses: "",
+      platform_label: platformLabel,
+      material_source: materialSource,
+      platform_snapshot_generated_at: cleanText(field(row, "platform_snapshot_generated_at", "平台标签快照生成时间")),
+      platform_snapshot_source_file: cleanText(field(row, "platform_snapshot_source_file", "平台标签快照来源")),
+      platform_snapshot_source_sha256: cleanText(field(row, "platform_snapshot_source_sha256", "平台标签快照哈希")),
+      matched_supplier_keyword: "",
+      matched_team_keyword: matchedTeamKeywordValue,
+      matched_suspicious_keyword: "",
+      alert_types: [...new Set(alertTypes)].join(","),
+      has_alert: alertTypes.length > 0,
+      title_style: titleStyle,
+      content_title_signal_score: 0,
+      material_name_date: materialNameDateValue,
+      category_rule_id: categoryRuleId,
+      account_source_role: accountSourceRole,
+      material_identity_model: MODEL,
+    };
+  }
+
+  function materialize(scope, row, options) {
+    const opts = options || {};
+    if (opts.config) validateConfig(opts.config, scope);
+    const source = row && typeof row === "object" ? row : {};
+    return Object.assign({}, source, classify(scope, source));
+  }
+
+  function toDashboardFields(materialized, options) {
+    const compact = Boolean(options && options.compact);
+    const output = {};
+    for (const [target, source] of Object.entries(DASHBOARD_FIELD_MAP)) {
+      if (compact && !DASHBOARD_COMPACT_FIELDS.includes(target)) continue;
+      const value = materialized && materialized[source] != null ? materialized[source] : "";
+      if (value !== "" && value != null) output[target] = value;
+    }
+    if (materialized && materialized.has_alert) output["身份报警"] = "是";
+    return output;
+  }
+
+  function materializeDashboardRow(scope, row, options) {
+    const canonical = materialize(scope, row, options);
+    return Object.assign(
+      {},
+      row && typeof row === "object" ? row : {},
+      toDashboardFields(canonical, { compact: Boolean(options && options.compact) }),
+    );
+  }
+
+  function canonicalIdentityView(row) {
+    const output = {};
+    for (const [dashboard, canonical] of Object.entries(DASHBOARD_FIELD_MAP)) {
+      output[canonical] = field(row, canonical, dashboard);
+    }
+    output.has_alert = Boolean(
+      row && row.has_alert === true
+      || /^(?:true|1|是|yes)$/iu.test(cleanText(row && row["身份报警"])),
+    );
+    return output;
+  }
+
+  function assertMaterialized(scope, row, options) {
+    const opts = options || {};
+    if (opts.config) validateConfig(opts.config, scope);
+    const actual = canonicalIdentityView(row);
+    const expected = classify(scope, row);
+    const errors = [];
+    for (const required of REQUIRED_EVIDENCE_FIELDS) {
+      if (!cleanText(actual[required])) errors.push(`${required}_missing`);
+    }
+    for (const key of [
+      "first_layer_identity",
+      "identity",
+      "evidence_level",
+      "classification_basis",
+      "material_name_date",
+      "category_rule_id",
+      "account_source_role",
+      "title_style",
+    ]) {
+      if (cleanText(actual[key]) !== cleanText(expected[key])) errors.push(`${key}_mismatch`);
+    }
+    const actualSignal = Number(actual.content_title_signal_score);
+    if (!Number.isFinite(actualSignal) || actualSignal !== Number(expected.content_title_signal_score)) {
+      errors.push("content_title_signal_score_mismatch");
+    }
+    if (actual.has_alert !== expected.has_alert) errors.push("has_alert_mismatch");
+    if (errors.length) {
+      const error = new Error(`unified_material_identity_row_invalid:${errors.join(",")}`);
+      error.code = "unified_material_identity_row_invalid";
+      error.details = {
+        scope: normalizeScope(scope),
+        material_id: cleanText(field(row, "material_id", "素材ID")),
+        errors,
+        expected,
+        actual,
+      };
+      throw error;
+    }
+    return expected;
+  }
+
+  function assertCompactMaterialized(scope, row, options) {
+    const opts = options || {};
+    if (opts.config) validateConfig(opts.config, scope);
+    const actual = canonicalIdentityView(row);
+    const expected = classify(scope, row);
+    const errors = [];
+    for (const required of ["identity", "category_rule_id"]) {
+      if (!cleanText(actual[required])) errors.push(`${required}_missing`);
+      else if (cleanText(actual[required]) !== cleanText(expected[required])) {
+        errors.push(`${required}_mismatch`);
+      }
+    }
+    for (const fieldName of [
+      "first_layer_identity",
+      "evidence_level",
+      "classification_basis",
+      "account_source_role",
+      "material_name_date",
+      "title_style",
+    ]) {
+      if (cleanText(actual[fieldName])
+        && cleanText(actual[fieldName]) !== cleanText(expected[fieldName])) {
+        errors.push(`${fieldName}_mismatch`);
+      }
+    }
+    if (actual.content_title_signal_score !== ""
+      && actual.content_title_signal_score != null
+      && Number(actual.content_title_signal_score) !== Number(expected.content_title_signal_score)) {
+      errors.push("content_title_signal_score_mismatch");
+    }
+    const hasStoredAlert = Boolean(
+      row && (
+        Object.prototype.hasOwnProperty.call(row, "has_alert")
+        || Object.prototype.hasOwnProperty.call(row, "身份报警")
+      )
+    );
+    if (hasStoredAlert && actual.has_alert !== expected.has_alert) errors.push("has_alert_mismatch");
+    if (errors.length) {
+      const error = new Error(`unified_material_identity_compact_row_invalid:${errors.join(",")}`);
+      error.code = "unified_material_identity_compact_row_invalid";
+      error.details = {
+        scope: normalizeScope(scope),
+        material_id: cleanText(field(row, "material_id", "素材ID")),
+        errors,
+        expected,
+        actual,
+      };
+      throw error;
+    }
+    return expected;
+  }
+
+  function moneyCents(value, fieldName) {
+    const parsed = Number(value == null || value === "" ? 0 : value);
+    if (!Number.isFinite(parsed)) {
+      const error = new Error(`unified_material_identity_metric_invalid:${fieldName}`);
+      error.code = "unified_material_identity_metric_invalid";
+      throw error;
+    }
+    return Math.round((parsed + Number.EPSILON) * 100);
+  }
+
+  function integerMetric(value, fieldName) {
+    const parsed = Number(value == null || value === "" ? 0 : value);
+    if (!Number.isFinite(parsed) || !Number.isInteger(parsed)) {
+      const error = new Error(`unified_material_identity_metric_invalid:${fieldName}`);
+      error.code = "unified_material_identity_metric_invalid";
+      throw error;
+    }
+    return parsed;
+  }
+
+  function summarizeMaterializedRows(scope, rows, options) {
+    const list = Array.isArray(rows) ? rows : [];
+    const counts = Object.fromEntries(BUCKETS.map((bucket) => [bucket, 0]));
+    const costCents = Object.fromEntries(BUCKETS.map((bucket) => [bucket, 0]));
+    const gmvCents = Object.fromEntries(BUCKETS.map((bucket) => [bucket, 0]));
+    const orders = Object.fromEntries(BUCKETS.map((bucket) => [bucket, 0]));
+    list.forEach((row, index) => {
+      const identity = (options && options.compact
+        ? assertCompactMaterialized(scope, row, options)
+        : assertMaterialized(scope, row, options)).identity;
+      counts[identity] += 1;
+      costCents[identity] += moneyCents(field(row, "cost", "整体消耗"), `rows[${index}].cost`);
+      gmvCents[identity] += moneyCents(field(row, "gmv", "整体成交金额"), `rows[${index}].gmv`);
+      orders[identity] += integerMetric(field(row, "orders", "整体成交订单数"), `rows[${index}].orders`);
+    });
+    const totals = {
+      rows: list.length,
+      cost_cents: Object.values(costCents).reduce((sum, value) => sum + value, 0),
+      gmv_cents: Object.values(gmvCents).reduce((sum, value) => sum + value, 0),
+      orders: Object.values(orders).reduce((sum, value) => sum + value, 0),
+    };
+    return {
+      model: MODEL,
+      buckets: [...BUCKETS],
+      counts,
+      cost_cents: costCents,
+      gmv_cents: gmvCents,
+      orders,
+      totals,
+    };
+  }
+
+  return Object.freeze({
+    MODEL,
+    CONFIG_SCHEMA_VERSION,
+    BUCKETS,
+    SCOPES,
+    REQUIRED_EVIDENCE_FIELDS,
+    DASHBOARD_FIELD_MAP,
+    DASHBOARD_REQUIRED_EVIDENCE_FIELDS,
+    DASHBOARD_IDENTITY_FIELDS,
+    DASHBOARD_COMPACT_FIELDS,
+    CONFIG_PRECEDENCE,
+    cleanText,
+    normalizeScope,
+    materialNameDate,
+    recognizableContentTitle,
+    validateConfig,
+    classify,
+    materialize,
+    toDashboardFields,
+    materializeDashboardRow,
+    canonicalIdentityView,
+    assertMaterialized,
+    assertCompactMaterialized,
+    summarizeMaterializedRows,
+  });
+});
+</script><script id="__gyDataCompletenessCore">(function (root, factory) {
+  const accountRegistryCore = typeof module === "object" && module.exports
+    ? require("./qianchuan-account-registry.cjs")
+    : root?.GYQianchuanAccountRegistry;
+  const materialIdentityCore = typeof module === "object" && module.exports
+    ? require("./unified-material-identity-core.cjs")
+    : root?.GuoyunUnifiedMaterialIdentity;
+  const api = factory(accountRegistryCore, materialIdentityCore);
+  if (typeof module === "object" && module.exports) module.exports = api;
   if (root) root.GYDataCompleteness = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (accountRegistryCore, materialIdentityCore) {
   "use strict";
 
   const REQUIRED_PRODUCT_FIELDS = [
@@ -1567,7 +2439,20 @@ buildTgt();renderActions();
   const REQUIRED_PRODUCT_NUMERIC_FIELDS = ["成交金额", "成交订单数"];
   const REQUIRED_LUOPAN_SHEETS = ["成交概览", "自营成交", "合作成交", "账号构成"];
   const SUPPORTED_CONTRACT_SCHEMA = "gy-data-completeness-contract-v1";
-  const SUPPORTED_CONTRACT_VERSION = "2026-07-23.1";
+  const LEGACY_CONTRACT_VERSION = "2026-07-23.1";
+  const PREVIOUS_CURRENT_CONTRACT_VERSION = "2026-07-27.1";
+  const CURRENT_CONTRACT_VERSION = "2026-07-28.1";
+  const SUPPORTED_CONTRACT_VERSIONS = new Set([
+    LEGACY_CONTRACT_VERSION,
+    PREVIOUS_CURRENT_CONTRACT_VERSION,
+    CURRENT_CONTRACT_VERSION,
+  ]);
+  const CONSOLE_SOURCE_KIND = "qianchuan_console_export";
+  const API_SOURCE_KIND = "qianchuan_api";
+  const HYBRID_SOURCE_KIND = "qianchuan_hybrid";
+  const AIGC_AGGREGATE_MATERIAL_NAME = "AIGC动态创意视频素材集合";
+  const AIGC_AGGREGATE_MATERIAL_SOURCE = "AIGC动态创意";
+  const TARGET_AD_SCOPES = ["self_shelf", "self_live", "creator_short_video"];
   const LOCKED_PRODUCT_COMBINATIONS = [
     ["自卖", "直播", "自播"],
     ["自卖", "短视频", "自营货架"],
@@ -1576,27 +2461,47 @@ buildTgt();renderActions();
     ["合作", "短视频", "达人短视频"],
     ["合作", "商品卡", "达人短视频"],
   ];
-  const LOCKED_AD_SCOPES = {
+  const LEGACY_AD_SCOPE_SHAPES = {
     self_shelf: {
       channel: "zy_shelf",
-      accounts: ["1841581240024778", "1710621310336004"],
       sourceSpecs: ["account_daily", "product_daily", "ad_daily", "material_video_daily", "material_image_daily", "aweme_auth_list"],
       globalSpecs: ["material_identity_build"],
       requiredLayers: ["prod", "video", "car"],
     },
     self_live: {
       channel: "zibo",
-      accounts: ["1866142023488967", "1843956002771338"],
       sourceSpecs: ["live_plan_anchors", "authorized_aweme_anchor_bridge", "live_video_daily", "live_room_daily", "live_other_daily", "aweme_auth_list"],
       globalSpecs: ["material_identity_build"],
       requiredLayers: ["acct", "direct", "video"],
     },
     creator_short_video: {
       channel: "dy_short",
-      accounts: ["1841581403523785", "1863165213655306"],
       sourceSpecs: ["account_daily", "product_daily", "ad_daily", "material_video_daily", "material_image_daily"],
       globalSpecs: ["daren_plan_identity", "material_identity_build"],
       requiredLayers: ["prod", "video", "daren"],
+    },
+  };
+  const CURRENT_AD_SCOPE_SHAPES = {
+    self_shelf: {
+      channel: "zy_shelf",
+      apiSpecs: ["account_daily", "product_daily", "ad_daily", "material_image_daily"],
+      consoleSpecs: ["material_video_daily", "platform_material_labels"],
+      globalSpecs: [],
+      requiredLayers: { prod: API_SOURCE_KIND, video: CONSOLE_SOURCE_KIND, car: API_SOURCE_KIND },
+    },
+    self_live: {
+      channel: "zibo",
+      apiSpecs: ["live_plan_anchors", "authorized_aweme_anchor_bridge", "live_room_daily", "live_other_daily"],
+      consoleSpecs: ["material_video_daily", "platform_material_labels"],
+      globalSpecs: [],
+      requiredLayers: { acct: HYBRID_SOURCE_KIND, direct: API_SOURCE_KIND, video: CONSOLE_SOURCE_KIND },
+    },
+    creator_short_video: {
+      channel: "dy_short",
+      apiSpecs: ["account_daily", "product_daily", "ad_daily", "material_image_daily"],
+      consoleSpecs: ["material_video_daily", "platform_material_labels"],
+      globalSpecs: ["daren_plan_identity"],
+      requiredLayers: { prod: API_SOURCE_KIND, video: CONSOLE_SOURCE_KIND, daren: API_SOURCE_KIND },
     },
   };
   const AD_LAYER_FACTS = {
@@ -1606,9 +2511,9 @@ buildTgt();renderActions();
       car: { fact: "material_daily", materialType: "image", statusSpecs: ["material_image_daily"] },
     },
     self_live: {
-      acct: { fact: "account_daily", statusSpecs: ["live_video_daily", "live_room_daily", "live_other_daily"] },
+      acct: { fact: "account_daily", statusSpecs: ["live_room_daily", "live_other_daily"] },
       direct: { fact: "live_daily", statusSpecs: ["live_room_daily"] },
-      video: { fact: "material_daily", materialType: "video", statusSpecs: ["live_video_daily"] },
+      video: { fact: "material_daily", materialType: "video", statusSpecs: [] },
     },
     creator_short_video: {
       prod: { fact: "product_daily", statusSpecs: ["product_daily"] },
@@ -1626,6 +2531,8 @@ buildTgt();renderActions();
     coverage_gap: 70,
     stale: 80,
     revision_mismatch: 90,
+    duplicate_source: 95,
+    account_scope_drift: 96,
     content_anomaly: 100,
     not_due: 900,
     optional_layer: 910,
@@ -1704,12 +2611,107 @@ buildTgt();renderActions();
     return JSON.stringify(left) === JSON.stringify(right);
   }
 
+  function uniqueStrings(values) {
+    return [...new Set((values || []).map((value) => String(value || "")))].sort();
+  }
+
+  function isCurrentContract(contract) {
+    return [PREVIOUS_CURRENT_CONTRACT_VERSION, CURRENT_CONTRACT_VERSION].includes(contract?.version);
+  }
+
+  function validateLegacyAdvertisingContract(contract) {
+    const globalAccountIds = new Set();
+    for (const [scope, locked] of Object.entries(LEGACY_AD_SCOPE_SHAPES)) {
+      const cfg = contract.advertising?.[scope];
+      const accounts = Array.isArray(cfg?.accounts) ? cfg.accounts : [];
+      const accountIds = accounts.map((row) => String(row?.advertiser_id || ""));
+      const accountNamesValid = accounts.every((row) => String(row?.name || "").trim());
+      const accountIdsValid = accountIds.length > 0
+        && accountIds.every((value) => /^\d+$/u.test(value))
+        && new Set(accountIds).size === accountIds.length
+        && accountIds.every((value) => !globalAccountIds.has(value));
+      accountIds.forEach((value) => globalAccountIds.add(value));
+      const requiredLayers = (cfg?.store_layers || []).filter((row) => row?.required !== false).map((row) => row?.type);
+      if (
+        cfg?.required !== true
+        || cfg?.channel !== locked.channel
+        || !accountIdsValid
+        || !accountNamesValid
+        || !exactStringSet(cfg?.required_source_specs, locked.sourceSpecs)
+        || !exactStringSet(cfg?.global_source_specs, locked.globalSpecs)
+        || !exactStringSet(requiredLayers, locked.requiredLayers)
+      ) {
+        throw new Error(`Data completeness contract required advertising scope is incomplete: ${scope}.`);
+      }
+    }
+    if (
+      contract.platform_material_labels?.required !== true
+      || contract.platform_material_labels?.source_kind !== "qianchuan_video_get"
+      || !(Number(contract.platform_material_labels.max_age_days) >= 0)
+    ) {
+      throw new Error("Data completeness contract platform-material-label requirement is incomplete.");
+    }
+  }
+
+  function validateCurrentAdvertisingContract(contract) {
+    const lockedShapes = contract?.version === PREVIOUS_CURRENT_CONTRACT_VERSION
+      ? {
+        ...CURRENT_AD_SCOPE_SHAPES,
+        self_live: {
+          ...CURRENT_AD_SCOPE_SHAPES.self_live,
+          requiredLayers: {
+            ...CURRENT_AD_SCOPE_SHAPES.self_live.requiredLayers,
+            acct: API_SOURCE_KIND,
+          },
+        },
+      }
+      : CURRENT_AD_SCOPE_SHAPES;
+    const registryContract = contract.account_registry || {};
+    if (
+      registryContract.schema !== "gy-qianchuan-account-registry-v1"
+      || registryContract.source !== "config/account_touchpoints.json"
+      || registryContract.failure_code !== "account_scope_drift"
+      || !exactStringSet(registryContract.required_scopes, TARGET_AD_SCOPES)
+    ) {
+      throw new Error("Data completeness contract account registry reference is incomplete.");
+    }
+    for (const [scope, locked] of Object.entries(lockedShapes)) {
+      const cfg = contract.advertising?.[scope];
+      const requiredLayers = Object.fromEntries(
+        (cfg?.store_layers || [])
+          .filter((row) => row?.required !== false)
+          .map((row) => [row?.type, row?.source_kind]),
+      );
+      if (
+        cfg?.required !== true
+        || cfg?.channel !== locked.channel
+        || cfg?.account_registry_scope !== scope
+        || Object.prototype.hasOwnProperty.call(cfg || {}, "accounts")
+        || !exactStringSet(cfg?.required_api_source_specs, locked.apiSpecs)
+        || !exactStringSet(cfg?.required_console_source_specs, locked.consoleSpecs)
+        || !exactStringSet(cfg?.low_frequency_audit_specs, ["aweme_auth_list"])
+        || !exactStringSet(cfg?.global_source_specs, locked.globalSpecs)
+        || JSON.stringify(requiredLayers) !== JSON.stringify(locked.requiredLayers)
+      ) {
+        throw new Error(`Data completeness contract current advertising scope is incomplete: ${scope}.`);
+      }
+    }
+    if (
+      contract.platform_material_labels?.required !== true
+      || contract.platform_material_labels?.source_kind !== CONSOLE_SOURCE_KIND
+      || contract.platform_material_labels?.same_batch_required !== true
+      || !exactStringSet(contract.platform_material_labels?.account_registry_scopes, TARGET_AD_SCOPES)
+    ) {
+      throw new Error("Data completeness contract same-batch platform-label requirement is incomplete.");
+    }
+  }
+
   function validateContract(contract) {
     if (!contract || typeof contract !== "object") throw new Error("Data completeness contract must be a JSON object.");
     if (contract.schema !== SUPPORTED_CONTRACT_SCHEMA) {
       throw new Error(`Unsupported data completeness contract schema: ${contract.schema || "missing"}.`);
     }
-    if (contract.version !== SUPPORTED_CONTRACT_VERSION) {
+    if (!SUPPORTED_CONTRACT_VERSIONS.has(contract.version)) {
       throw new Error(`Unsupported data completeness contract version: ${contract.version || "missing"}.`);
     }
     for (const field of ["product_daily_from", "refund_floor", "refund_daily_from"]) {
@@ -1728,25 +2730,11 @@ buildTgt();renderActions();
     ])) {
       throw new Error("Data completeness contract Feishu required fields are incomplete.");
     }
-    for (const [scope, locked] of Object.entries(LOCKED_AD_SCOPES)) {
-      const cfg = contract.advertising?.[scope];
-      const accountIds = (cfg?.accounts || []).map((row) => row?.advertiser_id);
-      const requiredLayers = (cfg?.store_layers || []).filter((row) => row?.required !== false).map((row) => row?.type);
-      if (
-        cfg?.required !== true
-        || cfg?.channel !== locked.channel
-        || !exactStringSet(accountIds, locked.accounts)
-        || !exactStringSet(cfg?.required_source_specs, locked.sourceSpecs)
-        || !exactStringSet(cfg?.global_source_specs, locked.globalSpecs)
-        || !exactStringSet(requiredLayers, locked.requiredLayers)
-      ) {
-        throw new Error(`Data completeness contract required advertising scope is incomplete: ${scope}.`);
-      }
-    }
-    if (contract.platform_material_labels?.required !== true || contract.platform_material_labels?.source_kind !== "qianchuan_video_get" || !(Number(contract.platform_material_labels.max_age_days) >= 0)) {
-      throw new Error("Data completeness contract platform-material-label requirement is incomplete.");
-    }
-    const requiredIssueTypes = Object.keys(STATUS_ORDER);
+    if (isCurrentContract(contract)) validateCurrentAdvertisingContract(contract);
+    else validateLegacyAdvertisingContract(contract);
+    const requiredIssueTypes = Object.keys(STATUS_ORDER).filter((status) => (
+      isCurrentContract(contract) || !["duplicate_source", "account_scope_drift"].includes(status)
+    ));
     if (requiredIssueTypes.some((status) => !String(contract.issue_types?.[status] || "").trim())) {
       throw new Error("Data completeness contract issue_types are incomplete.");
     }
@@ -1780,6 +2768,7 @@ buildTgt();renderActions();
   function makeIssue(status, values) {
     return {
       status,
+      code: values.code || status,
       status_label: values.status_label || "",
       severity: values.severity || "error",
       required: values.required !== false,
@@ -1791,6 +2780,7 @@ buildTgt();renderActions();
       layer: values.layer || "",
       item: values.item || "",
       reason: values.reason || "",
+      details: values.details && typeof values.details === "object" ? values.details : {},
     };
   }
 
@@ -2204,6 +3194,921 @@ buildTgt();renderActions();
     ));
   }
 
+  function normalizeConsoleBundleInput(input) {
+    const out = [];
+    const visit = (value) => {
+      if (!value) return;
+      if (Array.isArray(value)) {
+        value.forEach(visit);
+        return;
+      }
+      if (value.schema === "gy-qianchuan-console-video-facts-v1") {
+        out.push(value);
+        return;
+      }
+      if (Array.isArray(value.bundles)) visit(value.bundles);
+      if (Array.isArray(value.normalized)) visit(value.normalized);
+      if (value.normalized?.schema === "gy-qianchuan-console-video-facts-v1") visit(value.normalized);
+      if (value.consoleBundles) visit(value.consoleBundles);
+      if (value.self_shelf || value.self_live || value.creator_short_video) {
+        visit(value.self_shelf);
+        visit(value.self_live);
+        visit(value.creator_short_video);
+      }
+    };
+    visit(input);
+    return out;
+  }
+
+  function addAccountScopeDrift(state, reason, details = {}, values = {}) {
+    addIssue(state, "account_scope_drift", {
+      code: "account_scope_drift",
+      contract_id: values.contract_id || "ads.account_registry",
+      date_or_period: values.date_or_period || state.target,
+      domain: "全部投流数据",
+      source: values.source || "千川账户注册表",
+      touchpoint: values.touchpoint || "三域六账户",
+      layer: values.layer || "账户范围",
+      item: values.item || "account_registry",
+      reason: `account_scope_drift：${reason}`,
+      details,
+    });
+  }
+
+  function validateCurrentAccountRegistry(state) {
+    if (!state.currentContract) return true;
+    addMapping(state, {
+      contract_id: "ads.account_registry",
+      domain: "全部投流数据",
+      authoritative_source: "config/account_touchpoints.json 生成的账户注册表",
+      touchpoint_or_sell_type: "自营货架+自播+达人短视频",
+      carrier_or_layer: "账户范围",
+      due_date_or_period: state.target,
+      expected_table_or_api: "gy-qianchuan-account-registry-v1",
+      input_unit: true,
+      state: state.accountRegistry ? "present" : "missing",
+      evidence: state.accountRegistry?.sha256 || "",
+    });
+    if (!accountRegistryCore || typeof accountRegistryCore.validateAccountRegistry !== "function") {
+      addAccountScopeDrift(state, "registry_validator_unavailable");
+      return false;
+    }
+    try {
+      accountRegistryCore.validateAccountRegistry(state.accountRegistry, {
+        source: state.contract.account_registry?.source,
+        config: state.accountRegistryConfig || undefined,
+      });
+    } catch (error) {
+      addAccountScopeDrift(state, error?.reason || "registry_invalid", error?.details || {});
+      return false;
+    }
+    for (const scope of TARGET_AD_SCOPES) {
+      const cfg = state.contract.advertising?.[scope];
+      const registered = state.accountRegistry.scopes?.[cfg?.account_registry_scope];
+      if (
+        !registered
+        || registered.channel !== cfg?.channel
+        || !Array.isArray(registered.accounts)
+        || registered.accounts.length === 0
+      ) {
+        addAccountScopeDrift(state, "contract_registry_scope_mismatch", {
+          scope,
+          account_registry_scope: cfg?.account_registry_scope,
+          contract_channel: cfg?.channel,
+          registry_channel: registered?.channel,
+        }, { contract_id: `ads.${scope}.account_registry`, touchpoint: cfg?.label || scope });
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function resolvedAdConfig(state, scope, cfg) {
+    if (!state.currentContract) return cfg;
+    const registered = state.accountRegistry?.scopes?.[cfg.account_registry_scope];
+    return {
+      ...cfg,
+      accounts: Array.isArray(registered?.accounts) ? registered.accounts : [],
+      required_source_specs: cfg.required_api_source_specs || [],
+    };
+  }
+
+  function validateConsoleRegistryBindings(state) {
+    let ok = true;
+    for (const [index, bundle] of state.consoleBundles.entries()) {
+      const scope = String(bundle?.scope || "");
+      const registered = state.accountRegistry?.scopes?.[scope];
+      const accountId = String(bundle?.advertiser_id || "");
+      const account = registered?.accounts?.find((row) => String(row?.advertiser_id || "") === accountId);
+      const source = String(bundle?.account_registry_source || "").replace(/\\/gu, "/");
+      if (
+        !registered
+        || bundle?.channel !== registered.channel
+        || !account
+        || source !== state.accountRegistry.source
+        || String(bundle?.account_registry_sha256 || "") !== state.accountRegistry.sha256
+        || String(bundle?.account_registry_updated_at || "") !== state.accountRegistry.source_updated_at
+      ) {
+        addAccountScopeDrift(state, "console_bundle_account_scope_mismatch", {
+          index,
+          scope,
+          channel: bundle?.channel || "",
+          advertiser_id: accountId,
+          account_registry_source: source,
+          account_registry_sha256: bundle?.account_registry_sha256 || "",
+        }, {
+          contract_id: `ads.console.registry.${index}`,
+          touchpoint: registered?.label || scope || "未知",
+          layer: "控制台账户范围",
+          item: accountId || `bundle#${index + 1}`,
+        });
+        ok = false;
+      }
+    }
+    return ok;
+  }
+
+  function sha256LooksValid(value) {
+    return /^[A-F0-9]{64}$/u.test(String(value || "").trim().toUpperCase());
+  }
+
+  function bundleAccountDayKey(bundle) {
+    return [
+      String(bundle?.scope || ""),
+      String(bundle?.advertiser_id || ""),
+      cleanDate(bundle?.statistic_date),
+    ].join("|");
+  }
+
+  function factBusinessKey(scope, row, sourceKind) {
+    return [
+      scope,
+      String(sourceKind === "store" ? row?.["广告账户ID"] || "" : row?.advertiser_id || ""),
+      cleanDate(sourceKind === "store" ? row?.["日期"] : row?.date),
+      String(sourceKind === "store" ? row?.["素材ID"] || "" : row?.material_id || ""),
+    ].join("|");
+  }
+
+  function platformLabelKey(row) {
+    return [
+      String(row?.advertiser_id || ""),
+      cleanDate(row?.date),
+      String(row?.material_id || ""),
+    ].join("|");
+  }
+
+  function hasNonZeroBusinessValue(cost, gmv, orders) {
+    return (cost != null && cost !== 0)
+      || (gmv != null && gmv !== 0)
+      || (orders != null && orders !== 0);
+  }
+
+  function isKnownAigcAggregate(row, sourceKind) {
+    const materialId = String(
+      sourceKind === "store" ? row?.["素材ID"] || "" : row?.material_id || "",
+    ).trim();
+    const materialName = String(
+      sourceKind === "store" ? row?.["素材视频名称"] || "" : row?.material_name || "",
+    ).trim();
+    const materialSource = String(
+      sourceKind === "store" ? row?.["素材来源"] || "" : row?.material_source || "",
+    ).trim();
+    return materialId === "-"
+      && materialName === AIGC_AGGREGATE_MATERIAL_NAME
+      && materialSource === AIGC_AGGREGATE_MATERIAL_SOURCE;
+  }
+
+  function validSelfLiveVideoTypeEvidence(bundle, row) {
+    const evidence = String(row?.material_video_type_evidence || "").trim();
+    const value = String(row?.material_video_type || "").trim();
+    if (!value || !["source_column", "manifest_filter"].includes(evidence)) return false;
+    if (evidence === "source_column" && !String(bundle?.field_mapping?.material_video_type || "").trim()) {
+      return false;
+    }
+    if (evidence === "manifest_filter" && String(bundle?.field_mapping?.material_video_type || "").trim()) {
+      return false;
+    }
+    return true;
+  }
+
+  function validateConsoleBundle(state, scope, cfg, account, bundle, expectedDay = state.target) {
+    const registry = state.accountRegistry;
+    const day = cleanDate(expectedDay);
+    const accountId = String(account.advertiser_id);
+    const baseDetails = { scope, advertiser_id: accountId, statistic_date: day };
+    if (String(bundle?.account_registry_sha256 || "") !== String(registry.sha256 || "")
+      || String(bundle?.account_registry_source || "").replace(/\\/gu, "/") !== String(registry.source || "")
+      || String(bundle?.account_registry_updated_at || "") !== String(registry.source_updated_at || "")) {
+      addAccountScopeDrift(state, "console_bundle_registry_mismatch", {
+        ...baseDetails,
+        expected_sha256: registry.sha256,
+        actual_sha256: bundle?.account_registry_sha256 || "",
+        expected_source: registry.source,
+        actual_source: bundle?.account_registry_source || "",
+      }, {
+        contract_id: `ads.${scope}.console.${accountId}.${day}`,
+        touchpoint: cfg.label,
+        layer: "控制台视频素材层",
+        item: account.name,
+      });
+      return false;
+    }
+    const facts = Array.isArray(bundle?.facts) ? bundle.facts : null;
+    const labels = Array.isArray(bundle?.platform_labels) ? bundle.platform_labels : null;
+    const envelopeOk = bundle?.schema === "gy-qianchuan-console-video-facts-v1"
+      && bundle?.complete === true
+      && bundle?.source_kind === CONSOLE_SOURCE_KIND
+      && bundle?.scope === scope
+      && bundle?.channel === cfg.channel
+      && String(bundle?.advertiser_id || "") === accountId
+      && cleanDate(bundle?.statistic_date) === day
+      && cleanDate(bundle?.start_date) === day
+      && cleanDate(bundle?.end_date) === day
+      && bundle?.report_type === "material_video_daily"
+      && String(bundle?.batch_id || "").trim()
+      && sha256LooksValid(bundle?.manifest_sha256)
+      && sha256LooksValid(bundle?.source_xlsx_sha256)
+      && facts
+      && labels;
+    if (!envelopeOk) {
+      addIssue(state, "content_anomaly", {
+        contract_id: `ads.${scope}.console.${accountId}.${day}`,
+        date_or_period: day,
+        domain: "全部投流数据",
+        source: "千川控制台导表",
+        touchpoint: cfg.label,
+        layer: "控制台视频素材层",
+        item: account.name,
+        reason: `标准视频 bundle 信封不完整：schema=${bundle?.schema || "缺失"}、complete=${String(bundle?.complete)}、source=${bundle?.source_kind || "缺失"}、scope/channel=${bundle?.scope || "缺失"}/${bundle?.channel || "缺失"}、date=${bundle?.statistic_date || "缺失"}`,
+        details: baseDetails,
+      });
+      return false;
+    }
+    const factKeys = [];
+    const invalidFacts = [];
+    const unresolvedAggregateFacts = [];
+    const invalidVideoTypeEvidenceFacts = [];
+    for (const [index, row] of facts.entries()) {
+      const cost = scaledMetric(row?.cost, 100);
+      const gmv = scaledMetric(row?.gmv, 100);
+      const orders = scaledMetric(row?.orders, 1000);
+      const key = factBusinessKey(scope, row, "bundle");
+      factKeys.push(key);
+      if (
+        String(row?.material_id || "").trim() === "-"
+        && hasNonZeroBusinessValue(cost, gmv, orders)
+        && !isKnownAigcAggregate(row, "bundle")
+      ) {
+        unresolvedAggregateFacts.push(index);
+      }
+      if (scope === "self_live" && !validSelfLiveVideoTypeEvidence(bundle, row)) {
+        invalidVideoTypeEvidenceFacts.push(index);
+      }
+      if (
+        row?.source_kind !== CONSOLE_SOURCE_KIND
+        || row?.scope !== scope
+        || String(row?.advertiser_id || "") !== accountId
+        || cleanDate(row?.date) !== day
+        || !String(row?.material_id || "").trim()
+        || cost == null
+        || gmv == null
+        || orders == null
+        || String(row?.batch_id || "") !== String(bundle.batch_id)
+        || String(row?.manifest_sha256 || "") !== String(bundle.manifest_sha256)
+        || String(row?.source_xlsx_sha256 || "") !== String(bundle.source_xlsx_sha256)
+        || String(row?.account_registry_sha256 || "") !== String(registry.sha256)
+        || unresolvedAggregateFacts.includes(index)
+        || invalidVideoTypeEvidenceFacts.includes(index)
+      ) invalidFacts.push(index);
+    }
+    const duplicateFactKeys = factKeys.filter((key, index) => factKeys.indexOf(key) !== index);
+    const labelKeys = [];
+    const invalidLabels = [];
+    for (const [index, row] of labels.entries()) {
+      const key = platformLabelKey(row);
+      labelKeys.push(key);
+      if (
+        row?.source_kind !== CONSOLE_SOURCE_KIND
+        || String(row?.advertiser_id || "") !== accountId
+        || cleanDate(row?.date) !== day
+        || !String(row?.material_id || "").trim()
+        || String(row?.batch_id || "") !== String(bundle.batch_id)
+        || String(row?.manifest_sha256 || "") !== String(bundle.manifest_sha256)
+        || String(row?.source_xlsx_sha256 || "") !== String(bundle.source_xlsx_sha256)
+        || String(row?.account_registry_sha256 || "") !== String(registry.sha256)
+      ) invalidLabels.push(index);
+    }
+    const expectedLabelKeys = factKeys.map((key) => key.split("|").slice(1).join("|")).sort();
+    const duplicateLabelKeys = labelKeys.filter((key, index) => labelKeys.indexOf(key) !== index);
+    if (
+      invalidFacts.length
+      || invalidLabels.length
+      || duplicateFactKeys.length
+      || duplicateLabelKeys.length
+      || !exactStringSet(labelKeys, expectedLabelKeys)
+    ) {
+      addIssue(state, "content_anomaly", {
+        contract_id: `ads.${scope}.console.${accountId}.${day}`,
+        date_or_period: day,
+        domain: "全部投流数据",
+        source: "千川控制台导表",
+        touchpoint: cfg.label,
+        layer: "控制台视频素材层+平台标签层",
+        item: account.name,
+        reason: `控制台事实与同批标签未闭合：事实异常 ${invalidFacts.length} 行、标签异常 ${invalidLabels.length} 行、事实重复 ${duplicateFactKeys.length}、标签重复 ${duplicateLabelKeys.length}、事实 ${factKeys.length} 条/标签 ${labelKeys.length} 条；material_id_dash_with_value=${unresolvedAggregateFacts.length}；self_live_video_type_has_no_source_evidence=${invalidVideoTypeEvidenceFacts.length}`,
+        details: {
+          invalid_fact_rows: invalidFacts,
+          unresolved_material_aggregate_rows: unresolvedAggregateFacts,
+          invalid_material_video_type_evidence_rows: invalidVideoTypeEvidenceFacts,
+        },
+      });
+      return false;
+    }
+    return true;
+  }
+
+  function validateConsoleScope(state, scope, cfg) {
+    const expectedAccounts = cfg.accounts || [];
+    const scopeBundles = state.consoleBundles.filter((bundle) => (
+      bundle?.scope === scope && cleanDate(bundle?.statistic_date) === state.target
+    ));
+    const grouped = new Map();
+    for (const bundle of scopeBundles) {
+      const key = bundleAccountDayKey(bundle);
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(bundle);
+    }
+    const expectedKeys = new Set(expectedAccounts.map((account) => `${scope}|${account.advertiser_id}|${state.target}`));
+    const unexpected = [...grouped.keys()].filter((key) => !expectedKeys.has(key));
+    if (unexpected.length) {
+      addIssue(state, "content_anomaly", {
+        contract_id: `ads.${scope}.console.matrix`,
+        date_or_period: state.target,
+        domain: "全部投流数据",
+        source: "千川控制台导表",
+        touchpoint: cfg.label,
+        layer: "控制台账户日矩阵",
+        item: cfg.label,
+        reason: `出现合同外账户/日期 bundle：${unexpected.join("、")}`,
+      });
+    }
+    const validBundles = [];
+    for (const account of expectedAccounts) {
+      const key = `${scope}|${account.advertiser_id}|${state.target}`;
+      const matches = grouped.get(key) || [];
+      const bundle = matches.length === 1 ? matches[0] : null;
+      const valid = Boolean(bundle) && validateConsoleBundle(state, scope, cfg, account, bundle);
+      for (const spec of cfg.required_console_source_specs || []) {
+        addMapping(state, {
+          contract_id: `ads.${scope}.console.${account.advertiser_id}.${spec}`,
+          domain: "全部投流数据",
+          authoritative_source: "千川控制台导表",
+          touchpoint_or_sell_type: `${cfg.label}·${account.name}`,
+          carrier_or_layer: spec === "platform_material_labels" ? "同批平台标签层" : "投流素材层（视频）",
+          due_date_or_period: state.target,
+          expected_table_or_api: spec,
+          input_unit: true,
+          state: valid ? "present" : "missing",
+          evidence: bundle ? `batch=${bundle.batch_id || "缺失"}; manifest=${bundle.manifest_sha256 || "缺失"}` : "",
+        });
+        if (matches.length === 0) {
+          addIssue(state, "not_pulled", {
+            contract_id: `ads.${scope}.console.${account.advertiser_id}.${spec}`,
+            date_or_period: state.target,
+            domain: "全部投流数据",
+            source: "千川控制台导表",
+            touchpoint: cfg.label,
+            layer: spec === "platform_material_labels" ? "同批平台标签层" : "投流素材层（视频）",
+            item: account.name,
+            reason: `缺少 ${state.target} ${account.name} 的单账户单日控制台视频 bundle`,
+          });
+        } else if (matches.length !== 1) {
+          addIssue(state, "content_anomaly", {
+            contract_id: `ads.${scope}.console.${account.advertiser_id}.${spec}`,
+            date_or_period: state.target,
+            domain: "全部投流数据",
+            source: "千川控制台导表",
+            touchpoint: cfg.label,
+            layer: "控制台账户日矩阵",
+            item: account.name,
+            reason: `同一账户日出现 ${matches.length} 份 bundle，必须一账户一自然日一份`,
+          });
+        }
+      }
+      if (valid && matches.length === 1) validBundles.push(bundle);
+    }
+    state.consoleScopeEvidence[scope] = {
+      bundles: validBundles,
+      complete: validBundles.length === expectedAccounts.length,
+    };
+  }
+
+  function consoleFactRows(state, scope, day) {
+    return (state.consoleScopeEvidence?.[scope]?.bundles || [])
+      .filter((bundle) => cleanDate(bundle?.statistic_date) === day)
+      .flatMap((bundle) => Array.isArray(bundle?.facts) ? bundle.facts : []);
+  }
+
+  function metricTriplet(value) {
+    return {
+      cost: scaledMetric(value?.cost, 100),
+      gmv: scaledMetric(value?.gmv, 100),
+      orders: scaledMetric(value?.orders, 1000),
+    };
+  }
+
+  function addMetricTriplet(target, value) {
+    target.cost += Number(value?.cost || 0);
+    target.gmv += Number(value?.gmv || 0);
+    target.orders += Number(value?.orders || 0);
+    return target;
+  }
+
+  function sameMetricTriplet(left, right) {
+    return ["cost", "gmv", "orders"].every((field) => (
+      Number.isFinite(left?.[field])
+      && Number.isFinite(right?.[field])
+      && Number(left[field]) === Number(right[field])
+    ));
+  }
+
+  function buildSelfLiveHybridAccountEvidence(state, cfg, bundle, statusGroups, start, end) {
+    if (state.selfLiveHybridAccountEvidence) return state.selfLiveHybridAccountEvidence;
+    const days = daysBetween(start, end);
+    const accountIds = (cfg.accounts || []).map((account) => String(account.advertiser_id));
+    const allowedAccounts = new Set(accountIds);
+    const errors = [];
+    const rowsByDay = {};
+    const apiWindowByAccount = {};
+    const consoleWindowByAccount = {};
+    const hybridWindowByAccount = {};
+    for (const accountId of accountIds) {
+      apiWindowByAccount[accountId] = { cost: 0, gmv: 0, orders: 0 };
+      consoleWindowByAccount[accountId] = { cost: 0, gmv: 0, orders: 0 };
+      hybridWindowByAccount[accountId] = { cost: 0, gmv: 0, orders: 0 };
+    }
+
+    if (
+      bundle?.summary?.account_daily_source !== "live_direct_plus_other_conversion"
+      || bundle?.summary?.reconciliation_status !== "pending_console_video_merge"
+      || bundle?.plan_window_reconciliation?.capture_complete !== true
+      || bundle?.plan_window_reconciliation?.reconciliation_status !== "pending_console_video_merge"
+    ) {
+      errors.push("raw_self_live_bundle_is_not_the_locked_pending_hybrid_input");
+    }
+
+    const planRows = Array.isArray(bundle?.plan_window_reconciliation?.accounts)
+      ? bundle.plan_window_reconciliation.accounts
+      : [];
+    if (!exactStringSet(planRows.map((row) => String(row?.advertiser_id || "")), accountIds)) {
+      errors.push("plan_ledger_account_set_mismatch");
+    }
+
+    const apiStatusesOk = (cfg.required_source_specs || []).every((spec) => (
+      (cfg.accounts || []).every((account) => {
+        const rows = statusGroups.get(`${String(account.advertiser_id)}|${spec}`) || [];
+        return rows.length === 1 && successfulStatusRow(rows[0]);
+      })
+    ));
+    if (!apiStatusesOk) errors.push("api_status_matrix_incomplete");
+
+    for (const day of days) {
+      const rawRows = adFactRows(bundle, "self_live", "acct", day);
+      const rawCounts = new Map();
+      for (const row of rawRows) {
+        const accountId = String(row?.advertiser_id || "");
+        rawCounts.set(accountId, Number(rawCounts.get(accountId) || 0) + 1);
+      }
+      if (accountIds.some((accountId) => rawCounts.get(accountId) !== 1) || rawRows.length !== accountIds.length) {
+        errors.push(`api_account_day_matrix_incomplete:${day}`);
+      }
+      const rawSummary = summarizeAdRows(rawRows, "bundle", day, allowedAccounts);
+      if (rawSummary.invalid.length) errors.push(`api_account_day_rows_invalid:${day}`);
+
+      const validConsoleBundles = [];
+      for (const account of cfg.accounts || []) {
+        const matches = state.consoleBundles.filter((item) => (
+          item?.scope === "self_live"
+          && String(item?.advertiser_id || "") === String(account.advertiser_id)
+          && cleanDate(item?.statistic_date) === day
+        ));
+        if (matches.length !== 1) {
+          errors.push(`console_account_day_matrix_count:${day}:${account.advertiser_id}:${matches.length}`);
+          continue;
+        }
+        if (validateConsoleBundle(state, "self_live", cfg, account, matches[0], day)) {
+          validConsoleBundles.push(matches[0]);
+        } else {
+          errors.push(`console_account_day_bundle_invalid:${day}:${account.advertiser_id}`);
+        }
+      }
+      const consoleRows = validConsoleBundles.flatMap((item) => (
+        Array.isArray(item?.facts) ? item.facts : []
+      ));
+      const consoleSummary = summarizeAdRows(consoleRows, "bundle", day, allowedAccounts);
+      if (consoleSummary.invalid.length) errors.push(`console_account_day_rows_invalid:${day}`);
+
+      rowsByDay[day] = accountIds.map((accountId) => {
+        const api = rawSummary.accounts[accountId] || { cost: 0, gmv: 0, orders: 0 };
+        const consoleVideo = consoleSummary.accounts[accountId] || { cost: 0, gmv: 0, orders: 0 };
+        const hybrid = {
+          cost: api.cost + consoleVideo.cost,
+          gmv: api.gmv + consoleVideo.gmv,
+          orders: api.orders + consoleVideo.orders,
+        };
+        addMetricTriplet(apiWindowByAccount[accountId], api);
+        addMetricTriplet(consoleWindowByAccount[accountId], consoleVideo);
+        addMetricTriplet(hybridWindowByAccount[accountId], hybrid);
+        return {
+          date: day,
+          advertiser_id: accountId,
+          cost: hybrid.cost / 100,
+          gmv: hybrid.gmv / 100,
+          orders: hybrid.orders / 1000,
+        };
+      });
+    }
+
+    for (const accountId of accountIds) {
+      const matches = planRows.filter((row) => String(row?.advertiser_id || "") === accountId);
+      const plan = matches.length === 1 ? matches[0] : null;
+      if (
+        !plan
+        || plan?.plan_evidence_present !== true
+        || plan?.reconciliation_status !== "pending_console_video_merge"
+      ) {
+        errors.push(`plan_ledger_row_incomplete:${accountId}`);
+        continue;
+      }
+      const planTotals = metricTriplet(plan.plan_list_totals);
+      const apiTotals = metricTriplet(plan.api_live_direct_plus_other_conversion);
+      const pendingConsoleTotals = metricTriplet(plan.pending_console_video_balance);
+      if (
+        !sameMetricTriplet(apiWindowByAccount[accountId], apiTotals)
+        || !sameMetricTriplet(consoleWindowByAccount[accountId], pendingConsoleTotals)
+        || !sameMetricTriplet(hybridWindowByAccount[accountId], planTotals)
+      ) {
+        errors.push(`plan_window_closure_mismatch:${accountId}`);
+      }
+    }
+
+    const result = {
+      ok: errors.length === 0,
+      errors,
+      rowsByDay,
+      apiStatusesOk,
+      days,
+      accountIds,
+      planAuthority: String(bundle?.plan_window_reconciliation?.authority || ""),
+    };
+    state.selfLiveHybridAccountEvidence = result;
+    if (!result.ok) {
+      addIssue(state, "content_anomaly", {
+        code: "self_live_hybrid_reconciliation_failed",
+        contract_id: "ads.self_live.store.acct.hybrid_reconciliation",
+        date_or_period: `${start}-${end}`,
+        domain: "全部投流数据",
+        source: "巨量千川API+千川控制台导表+独立计划账本",
+        touchpoint: cfg.label,
+        layer: "投流账户层",
+        item: cfg.label,
+        reason: `自播账户总盘三层闭合失败：${errors.join("；") || "未知原因"}`,
+        details: { errors },
+      });
+    }
+    return result;
+  }
+
+  function sameConsoleFacts(bundleRows, storeRows, scope, day) {
+    const expected = new Map();
+    const actual = new Map();
+    for (const row of bundleRows) {
+      expected.set(factBusinessKey(scope, row, "bundle"), [
+        scaledMetric(row?.cost, 100),
+        scaledMetric(row?.gmv, 100),
+        scaledMetric(row?.orders, 1000),
+        String(row?.material_video_type || ""),
+      ]);
+    }
+    for (const row of storeRows) {
+      actual.set(factBusinessKey(scope, row, "store"), [
+        scaledMetric(row?.["整体消耗"], 100),
+        scaledMetric(row?.["整体成交金额"], 100),
+        scaledMetric(row?.["整体成交订单数"], 1000),
+        String(row?.["视频素材类型"] || ""),
+      ]);
+      if (
+        cleanDate(row?.["日期"]) !== day
+      ) return false;
+    }
+    if (!exactStringSet([...actual.keys()], [...expected.keys()])) return false;
+    return [...expected.entries()].every(([key, value]) => JSON.stringify(actual.get(key)) === JSON.stringify(value));
+  }
+
+  function consoleMetadataMatches(state, scope, cfg, day, meta) {
+    const bundles = state.consoleScopeEvidence?.[scope]?.bundles || [];
+    return (
+      meta.chan === cfg.channel
+      && meta.type === "video"
+      && meta.scope === scope
+      && String(meta.source_kind || meta.source || "") === CONSOLE_SOURCE_KIND
+      && cleanDate(meta.start) === day
+      && cleanDate(meta.end) === day
+      && cleanDate(meta?.source_window?.start) === day
+      && cleanDate(meta?.source_window?.end) === day
+      && String(meta.account_registry_source || "").replace(/\\/gu, "/") === String(state.accountRegistry?.source || "")
+      && String(meta.account_registry_sha256 || "") === String(state.accountRegistry?.sha256 || "")
+      && String(meta.account_registry_updated_at || "") === String(state.accountRegistry?.source_updated_at || "")
+      && exactStringSet(
+        uniqueStrings(meta.advertiser_ids),
+        uniqueStrings((cfg.accounts || []).map((account) => account.advertiser_id)),
+      )
+      && exactStringSet(
+        uniqueStrings(meta.batch_ids || [meta.batch_id]),
+        uniqueStrings(bundles.map((bundle) => bundle.batch_id)),
+      )
+      && exactStringSet(
+        uniqueStrings(meta.manifest_sha256s || [meta.manifest_sha256]),
+        uniqueStrings(bundles.map((bundle) => bundle.manifest_sha256)),
+      )
+      && exactStringSet(
+        uniqueStrings(meta.source_xlsx_sha256s || [meta.source_xlsx_sha256]),
+        uniqueStrings(bundles.map((bundle) => bundle.source_xlsx_sha256)),
+      )
+    );
+  }
+
+  function validateConsoleStoreIdentity(state, scope, cfg, day, storeRows, storeKey, meta) {
+    const rows = Array.isArray(storeRows) ? storeRows : [];
+    const buckets = Array.isArray(materialIdentityCore?.BUCKETS)
+      ? [...materialIdentityCore.BUCKETS]
+      : [];
+    const compactFields = Array.isArray(materialIdentityCore?.DASHBOARD_COMPACT_FIELDS)
+      ? [...materialIdentityCore.DASHBOARD_COMPACT_FIELDS]
+      : [];
+    const requiredFields = compactFields.filter((field) => field !== "身份报警");
+    const declaredBuckets = Array.isArray(meta?.material_identity_buckets)
+      ? meta.material_identity_buckets
+      : [];
+    const declaredFields = new Set(
+      Array.isArray(meta?.material_identity_fields) ? meta.material_identity_fields.map(String) : [],
+    );
+    const missingDeclaredFields = requiredFields.filter((field) => !declaredFields.has(field));
+    const declaredModel = String(meta?.material_identity_model || "").trim();
+    const expectedModel = String(materialIdentityCore?.MODEL || "").trim();
+    const declaredConfigSha256 = String(meta?.material_identity_config_sha256 || "")
+      .trim()
+      .toUpperCase();
+    const expectedConfigSha256 = String(state.materialIdentityConfigSha256?.[scope] || "")
+      .trim()
+      .toUpperCase();
+    const declaredConfigSchemaVersion = Number(meta?.material_identity_config_schema_version);
+    const expectedConfigSchemaVersion = Number(state.materialIdentityConfigSchemaVersion?.[scope]);
+    const helperConfigSchemaVersion = Number(materialIdentityCore?.CONFIG_SCHEMA_VERSION);
+    const metadataOk = Boolean(expectedModel)
+      && declaredModel === expectedModel
+      && Number.isInteger(expectedConfigSchemaVersion)
+      && expectedConfigSchemaVersion === helperConfigSchemaVersion
+      && declaredConfigSchemaVersion === expectedConfigSchemaVersion
+      && /^[A-F0-9]{64}$/u.test(expectedConfigSha256)
+      && declaredConfigSha256 === expectedConfigSha256
+      && exactStringSet(declaredBuckets, buckets)
+      && missingDeclaredFields.length === 0;
+    const invalidRows = [];
+    const validRows = [];
+    const materialIdentities = new Map();
+    for (const [index, row] of rows.entries()) {
+      const materialId = String(row?.["素材ID"] || "").trim();
+      const identity = String(row?.["身份"] || "").trim();
+      if (!materialIdentities.has(materialId)) materialIdentities.set(materialId, new Set());
+      materialIdentities.get(materialId).add(identity || "missing");
+      try {
+        if (!materialIdentityCore || typeof materialIdentityCore.assertCompactMaterialized !== "function") {
+          const error = new Error("unified_material_identity_core_unavailable");
+          error.code = "unified_material_identity_core_unavailable";
+          throw error;
+        }
+        materialIdentityCore.assertCompactMaterialized(scope, row);
+        validRows.push(row);
+      } catch (error) {
+        invalidRows.push({
+          index,
+          material_id: materialId,
+          code: String(error?.code || "unified_material_identity_row_invalid"),
+          errors: Array.isArray(error?.details?.errors)
+            ? [...error.details.errors]
+            : [String(error?.message || "identity_validation_failed")],
+        });
+      }
+    }
+    const conflictingMaterials = [...materialIdentities.entries()]
+      .filter(([, identities]) => identities.size !== 1)
+      .map(([materialId, identities]) => ({
+        material_id: materialId,
+        identities: [...identities].sort((left, right) => left.localeCompare(right, "zh-CN")),
+      }));
+    let summary = null;
+    let summaryError = null;
+    try {
+      if (!materialIdentityCore || typeof materialIdentityCore.summarizeMaterializedRows !== "function") {
+        const error = new Error("unified_material_identity_core_unavailable");
+        error.code = "unified_material_identity_core_unavailable";
+        throw error;
+      }
+      summary = materialIdentityCore.summarizeMaterializedRows(scope, validRows, { compact: true });
+    } catch (error) {
+      summaryError = {
+        code: String(error?.code || "unified_material_identity_summary_invalid"),
+        message: String(error?.message || "identity_summary_failed"),
+      };
+    }
+    const directTotals = rows.reduce((totals, row) => {
+      const cost = scaledMetric(row?.["整体消耗"], 100);
+      const gmv = scaledMetric(row?.["整体成交金额"], 100);
+      const orders = scaledMetric(row?.["整体成交订单数"], 1);
+      totals.rows += 1;
+      if (cost == null || gmv == null || orders == null) totals.invalid_metrics += 1;
+      else {
+        totals.cost_cents += cost;
+        totals.gmv_cents += gmv;
+        totals.orders += orders;
+      }
+      return totals;
+    }, {
+      rows: 0,
+      cost_cents: 0,
+      gmv_cents: 0,
+      orders: 0,
+      invalid_metrics: 0,
+    });
+    const assignedTotals = summary?.totals || {
+      rows: 0,
+      cost_cents: 0,
+      gmv_cents: 0,
+      orders: 0,
+    };
+    const closureOk = summaryError == null
+      && directTotals.invalid_metrics === 0
+      && directTotals.rows === assignedTotals.rows
+      && directTotals.cost_cents === assignedTotals.cost_cents
+      && directTotals.gmv_cents === assignedTotals.gmv_cents
+      && directTotals.orders === assignedTotals.orders;
+    const declaredSummary = meta?.material_identity_summary || null;
+    const summaryMatches = summaryError == null
+      && JSON.stringify(declaredSummary) === JSON.stringify(summary);
+    const ok = metadataOk
+      && invalidRows.length === 0
+      && conflictingMaterials.length === 0
+      && closureOk
+      && summaryMatches;
+    const evidence = {
+      scope,
+      channel: cfg.channel,
+      date: day,
+      store_key: storeKey,
+      expected_model: expectedModel,
+      declared_model: declaredModel,
+      expected_config_schema_version: expectedConfigSchemaVersion,
+      helper_config_schema_version: helperConfigSchemaVersion,
+      declared_config_schema_version: declaredConfigSchemaVersion,
+      expected_config_sha256: expectedConfigSha256,
+      declared_config_sha256: declaredConfigSha256,
+      expected_buckets: buckets,
+      declared_buckets: declaredBuckets,
+      missing_declared_fields: missingDeclaredFields,
+      row_count: rows.length,
+      invalid_row_count: invalidRows.length,
+      conflicting_material_count: conflictingMaterials.length,
+      direct_totals: directTotals,
+      assigned_totals: assignedTotals,
+      five_bucket_summary: summary,
+      declared_five_bucket_summary: declaredSummary,
+      five_bucket_summary_matches: summaryMatches,
+      five_bucket_closure_ok: closureOk,
+      metadata_ok: metadataOk,
+      ok,
+    };
+    state.materialIdentityEvidence.push(evidence);
+    addMapping(state, {
+      contract_id: `ads.${scope}.store.video.${day}.material_identity`,
+      domain: "素材身份校验",
+      authoritative_source: "统一素材身份分类器+中央数据",
+      touchpoint_or_sell_type: cfg.label,
+      carrier_or_layer: "投流素材层（身份）",
+      due_date_or_period: day,
+      expected_table_or_api: "五档身份+完整证据+金额闭合",
+      input_unit: false,
+      state: ok ? "present" : "missing",
+      evidence: `rows=${rows.length}; invalid=${invalidRows.length}; closure=${closureOk}`,
+    });
+    if (!ok) {
+      addIssue(state, "content_anomaly", {
+        code: "material_identity_gate_failed",
+        contract_id: `ads.${scope}.store.video.${day}.material_identity`,
+        date_or_period: day,
+        domain: "素材身份校验",
+        source: "中央数据",
+        touchpoint: cfg.label,
+        layer: "投流素材层（身份）",
+        item: storeKey,
+        reason: `中央视频身份硬门失败：元数据=${metadataOk ? "完整" : "缺失/漂移"}；身份异常 ${invalidRows.length} 行；同素材身份冲突 ${conflictingMaterials.length} 个；五档金额闭合=${closureOk ? "通过" : "失败"}；五档摘要=${summaryMatches ? "一致" : "不一致"}`,
+        details: {
+          missing_declared_fields: missingDeclaredFields,
+          expected_model: expectedModel,
+          declared_model: declaredModel,
+          expected_config_schema_version: expectedConfigSchemaVersion,
+          helper_config_schema_version: helperConfigSchemaVersion,
+          declared_config_schema_version: declaredConfigSchemaVersion,
+          expected_config_sha256: expectedConfigSha256,
+          declared_config_sha256: declaredConfigSha256,
+          expected_buckets: buckets,
+          declared_buckets: declaredBuckets,
+          invalid_rows: invalidRows,
+          conflicting_materials: conflictingMaterials,
+          summary_error: summaryError,
+          direct_totals: directTotals,
+          assigned_totals: assignedTotals,
+          declared_five_bucket_summary: declaredSummary,
+          recomputed_five_bucket_summary: summary,
+          five_bucket_summary_matches: summaryMatches,
+          five_bucket_closure_ok: closureOk,
+        },
+      });
+    }
+    return ok;
+  }
+
+  function validateConsoleStoreSafety(state, scope, cfg, day, storeRows, storeKey, meta) {
+    const unresolvedAggregateRows = [];
+    const invalidVideoTypeRows = [];
+    const rawFactsByKey = new Map();
+    for (const bundle of state.consoleBundles.filter((item) => (
+      item?.scope === scope && cleanDate(item?.statistic_date) === day
+    ))) {
+      for (const fact of Array.isArray(bundle?.facts) ? bundle.facts : []) {
+        const key = factBusinessKey(scope, fact, "bundle");
+        if (!rawFactsByKey.has(key)) rawFactsByKey.set(key, []);
+        rawFactsByKey.get(key).push({ bundle, fact });
+      }
+    }
+    for (const [index, row] of storeRows.entries()) {
+      const cost = scaledMetric(row?.["整体消耗"], 100);
+      const gmv = scaledMetric(row?.["整体成交金额"], 100);
+      const orders = scaledMetric(row?.["整体成交订单数"], 1000);
+      if (
+        String(row?.["素材ID"] || "").trim() === "-"
+        && hasNonZeroBusinessValue(cost, gmv, orders)
+        && !isKnownAigcAggregate(row, "store")
+      ) {
+        unresolvedAggregateRows.push(index);
+      }
+      if (scope === "self_live") {
+        const key = factBusinessKey(scope, row, "store");
+        const matches = rawFactsByKey.get(key) || [];
+        const match = matches.length === 1 ? matches[0] : null;
+        const storeVideoType = String(row?.["视频素材类型"] || "").trim();
+        if (
+          !match
+          || !validSelfLiveVideoTypeEvidence(match.bundle, match.fact)
+          || !storeVideoType
+          || storeVideoType !== String(match.fact?.material_video_type || "").trim()
+        ) {
+          invalidVideoTypeRows.push(index);
+        }
+      }
+    }
+    const identityOk = validateConsoleStoreIdentity(
+      state,
+      scope,
+      cfg,
+      day,
+      storeRows,
+      storeKey,
+      meta,
+    );
+    if (unresolvedAggregateRows.length || invalidVideoTypeRows.length) {
+      addIssue(state, "content_anomaly", {
+        code: unresolvedAggregateRows.length
+          ? "unresolved_material_aggregate"
+          : "material_video_type_missing",
+        contract_id: `ads.${scope}.store.video.${day}.source_evidence`,
+        date_or_period: day,
+        domain: "全部投流数据",
+        source: "中央数据",
+        touchpoint: cfg.label,
+        layer: "投流素材层（视频）",
+        item: storeKey,
+        reason: `中央视频事实未通过最终来源证据复核：material_id_dash_with_value=${unresolvedAggregateRows.length}；self_live_video_type_has_no_source_evidence=${invalidVideoTypeRows.length}`,
+        details: {
+          unresolved_material_aggregate_rows: unresolvedAggregateRows,
+          invalid_material_video_type_evidence_rows: invalidVideoTypeRows,
+        },
+      });
+      return false;
+    }
+    return identityOk;
+  }
+
   function successfulStatusRow(row) {
     if (!row || row.status !== "ok") return false;
     const hasExpected = Object.prototype.hasOwnProperty.call(row, "subcalls_expected");
@@ -2217,8 +4122,25 @@ buildTgt();renderActions();
     return true;
   }
 
+  function apiVideoFactEntries(bundle) {
+    const facts = bundle?.facts || {};
+    const entries = [];
+    for (const row of Array.isArray(facts.material_daily) ? facts.material_daily : []) {
+      if (String(row?.material_type || "video").toLowerCase() !== "image") {
+        entries.push({ container: "material_daily", row });
+      }
+    }
+    for (const container of ["material_video_daily", "live_video_daily"]) {
+      for (const row of Array.isArray(facts[container]) ? facts[container] : []) {
+        entries.push({ container, row });
+      }
+    }
+    return entries;
+  }
+
   function validateAdScope(state, scope, cfg) {
     if (cfg.required === false) return;
+    if (state.currentContract) validateConsoleScope(state, scope, cfg);
     const bundle = state.adBundles?.[scope];
     const label = cfg.label;
     const windowStart = cleanDate(bundle?.window?.start);
@@ -2229,16 +4151,15 @@ buildTgt();renderActions();
         contract_id: `ads.${scope}.bundle`, date_or_period: state.target, domain: "全部投流数据", source: "巨量千川API",
         touchpoint: label, layer: "源端批次", item: label, reason: `没有 ${label} 的同批API证据包`,
       });
-      return;
     }
-    if (bundle.complete !== true || cleanDate(bundle?.window?.end) !== state.target) {
+    if (bundle && (bundle.complete !== true || cleanDate(bundle?.window?.end) !== state.target)) {
       addIssue(state, bundle.complete === true ? "stale" : "not_pulled", {
         contract_id: `ads.${scope}.bundle`, date_or_period: sourceRange, domain: "全部投流数据", source: "巨量千川API",
         touchpoint: label, layer: "源端批次", item: label,
         reason: `API证据包 complete=${String(bundle.complete)}，窗口结束日 ${bundle?.window?.end || "缺失"}，目标日 ${state.target}`,
       });
     }
-    const statuses = Array.isArray(bundle.statuses) ? bundle.statuses : [];
+    const statuses = Array.isArray(bundle?.statuses) ? bundle.statuses : [];
     const statusGroups = new Map();
     for (const row of statuses) {
       const key = `${String(row?.advertiser_id || "")}|${String(row?.spec || "")}`;
@@ -2251,7 +4172,10 @@ buildTgt();renderActions();
     const expectedGlobalStatusKeys = (cfg.global_source_specs || [])
       .filter((spec) => spec !== "daren_plan_identity")
       .map((spec) => `|${spec}`);
-    const allowedStatusKeys = new Set([...expectedAccountStatusKeys, ...expectedGlobalStatusKeys]);
+    const optionalAccountStatusKeys = (cfg.accounts || []).flatMap((account) => (
+      (cfg.low_frequency_audit_specs || []).map((spec) => `${String(account.advertiser_id)}|${spec}`)
+    ));
+    const allowedStatusKeys = new Set([...expectedAccountStatusKeys, ...expectedGlobalStatusKeys, ...optionalAccountStatusKeys]);
     const duplicateStatusKeys = [...statusGroups.entries()].filter(([, rows]) => rows.length !== 1).map(([key, rows]) => ({ key, count: rows.length }));
     const unexpectedStatusKeys = [...statusGroups.keys()].filter((key) => !allowedStatusKeys.has(key));
     if (duplicateStatusKeys.length || unexpectedStatusKeys.length) {
@@ -2285,17 +4209,34 @@ buildTgt();renderActions();
           });
         }
       }
+      for (const spec of cfg.low_frequency_audit_specs || []) {
+        const rows = statusGroups.get(`${String(account.advertiser_id)}|${spec}`) || [];
+        const row = rows.length === 1 ? rows[0] : null;
+        addMapping(state, {
+          contract_id: `ads.${scope}.audit.${account.advertiser_id}.${spec}`,
+          domain: "全部投流数据",
+          authoritative_source: "巨量千川API（低频审计）",
+          touchpoint_or_sell_type: `${label}·${account.name}`,
+          carrier_or_layer: spec,
+          due_date_or_period: sourceRange,
+          expected_table_or_api: spec,
+          required: false,
+          input_unit: false,
+          state: successfulStatusRow(row) ? "present" : "optional",
+          evidence: row ? `status=${row.status}` : "非每日硬阻塞",
+        });
+      }
     }
     for (const spec of cfg.global_source_specs || []) {
       if (spec === "daren_plan_identity") {
-        const rows = Array.isArray(bundle.daren_statuses) ? bundle.daren_statuses : [];
+        const rows = Array.isArray(bundle?.daren_statuses) ? bundle.daren_statuses : [];
         const expectedAccountIds = new Set((cfg.accounts || []).map((account) => String(account.advertiser_id)));
         const unexpectedRows = rows.filter((row) => !expectedAccountIds.has(String(row?.advertiser_id || "")));
         for (const account of cfg.accounts || []) {
           const matches = rows.filter((item) => String(item?.advertiser_id || "") === String(account.advertiser_id));
           const row = matches.length === 1 ? matches[0] : null;
           const explicitStatusOk = !Object.prototype.hasOwnProperty.call(row || {}, "status") || row.status === "ok";
-          const ok = bundle.daren_complete === true
+          const ok = bundle?.daren_complete === true
             && matches.length === 1
             && explicitStatusOk
             && Number(row?.pages) >= 1
@@ -2343,11 +4284,73 @@ buildTgt();renderActions();
         });
       }
     }
+    if (state.currentContract) {
+      const apiVideoFacts = apiVideoFactEntries(bundle).map((entry) => ({
+        ...entry,
+        business_key: factBusinessKey(scope, entry.row, "bundle"),
+      }));
+      const consoleKeys = new Set(consoleFactRows(state, scope, state.target).map((row) => (
+        factBusinessKey(scope, row, "bundle")
+      )));
+      const overlappingApiVideoFacts = apiVideoFacts.filter((entry) => consoleKeys.has(entry.business_key));
+      const remainingApiVideoFacts = apiVideoFacts.filter((entry) => !consoleKeys.has(entry.business_key));
+      const apiVideoStatuses = statuses.filter((row) => ["material_video_daily", "live_video_daily"].includes(String(row?.spec || "")));
+      if (overlappingApiVideoFacts.length) {
+        addIssue(state, "duplicate_source", {
+          code: "duplicate_source",
+          contract_id: `ads.${scope}.video_authority`,
+          date_or_period: sourceRange,
+          domain: "全部投流数据",
+          source: "巨量千川API+千川控制台导表",
+          touchpoint: label,
+          layer: "投流素材层（视频）",
+          item: label,
+          reason: `同一视频事实同时存在于 API 与控制台导表：重叠 ${overlappingApiVideoFacts.length} 条`,
+          details: {
+            overlapping_business_keys: [...new Set(overlappingApiVideoFacts.map((entry) => entry.business_key))].sort(),
+            api_fact_containers: [...new Set(overlappingApiVideoFacts.map((entry) => entry.container))].sort(),
+          },
+        });
+      }
+      if (remainingApiVideoFacts.length || apiVideoStatuses.length) {
+        const counts = {};
+        for (const { container } of remainingApiVideoFacts) counts[container] = (counts[container] || 0) + 1;
+        addIssue(state, "content_anomaly", {
+          code: "hybrid_contract_violation",
+          contract_id: `ads.${scope}.video_authority`,
+          date_or_period: sourceRange,
+          domain: "全部投流数据",
+          source: "巨量千川API",
+          touchpoint: label,
+          layer: "投流素材层（视频）",
+          item: label,
+          reason: `视频事实已由控制台导表独占，但 API 包仍含非重叠视频行 ${remainingApiVideoFacts.length} 条、视频接口状态 ${apiVideoStatuses.length} 条`,
+          details: {
+            api_video_row_count: remainingApiVideoFacts.length,
+            api_video_rows_by_container: counts,
+            api_video_status_count: apiVideoStatuses.length,
+            api_video_business_keys: [...new Set(remainingApiVideoFacts.map((entry) => entry.business_key))].sort(),
+          },
+        });
+      }
+    }
     const start = windowStart || state.target;
     const end = windowEnd || state.target;
     const accountIds = (cfg.accounts || []).map((account) => String(account.advertiser_id));
     const allowedAccounts = new Set(accountIds);
+    const selfLiveHybridAccountEvidence = (
+      state.currentContract
+      && scope === "self_live"
+      && (cfg.store_layers || []).some((layer) => (
+        layer?.type === "acct" && layer?.source_kind === HYBRID_SOURCE_KIND
+      ))
+    )
+      ? buildSelfLiveHybridAccountEvidence(state, cfg, bundle, statusGroups, start, end)
+      : null;
     for (const layer of cfg.store_layers || []) {
+      const layerSourceKind = state.currentContract
+        ? String(layer.source_kind || "")
+        : API_SOURCE_KIND;
       if (layer.required === false) {
         addMapping(state, {
           contract_id: `ads.${scope}.store.${layer.type}`, domain: "全部投流数据", authoritative_source: "中央数据",
@@ -2356,7 +4359,10 @@ buildTgt();renderActions();
         });
         continue;
       }
-      for (const day of daysBetween(start, end)) {
+      const layerDays = state.currentContract && layerSourceKind === CONSOLE_SOURCE_KIND
+        ? [state.target]
+        : daysBetween(start, end);
+      for (const day of layerDays) {
         const key = `tlapi::${cfg.channel}::${layer.type}::rng${day}_${day}`;
         const payload = state.store[key];
         addMapping(state, {
@@ -2375,37 +4381,67 @@ buildTgt();renderActions();
         const meta = payload._tl || {};
         const sourceWindowStart = cleanDate(meta?.source_window?.start);
         const sourceWindowEnd = cleanDate(meta?.source_window?.end);
-        if (
-          meta.chan !== cfg.channel
-          || meta.type !== layer.type
-          || meta.scope !== scope
-          || meta.source !== "qianchuan_api"
-          || cleanDate(meta.start) !== day
-          || cleanDate(meta.end) !== day
-          || sourceWindowStart !== windowStart
-          || sourceWindowEnd !== windowEnd
-        ) {
+        const consoleMetaOk = state.currentContract
+          && layerSourceKind === CONSOLE_SOURCE_KIND
+          && consoleMetadataMatches(state, scope, cfg, day, meta);
+        const apiMetaOk = layerSourceKind === API_SOURCE_KIND
+          && meta.chan === cfg.channel
+          && meta.type === layer.type
+          && meta.scope === scope
+          && String(meta.source_kind || meta.source || "") === API_SOURCE_KIND
+          && cleanDate(meta.start) === day
+          && cleanDate(meta.end) === day
+          && sourceWindowStart === windowStart
+          && sourceWindowEnd === windowEnd;
+        const hybridMetaOk = layerSourceKind === HYBRID_SOURCE_KIND
+          && scope === "self_live"
+          && layer.type === "acct"
+          && meta.chan === cfg.channel
+          && meta.type === layer.type
+          && meta.scope === scope
+          && String(meta.source_kind || meta.source || "") === HYBRID_SOURCE_KIND
+          && cleanDate(meta.start) === day
+          && cleanDate(meta.end) === day
+          && sourceWindowStart === windowStart
+          && sourceWindowEnd === windowEnd
+          && meta.account_daily_source === "video_plus_live_direct_plus_other_conversion"
+          && meta.reconciliation_status === "complete"
+          && meta.hybrid_reconciliation_schema === "gy-qianchuan-self-live-hybrid-account-reconciliation-v1"
+          && cleanDate(meta?.hybrid_reconciliation_window?.start) === windowStart
+          && cleanDate(meta?.hybrid_reconciliation_window?.end) === windowEnd;
+        if (!(consoleMetaOk || apiMetaOk || hybridMetaOk)) {
           addIssue(state, "dimension_mismatch", {
             contract_id: `ads.${scope}.store.${layer.type}.${day}`, date_or_period: day, domain: "全部投流数据", source: "中央数据",
             touchpoint: label, layer: layer.label, item: key,
-            reason: `投流元数据为 ${meta.scope || "空"}/${meta.chan || "空"}/${meta.type || "空"}/${meta.start || "空"}-${meta.end || "空"}；源窗口 ${sourceWindowStart || "空"}-${sourceWindowEnd || "空"}`,
+            reason: `投流元数据为 ${meta.scope || "空"}/${meta.chan || "空"}/${meta.type || "空"}/${meta.start || "空"}-${meta.end || "空"}，source=${meta.source_kind || meta.source || "空"}；本层要求 ${layerSourceKind || "未声明"}`,
           });
         }
-        const bundleRows = adFactRows(bundle, scope, layer.type, day);
+        const bundleRows = state.currentContract && layerSourceKind === CONSOLE_SOURCE_KIND
+          ? consoleFactRows(state, scope, day)
+          : layerSourceKind === HYBRID_SOURCE_KIND
+            ? selfLiveHybridAccountEvidence?.rowsByDay?.[day] || []
+          : adFactRows(bundle, scope, layer.type, day);
         const storeRows = sourceRows(payload);
+        if (state.currentContract && layerSourceKind === CONSOLE_SOURCE_KIND) {
+          validateConsoleStoreSafety(state, scope, cfg, day, storeRows, key, meta);
+        }
         const bundleSummary = summarizeAdRows(bundleRows, "bundle", day, allowedAccounts);
         const storeSummary = summarizeAdRows(storeRows, "store", day, allowedAccounts);
         const layerFactSpec = AD_LAYER_FACTS[scope]?.[layer.type];
-        const sourceStatusesOk = Boolean(layerFactSpec) && (layerFactSpec.statusSpecs || []).every((spec) => (
-          (cfg.accounts || []).every((account) => {
-            const rows = statusGroups.get(`${String(account.advertiser_id)}|${spec}`) || [];
-            return rows.length === 1 && successfulStatusRow(rows[0]);
-          })
-        ));
+        const sourceStatusesOk = layerSourceKind === CONSOLE_SOURCE_KIND
+          ? state.consoleScopeEvidence?.[scope]?.complete === true
+          : layerSourceKind === HYBRID_SOURCE_KIND
+            ? selfLiveHybridAccountEvidence?.ok === true
+          : Boolean(layerFactSpec) && (layerFactSpec.statusSpecs || []).every((spec) => (
+            (cfg.accounts || []).every((account) => {
+              const rows = statusGroups.get(`${String(account.advertiser_id)}|${spec}`) || [];
+              return rows.length === 1 && successfulStatusRow(rows[0]);
+            })
+          ));
         const darenZeroProofOk = layer.type !== "daren" || (
-          bundle.daren_complete === true
+          bundle?.daren_complete === true
           && (cfg.accounts || []).every((account) => {
-            const rows = (bundle.daren_statuses || []).filter((row) => String(row?.advertiser_id || "") === String(account.advertiser_id));
+            const rows = (bundle?.daren_statuses || []).filter((row) => String(row?.advertiser_id || "") === String(account.advertiser_id));
             const row = rows.length === 1 ? rows[0] : null;
             return rows.length === 1
               && (!Object.prototype.hasOwnProperty.call(row, "status") || row.status === "ok")
@@ -2430,11 +4466,15 @@ buildTgt();renderActions();
               reason: `必需层为空，且未形成同批 success-zero 闭环；源端合计 cost=${bundleSummary.totals.cost}/gmv=${bundleSummary.totals.gmv}/orders=${bundleSummary.totals.orders}，状态证据=${sourceStatusesOk && darenZeroProofOk ? "ok" : "不完整"}`,
             });
           }
-        } else if (!sameAdSummary(bundleSummary, storeSummary, accountIds)) {
+        } else if (
+          layerSourceKind === CONSOLE_SOURCE_KIND
+            ? !sameConsoleFacts(bundleRows, storeRows, scope, day)
+            : !sameAdSummary(bundleSummary, storeSummary, accountIds)
+        ) {
           addIssue(state, "content_anomaly", {
             contract_id: `ads.${scope}.store.${layer.type}.${day}`, date_or_period: day, domain: "全部投流数据", source: "中央数据",
             touchpoint: label, layer: layer.label, item: key,
-            reason: `中央层与同批API证据包按账户金额不闭合；源端 ${JSON.stringify(bundleSummary.totals)}，中央 ${JSON.stringify(storeSummary.totals)}`,
+            reason: `中央层与同批${layerSourceKind === CONSOLE_SOURCE_KIND ? "控制台视频事实" : layerSourceKind === HYBRID_SOURCE_KIND ? "API非视频+控制台视频+计划账本" : "API证据包"}不闭合；源端 ${JSON.stringify(bundleSummary.totals)}，中央 ${JSON.stringify(storeSummary.totals)}`,
           });
         }
       }
@@ -2463,8 +4503,8 @@ buildTgt();renderActions();
     }
     const source = snapshot.source && typeof snapshot.source === "object" ? snapshot.source : {};
     const expectedAccounts = [
-      ...LOCKED_AD_SCOPES.self_shelf.accounts,
-      ...LOCKED_AD_SCOPES.self_live.accounts,
+      ...(state.contract.advertising?.self_shelf?.accounts || []).map((row) => String(row?.advertiser_id || "")),
+      ...(state.contract.advertising?.self_live?.accounts || []).map((row) => String(row?.advertiser_id || "")),
     ];
     const sourceAccounts = Array.isArray(source.accounts) ? source.accounts.map(String) : [];
     const requestSetSha = String(source.request_set_sha256 || "").toUpperCase();
@@ -2521,6 +4561,14 @@ buildTgt();renderActions();
       feishu: input.feishu || null,
       adBundles: input.adBundles || {},
       platformLabels: input.platformLabels || null,
+      accountRegistry: input.accountRegistry || null,
+      accountRegistryConfig: input.accountRegistryConfig || null,
+      consoleBundles: normalizeConsoleBundleInput(input.consoleBundles),
+      consoleScopeEvidence: {},
+      materialIdentityEvidence: [],
+      materialIdentityConfigSha256: input.materialIdentityConfigSha256 || {},
+      materialIdentityConfigSchemaVersion: input.materialIdentityConfigSchemaVersion || {},
+      currentContract: isCurrentContract(input.contract),
       target: cleanDate(input.targetDate || input.task?.businessPeriod?.end),
       generatedAtTimestamp: generatedAtDate.getTime(),
       issues: [],
@@ -2531,10 +4579,14 @@ buildTgt();renderActions();
     validateProducts(state);
     validateRefunds(state);
     validateFeishu(state);
-    for (const [scope, cfg] of Object.entries(state.contract.advertising || {})) {
-      if (cfg && cfg.channel) validateAdScope(state, scope, cfg);
+    const registryOk = validateCurrentAccountRegistry(state);
+    if (!state.currentContract || registryOk) {
+      if (state.currentContract) validateConsoleRegistryBindings(state);
+      for (const [scope, cfg] of Object.entries(state.contract.advertising || {})) {
+        if (cfg && cfg.channel) validateAdScope(state, scope, resolvedAdConfig(state, scope, cfg));
+      }
     }
-    validatePlatformLabels(state);
+    if (!state.currentContract) validatePlatformLabels(state);
     const issues = stableIssues(state.issues);
     const blocking = issues.filter((issue) => issue.required && issue.severity === "error" && !["not_due", "optional_layer"].includes(issue.status));
     return {
@@ -2544,6 +4596,12 @@ buildTgt();renderActions();
       generated_at: input.generatedAt || new Date().toISOString(),
       target_date: state.target,
       source_sha256: input.sourceSha256 || "",
+      account_registry_source: state.currentContract ? state.accountRegistry?.source || "" : "",
+      account_registry_sha256: state.currentContract ? state.accountRegistry?.sha256 || "" : "",
+      account_registry_updated_at: state.currentContract ? state.accountRegistry?.source_updated_at || "" : "",
+      console_bundle_count: state.currentContract ? state.consoleBundles.length : 0,
+      material_identity_gate_count: state.materialIdentityEvidence.length,
+      material_identity_gates: state.materialIdentityEvidence,
       daily_cutoff_hour: Number(state.contract.daily_cutoff_hour || 9),
       ok: blocking.length === 0,
       blocking_issue_count: blocking.length,
