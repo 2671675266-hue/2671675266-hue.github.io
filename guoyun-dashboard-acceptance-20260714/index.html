@@ -1500,7 +1500,7 @@ buildTgt();renderActions();
   function hasStore(v){if(!v||v==='{}'||v==='null')return false;try{return Object.keys(JSON.parse(v)).length>0;}catch(e){return false;}}
   function parseSnapshot(v){if(!v)return null;if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}}if(!v||v.schema!=='gy-central-store-v1'||!v.seed||typeof v.seed.gy_import_store_v1!=='string')return null;return v;}
   function fetchCentral(){return fetch(CENTRAL_URL+'?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(v){v=parseSnapshot(v);if(!v)throw new Error('中央快照格式无效');return v;});}
-  function applySmallSeed(snapshot){var sd=snapshot&&snapshot.seed;if(!sd)return;Object.keys(sd).forEach(function(k){if(k!=='gy_import_store_v1'&&sd[k]!=null){try{localStorage.setItem(k,sd[k]);}catch(e){}}});try{tgtsAll=JSON.parse(sd.gy_tgts_v1||'{}')||{};}catch(e){tgtsAll={};}actions=loadActions();try{concls=JSON.parse(sd.gy_imp_concl||'{}')||{};}catch(e){concls={};}buildTgt();renderActions();}
+  function applySmallSeed(snapshot){var sd=snapshot&&snapshot.seed;if(!sd)return;Object.keys(sd).forEach(function(k){if(k!=='gy_import_store_v1'&&k!=='gy_tgts_v1'&&sd[k]!=null){try{localStorage.setItem(k,sd[k]);}catch(e){}}});var centralTgts={},localOverrides={};try{centralTgts=JSON.parse(sd.gy_tgts_v1||'{}')||{};}catch(e){}try{localOverrides=JSON.parse(localStorage.getItem('gy_tgts_local_override_v1')||'{}')||{};}catch(e){}tgtsAll=Object.assign({},centralTgts);Object.keys(localOverrides).forEach(function(m){if(/^\d{6}$/.test(m)&&localOverrides[m]&&typeof localOverrides[m]==='object')tgtsAll[m]=Object.assign({},centralTgts[m]||{},localOverrides[m]);});try{localStorage.setItem('gy_tgts_v1',JSON.stringify(tgtsAll));}catch(e){}actions=loadActions();try{concls=JSON.parse(sd.gy_imp_concl||'{}')||{};}catch(e){concls={};}buildTgt();renderActions();}
   function boot(){
     Promise.all([idbGet('gy_import_store_v1'),idbGet(GY_CENTRAL_CACHE_KEY),fetchCentral().catch(function(){return null;})]).then(function(v){
       var localStore=v[0]||localStorage.getItem(STORE_KEY);var cached=parseSnapshot(v[1]);var fresh=parseSnapshot(v[2]);var central=fresh||cached;var embeddedSeed=window.__GY_SEED__||{},embeddedStore=embeddedSeed.gy_import_store_v1||'{}',embedded=false;var queryLocal=false;try{queryLocal=new URL(location.href).searchParams.get('mode')==='local';}catch(e){}
@@ -1520,6 +1520,7 @@ buildTgt();renderActions();
   "use strict";
 
   var HINT_KEY = "gy_workbench_manage_hint_v1";
+  var TARGET_OVERRIDE_KEY = "gy_tgts_local_override_v1";
   var state = {
     authorized: false,
     revision: "",
@@ -1710,10 +1711,49 @@ buildTgt();renderActions();
     if (key && typeof window.saveConcl === "function") window.saveConcl(key, value);
   }
 
+  function activeTargetMonth() {
+    var month = "";
+    try {
+      month = String(window.tgtEditMonth || (typeof window.activeGoalMonth === "function" ? window.activeGoalMonth() : "") || "");
+    } catch (error) {}
+    return /^\d{6}$/.test(month) ? month : "";
+  }
+
+  function persistLocalTargetOverride() {
+    var month = activeTargetMonth();
+    var targets = window.tgtsAll && month ? window.tgtsAll[month] : null;
+    if (!month || !targets || typeof targets !== "object") return;
+    try {
+      var stored = JSON.parse(localStorage.getItem(TARGET_OVERRIDE_KEY) || "{}");
+      if (!stored || typeof stored !== "object" || Array.isArray(stored)) stored = {};
+      stored[month] = Object.assign({}, targets);
+      localStorage.setItem(TARGET_OVERRIDE_KEY, JSON.stringify(stored));
+    } catch (error) {}
+  }
+
   function applyEditingState() {
     var editable = state.authorized;
-    var controls = document.querySelectorAll('#tg input[type="number"],#conclRow textarea,textarea[oninput^="saveConcl(\\\'dmact_"]');
-    Array.prototype.forEach.call(controls, function (control) { control.readOnly = !editable; });
+    var targetControls = document.querySelectorAll('#tg input[type="number"]');
+    Array.prototype.forEach.call(targetControls, function (control) {
+      control.readOnly = false;
+      control.title = editable ? "修改后同步到中央目标" : "可直接修改；仅保存在当前浏览器，不改中央经营数据";
+    });
+    var centralControls = document.querySelectorAll('#conclRow textarea,textarea[oninput^="saveConcl(\\\'dmact_"]');
+    Array.prototype.forEach.call(centralControls, function (control) { control.readOnly = !editable; });
+    var targetRow = document.getElementById("tg");
+    if (targetRow) {
+      var note = targetRow.querySelector("[data-gywb-target-mode]");
+      if (!note) {
+        note = document.createElement("span");
+        note.setAttribute("data-gywb-target-mode", "");
+        note.style.cssText = "font-size:10px;color:#8a7d66;white-space:nowrap";
+        targetRow.appendChild(note);
+      }
+      var noteText = editable ? "中央同步" : "本机可改";
+      var noteTitle = editable ? "当前为管理态，目标修改会同步到中央" : "公开页可改目标，但只保存在当前浏览器";
+      if (note.textContent !== noteText) note.textContent = noteText;
+      note.title = noteTitle;
+    }
     Array.prototype.forEach.call(document.querySelectorAll("#conclRow .cc-tag"), function (tag) {
       if (!tag.dataset.gywbOriginal) tag.dataset.gywbOriginal = tag.textContent;
       var wanted = editable ? "中央同步" : tag.dataset.gywbOriginal;
@@ -1895,6 +1935,7 @@ buildTgt();renderActions();
       var originalSaveTgts = window.saveTgts;
       window.saveTgts = function () {
         var result = originalSaveTgts.apply(this, arguments);
+        persistLocalTargetOverride();
         try { stage("gy_tgts_v1", JSON.stringify(window.tgtsAll || {})); } catch (error) {}
         return result;
       };
@@ -1909,6 +1950,7 @@ buildTgt();renderActions();
     }
     window.GY_WORKBENCH = {
       canEdit: function () { return state.authorized; },
+      canEditTargets: function () { return true; },
       flush: flush,
       open: function () { openLogin(""); },
     };
@@ -2449,6 +2491,7 @@ buildTgt();renderActions();
     CURRENT_CONTRACT_VERSION,
   ]);
   const CONSOLE_SOURCE_KIND = "qianchuan_console_export";
+  const CONSOLE_LIVE_ANALYSIS_SOURCE_KIND = "qianchuan_console_live_analysis";
   const API_SOURCE_KIND = "qianchuan_api";
   const HYBRID_SOURCE_KIND = "qianchuan_hybrid";
   const AIGC_AGGREGATE_MATERIAL_NAME = "AIGC动态创意视频素材集合";
@@ -2579,6 +2622,17 @@ buildTgt();renderActions();
     const day = date.getUTCDay() || 7;
     date.setUTCDate(date.getUTCDate() - day + 1);
     return formatDay(date);
+  }
+
+  function sundayOf(value) {
+    const monday = mondayOf(value);
+    return monday ? addDays(monday, 6) : "";
+  }
+
+  function luopanWeekKey(value) {
+    const start = mondayOf(value);
+    const weekEnd = sundayOf(value);
+    return start && weekEnd ? `${weekEnd.slice(0, 6)}_wk${start}::luopan` : "";
   }
 
   function isoToShanghaiParts(value) {
@@ -2813,7 +2867,10 @@ buildTgt();renderActions();
     const { store, target, task } = state;
     const start = cleanDate(task?.businessPeriod?.start) || mondayOf(target);
     const end = cleanDate(task?.businessPeriod?.end) || target;
-    const key = `${end.slice(0, 6)}_wk${start}::luopan`;
+    // A natural-week key belongs to the month containing that week's Sunday.
+    // This is deliberately independent from a partial WTD request ending on
+    // the target day (for example 2026-07-27 belongs to 202608_wk20260727).
+    const key = luopanWeekKey(start);
     const payload = store[key];
     addMapping(state, {
       contract_id: "luopan.business.wtd",
@@ -3633,6 +3690,81 @@ buildTgt();renderActions();
     ));
   }
 
+  function isConsoleSelfLiveSummaryBundle(bundle) {
+    return bundle?.schema === "gy-qianchuan-console-self-live-summary-v1"
+      && bundle?.source === CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+      && bundle?.scope === "self_live"
+      && bundle?.complete === true
+      && bundle?.console_source_contract?.schema === "gy-qianchuan-console-self-live-source-contract-v1";
+  }
+
+  function buildSelfLiveConsoleSummaryEvidence(state, cfg, bundle, start, end) {
+    if (state.selfLiveConsoleSummaryEvidence) return state.selfLiveConsoleSummaryEvidence;
+    const errors = [];
+    const days = daysBetween(start, end);
+    const accountIds = (cfg.accounts || []).map((account) => String(account.advertiser_id));
+    const statusRows = Array.isArray(bundle?.statuses) ? bundle.statuses : [];
+    const factAccountIds = new Set((bundle?.facts?.account_daily || []).map((row) => String(row?.advertiser_id || "")));
+    const activeRows = (bundle?.facts?.account_daily || []).filter((row) => row?.account_status === "active_required");
+    const retiredRows = (bundle?.facts?.account_daily || []).filter((row) => row?.account_status === "retired_not_required");
+    const activeIds = activeRows.map((row) => String(row?.advertiser_id || ""));
+    const retiredIds = retiredRows.map((row) => String(row?.advertiser_id || ""));
+    if (days.length !== 1 || days[0] !== state.target) errors.push("console_self_live_window_mismatch");
+    if (!exactStringSet([...factAccountIds], accountIds)) errors.push("console_self_live_account_set_mismatch");
+    if (activeIds.length !== 1 || retiredIds.length !== accountIds.length - 1) errors.push("console_self_live_account_status_partition_invalid");
+    const requiredActiveSpecs = ["account_daily", "live_room_daily", "material_video_daily", "material_identity_build"];
+    for (const accountId of activeIds) {
+      for (const spec of requiredActiveSpecs) {
+        const matches = statusRows.filter((row) => String(row?.advertiser_id || "") === accountId && row?.spec === spec);
+        if (matches.length !== 1 || !successfulStatusRow(matches[0])) errors.push(`console_self_live_status_missing:${accountId}:${spec}`);
+      }
+    }
+    for (const accountId of retiredIds) {
+      const matches = statusRows.filter((row) => String(row?.advertiser_id || "") === accountId && row?.spec === "account_retired_not_required");
+      if (matches.length !== 1 || matches[0]?.status !== "not_required") errors.push(`console_self_live_retired_status_missing:${accountId}`);
+    }
+    const allowedStatusKeys = new Set([
+      ...activeIds.flatMap((accountId) => requiredActiveSpecs.map((spec) => `${accountId}|${spec}`)),
+      ...retiredIds.map((accountId) => `${accountId}|account_retired_not_required`),
+    ]);
+    const actualStatusKeys = statusRows.map((row) => `${String(row?.advertiser_id || "")}|${String(row?.spec || "")}`);
+    if (!exactStringSet(actualStatusKeys, [...allowedStatusKeys])) errors.push("console_self_live_status_matrix_mismatch");
+    const reconciliation = bundle?.plan_window_reconciliation || {};
+    if (
+      reconciliation.ok !== true
+      || reconciliation.authority !== CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+      || reconciliation.reconciliation_status !== "complete_with_signed_attribution_adjustment"
+      || bundle?.summary?.source_reconciled !== true
+      || bundle?.summary?.reconciliation_status !== "complete_with_signed_attribution_adjustment"
+      || bundle?.console_source_contract?.supplier_requests_started !== false
+      || Number(bundle?.console_source_contract?.network_requests) !== 0
+    ) {
+      errors.push("console_self_live_reconciliation_contract_invalid");
+    }
+    for (const row of reconciliation.accounts || []) {
+      if (row?.cost_closed !== true || row?.gmv_orders_closed_with_signed_adjustment !== true) {
+        errors.push(`console_self_live_account_reconciliation_failed:${row?.advertiser_id || "unknown"}`);
+      }
+    }
+    const result = { ok: errors.length === 0, errors, activeIds, retiredIds, days };
+    state.selfLiveConsoleSummaryEvidence = result;
+    if (!result.ok) {
+      addIssue(state, "content_anomaly", {
+        code: "self_live_console_summary_reconciliation_failed",
+        contract_id: "ads.self_live.console_summary_reconciliation",
+        date_or_period: `${start}-${end}`,
+        domain: "全部投流数据",
+        source: "千川控制台直播分析+直播间画面+视频素材导表",
+        touchpoint: cfg.label,
+        layer: "投流账户层",
+        item: cfg.label,
+        reason: `自播控制台总盘闭合失败：${errors.join("；") || "未知原因"}`,
+        details: { errors },
+      });
+    }
+    return result;
+  }
+
   function buildSelfLiveHybridAccountEvidence(state, cfg, bundle, statusGroups, start, end) {
     if (state.selfLiveHybridAccountEvidence) return state.selfLiveHybridAccountEvidence;
     const days = daysBetween(start, end);
@@ -3664,6 +3796,21 @@ buildTgt();renderActions();
     if (!exactStringSet(planRows.map((row) => String(row?.advertiser_id || "")), accountIds)) {
       errors.push("plan_ledger_account_set_mismatch");
     }
+    const rawAnchorAccounts = Array.isArray(bundle?.accounts) ? bundle.accounts : [];
+    if (!exactStringSet(rawAnchorAccounts.map((row) => String(row?.advertiser_id || "")), accountIds)) {
+      errors.push("plan_anchor_account_set_mismatch");
+    }
+    const suppliedPlanEvidence = state.selfLivePlanEvidence || {};
+    const planEvidenceRows = Array.isArray(suppliedPlanEvidence.observations)
+      ? suppliedPlanEvidence.observations
+      : [];
+    if ((suppliedPlanEvidence.errors || []).length) {
+      errors.push(...suppliedPlanEvidence.errors.map((value) => `plan_anchor_evidence:${value}`));
+    }
+    if (!exactStringSet(planEvidenceRows.map((row) => String(row?.advertiserId || "")), accountIds)) {
+      errors.push("plan_anchor_evaluation_account_set_mismatch");
+    }
+    const planEvidenceByAccount = new Map(planEvidenceRows.map((row) => [String(row?.advertiserId || ""), row]));
 
     const apiStatusesOk = (cfg.required_source_specs || []).every((spec) => (
       (cfg.accounts || []).every((account) => {
@@ -3733,23 +3880,43 @@ buildTgt();renderActions();
     for (const accountId of accountIds) {
       const matches = planRows.filter((row) => String(row?.advertiser_id || "") === accountId);
       const plan = matches.length === 1 ? matches[0] : null;
+      const rawAnchorAccount = rawAnchorAccounts.find((row) => String(row?.advertiser_id || "") === accountId);
+      const planObservation = planEvidenceByAccount.get(accountId);
       if (
         !plan
         || plan?.plan_evidence_present !== true
         || plan?.reconciliation_status !== "pending_console_video_merge"
+        || !rawAnchorAccount
+        || !planObservation
+        || planObservation.ok !== true
       ) {
         errors.push(`plan_ledger_row_incomplete:${accountId}`);
         continue;
       }
       const planTotals = metricTriplet(plan.plan_list_totals);
+      const evidencePlanTotals = metricTriplet(rawAnchorAccount?.plan_evidence?.plan_totals);
       const apiTotals = metricTriplet(plan.api_live_direct_plus_other_conversion);
       const pendingConsoleTotals = metricTriplet(plan.pending_console_video_balance);
       if (
-        !sameMetricTriplet(apiWindowByAccount[accountId], apiTotals)
-        || !sameMetricTriplet(consoleWindowByAccount[accountId], pendingConsoleTotals)
-        || !sameMetricTriplet(hybridWindowByAccount[accountId], planTotals)
+        !sameMetricTriplet(planTotals, evidencePlanTotals)
+        || !sameMetricTriplet(apiWindowByAccount[accountId], apiTotals)
       ) {
         errors.push(`plan_window_closure_mismatch:${accountId}`);
+        continue;
+      }
+      if (planObservation.comparable === true) {
+        if (
+          !sameMetricTriplet(consoleWindowByAccount[accountId], pendingConsoleTotals)
+          || !sameMetricTriplet(hybridWindowByAccount[accountId], planTotals)
+        ) {
+          errors.push(`plan_window_closure_mismatch:${accountId}`);
+        }
+      } else if (
+        planObservation.reason !== "configured_anchor_absent_in_window"
+        || !(planObservation.configuredAnchorAbsentInWindow || []).length
+        || (planObservation.unapprovedBusinessActiveAnchor || []).length
+      ) {
+        errors.push(`plan_window_noncomparable_evidence_invalid:${accountId}`);
       }
     }
 
@@ -3761,6 +3928,7 @@ buildTgt();renderActions();
       days,
       accountIds,
       planAuthority: String(bundle?.plan_window_reconciliation?.authority || ""),
+      planEvidence: planEvidenceRows,
     };
     state.selfLiveHybridAccountEvidence = result;
     if (!result.ok) {
@@ -4139,11 +4307,179 @@ buildTgt();renderActions();
     return entries;
   }
 
+  const CREATOR_ACTIVE_FIELDS = [
+    "cost", "gmv", "orders", "pay_amount", "coupon_amount", "platform_subsidy",
+    "settle_1h_amount", "settle_1h_orders", "settle_7d_amount", "settle_14d_amount",
+    "settle_30d_amount", "refund_1h_amount", "refund_1h_orders",
+  ];
+
+  function canonicalLocalPath(value) {
+    return String(value || "").trim().replace(/\\/gu, "/").toLowerCase();
+  }
+
+  function validSha256(value) {
+    return /^[A-Fa-f0-9]{64}$/u.test(String(value || "").trim());
+  }
+
+  function validExplicitUnresolvedCreatorIdentity(identity, adId) {
+    return identity?.identity_resolution_status === "unresolved_visible_bucket"
+      && String(identity?.source_plan_id || "") === String(adId || "")
+      && String(identity?.douyin_id || "") === `__UNRESOLVED_AD__${String(adId || "")}`
+      && String(identity?.douyin_name || "").includes("待归属达人账号");
+  }
+
+  function creatorTrustedCheckpointEvidence(state, bundle, cfg) {
+    if (state.creatorIdentityCarryForwardEvidence) {
+      return state.creatorIdentityCarryForwardEvidence;
+    }
+    const resume = bundle?.daren_resume || {};
+    const applicable = resume.identity_source_mode === "trusted_checkpoint_carry_forward";
+    if (!applicable) {
+      const result = { applicable: false, ok: false, errors: [], accounts: {} };
+      state.creatorIdentityCarryForwardEvidence = result;
+      return result;
+    }
+
+    const evidence = state.creatorIdentityCheckpointEvidence || {};
+    const current = evidence.current_checkpoint || null;
+    const trusted = evidence.trusted_checkpoint || null;
+    const errors = Array.isArray(evidence.errors) ? [...evidence.errors] : [];
+    const expectedAccountIds = (cfg.accounts || [])
+      .map((account) => String(account.advertiser_id || ""))
+      .filter(Boolean)
+      .sort();
+    const declaredTrustedSha = String(resume.trusted_checkpoint_sha256 || "").toUpperCase();
+    const actualTrustedSha = String(evidence.trusted_checkpoint_sha256 || "").toUpperCase();
+    const rawSha = String(bundle?.daren_source_raw_sha256 || "").toUpperCase();
+    const resumeRawSha = String(resume.raw_sha256 || "").toUpperCase();
+    const expectedWindow = {
+      start: cleanDate(bundle?.window?.start),
+      end: cleanDate(bundle?.window?.end),
+    };
+
+    if (bundle?.daren_complete !== true || resume.complete !== true) errors.push("carry_forward_not_complete");
+    if (resume.provider_requests_started !== false || Number(resume.network_requests) !== 0) {
+      errors.push("carry_forward_network_or_provider_request_detected");
+    }
+    if ((resume.fetched_partitions || []).length !== 0) errors.push("carry_forward_has_fetched_partitions");
+    if (!exactStringSet(resume.reused_partitions || [], expectedAccountIds)) {
+      errors.push("carry_forward_reused_account_set_mismatch");
+    }
+    if (!validSha256(declaredTrustedSha) || actualTrustedSha !== declaredTrustedSha) {
+      errors.push("trusted_checkpoint_sha256_mismatch");
+    }
+    if (!validSha256(rawSha) || rawSha !== resumeRawSha) errors.push("current_raw_sha256_binding_mismatch");
+    if (canonicalLocalPath(evidence.current_checkpoint_file) !== canonicalLocalPath(resume.checkpoint)) {
+      errors.push("current_checkpoint_path_mismatch");
+    }
+    if (canonicalLocalPath(evidence.trusted_checkpoint_file) !== canonicalLocalPath(resume.trusted_checkpoint_file)) {
+      errors.push("trusted_checkpoint_path_mismatch");
+    }
+    if (
+      current?.schema !== "guoyun-creator-aweme-enrichment-checkpoint-v1"
+      || current?.complete !== true
+      || String(current?.raw?.sha256 || "").toUpperCase() !== rawSha
+      || String(current?.raw?.scope || "") !== "creator_short_video"
+      || cleanDate(current?.raw?.window?.start) !== expectedWindow.start
+      || cleanDate(current?.raw?.window?.end) !== expectedWindow.end
+      || Number(current?.raw?.expected_calls) !== Number(bundle?.expected_calls)
+      || !exactStringSet(current?.expected_partitions || [], expectedAccountIds)
+      || !exactStringSet(Object.keys(current?.completed_partitions || {}), expectedAccountIds)
+      || String(current?.trusted_checkpoint_sha256 || "").toUpperCase() !== declaredTrustedSha
+      || canonicalLocalPath(current?.trusted_checkpoint_file) !== canonicalLocalPath(resume.trusted_checkpoint_file)
+    ) {
+      errors.push("current_checkpoint_contract_mismatch");
+    }
+    if (
+      trusted?.schema !== "guoyun-creator-aweme-enrichment-checkpoint-v1"
+      || trusted?.complete !== true
+      || !exactStringSet(trusted?.expected_partitions || [], expectedAccountIds)
+      || !exactStringSet(Object.keys(trusted?.completed_partitions || {}), expectedAccountIds)
+    ) {
+      errors.push("trusted_checkpoint_contract_mismatch");
+    }
+
+    const statuses = Array.isArray(bundle?.daren_statuses) ? bundle.daren_statuses : [];
+    const adRows = Array.isArray(bundle?.facts?.ad_daily) ? bundle.facts.ad_daily : [];
+    const accountResults = {};
+    for (const accountId of expectedAccountIds) {
+      const accountErrors = [];
+      const matches = statuses.filter((row) => String(row?.advertiser_id || "") === accountId);
+      const status = matches.length === 1 ? matches[0] : null;
+      const accountRows = adRows.filter((row) => String(row?.advertiser_id || "") === accountId);
+      const activeRows = accountRows
+        .filter((row) => CREATOR_ACTIVE_FIELDS.some((field) => Math.abs(Number(row?.[field] || 0)) > 0.000001));
+      const activeIds = [...new Set(activeRows
+        .map((row) => String(row?.ad_id || "").trim()))].sort();
+      if (activeIds.some((adId) => !adId)) accountErrors.push("active_ad_id_missing");
+      const currentIdentity = current?.completed_partitions?.[accountId]?.identity;
+      const trustedIdentity = trusted?.completed_partitions?.[accountId]?.identity;
+      if (!currentIdentity || typeof currentIdentity !== "object") accountErrors.push("current_identity_partition_missing");
+      if (!trustedIdentity || typeof trustedIdentity !== "object") accountErrors.push("trusted_identity_partition_missing");
+      const missingCurrent = activeIds.filter((adId) => !currentIdentity?.[adId]);
+      const missingTrusted = activeIds.filter((adId) => (
+        !trustedIdentity?.[adId]
+        && !validExplicitUnresolvedCreatorIdentity(currentIdentity?.[adId], adId)
+      ));
+      if (missingCurrent.length) accountErrors.push(`current_active_identity_missing:${missingCurrent.join(",")}`);
+      if (missingTrusted.length) accountErrors.push(`trusted_active_identity_missing:${missingTrusted.join(",")}`);
+      const reportTotals = metricTriplet(accountRows.reduce((sum, row) => ({
+        cost: Number(sum.cost || 0) + Number(row?.cost || 0),
+        gmv: Number(sum.gmv || 0) + Number(row?.gmv || 0),
+        orders: Number(sum.orders || 0) + Number(row?.orders || 0),
+      }), { cost: 0, gmv: 0, orders: 0 }));
+      if (
+        !status
+        || status.status !== "ok"
+        || status.resume_action !== "trusted_checkpoint_carry_forward"
+        || status.identity_source_mode !== "trusted_checkpoint_carry_forward"
+        || String(status.identity_source_checkpoint_sha256 || "").toUpperCase() !== declaredTrustedSha
+        || Number(status.pages) !== 0
+        || Number(status.request_count) !== 0
+        || Number(status.requests_completed) !== 0
+        || Number(status.active_ad_ids) !== activeIds.length
+        || Number(status.mapped_active_ad_ids) !== activeIds.length
+        || Number(status.active_identity_coverage) !== 1
+        || status.plan_totals_source !== "current_ad_daily_report"
+        || !sameMetricTriplet(metricTriplet(status.report_totals), reportTotals)
+        || !sameMetricTriplet(metricTriplet(status.plan_totals), reportTotals)
+      ) {
+        accountErrors.push("carry_forward_status_or_current_metrics_mismatch");
+      }
+      accountResults[accountId] = {
+        ok: accountErrors.length === 0,
+        errors: accountErrors,
+        active_ad_ids: activeIds,
+        active_ad_row_count: activeRows.length,
+      };
+    }
+    const unexpectedStatuses = statuses.filter((row) => (
+      !expectedAccountIds.includes(String(row?.advertiser_id || ""))
+    ));
+    if (unexpectedStatuses.length) errors.push("carry_forward_unexpected_account_status");
+    if (Number(bundle?.daren_summary?.active_ad_day_rows) !== Object.values(accountResults)
+      .reduce((sum, row) => sum + row.active_ad_row_count, 0)
+      || Number(bundle?.daren_summary?.mapped_ad_day_rows) !== Number(bundle?.daren_summary?.active_ad_day_rows)
+      || Number(bundle?.daren_summary?.identity_coverage) !== 1) {
+      errors.push("carry_forward_summary_mismatch");
+    }
+    const result = {
+      applicable: true,
+      ok: errors.length === 0 && Object.values(accountResults).every((row) => row.ok),
+      errors,
+      accounts: accountResults,
+      trusted_checkpoint_sha256: declaredTrustedSha,
+    };
+    state.creatorIdentityCarryForwardEvidence = result;
+    return result;
+  }
+
   function validateAdScope(state, scope, cfg) {
     if (cfg.required === false) return;
     if (state.currentContract) validateConsoleScope(state, scope, cfg);
     const bundle = state.adBundles?.[scope];
     const label = cfg.label;
+    const consoleSelfLiveSummary = scope === "self_live" && isConsoleSelfLiveSummaryBundle(bundle);
     const windowStart = cleanDate(bundle?.window?.start);
     const windowEnd = cleanDate(bundle?.window?.end);
     const sourceRange = windowStart && windowEnd ? `${windowStart}-${windowEnd}` : state.target;
@@ -4167,8 +4503,9 @@ buildTgt();renderActions();
       if (!statusGroups.has(key)) statusGroups.set(key, []);
       statusGroups.get(key).push(row);
     }
+    const requiredSourceSpecs = consoleSelfLiveSummary ? [] : (cfg.required_source_specs || []);
     const expectedAccountStatusKeys = (cfg.accounts || []).flatMap((account) => (
-      (cfg.required_source_specs || []).map((spec) => `${String(account.advertiser_id)}|${spec}`)
+      requiredSourceSpecs.map((spec) => `${String(account.advertiser_id)}|${spec}`)
     ));
     const expectedGlobalStatusKeys = (cfg.global_source_specs || [])
       .filter((spec) => spec !== "daren_plan_identity")
@@ -4176,7 +4513,9 @@ buildTgt();renderActions();
     const optionalAccountStatusKeys = (cfg.accounts || []).flatMap((account) => (
       (cfg.low_frequency_audit_specs || []).map((spec) => `${String(account.advertiser_id)}|${spec}`)
     ));
-    const allowedStatusKeys = new Set([...expectedAccountStatusKeys, ...expectedGlobalStatusKeys, ...optionalAccountStatusKeys]);
+    const allowedStatusKeys = consoleSelfLiveSummary
+      ? new Set(statusGroups.keys())
+      : new Set([...expectedAccountStatusKeys, ...expectedGlobalStatusKeys, ...optionalAccountStatusKeys]);
     const duplicateStatusKeys = [...statusGroups.entries()].filter(([, rows]) => rows.length !== 1).map(([key, rows]) => ({ key, count: rows.length }));
     const unexpectedStatusKeys = [...statusGroups.keys()].filter((key) => !allowedStatusKeys.has(key));
     if (duplicateStatusKeys.length || unexpectedStatusKeys.length) {
@@ -4187,7 +4526,7 @@ buildTgt();renderActions();
       });
     }
     for (const account of cfg.accounts || []) {
-      for (const spec of cfg.required_source_specs || []) {
+      for (const spec of requiredSourceSpecs) {
         const rows = statusGroups.get(`${String(account.advertiser_id)}|${spec}`) || [];
         const row = rows.length === 1 ? rows[0] : null;
         addMapping(state, {
@@ -4233,27 +4572,43 @@ buildTgt();renderActions();
         const rows = Array.isArray(bundle?.daren_statuses) ? bundle.daren_statuses : [];
         const expectedAccountIds = new Set((cfg.accounts || []).map((account) => String(account.advertiser_id)));
         const unexpectedRows = rows.filter((row) => !expectedAccountIds.has(String(row?.advertiser_id || "")));
+        const carryForward = creatorTrustedCheckpointEvidence(state, bundle, cfg);
         for (const account of cfg.accounts || []) {
           const matches = rows.filter((item) => String(item?.advertiser_id || "") === String(account.advertiser_id));
           const row = matches.length === 1 ? matches[0] : null;
           const explicitStatusOk = !Object.prototype.hasOwnProperty.call(row || {}, "status") || row.status === "ok";
-          const ok = bundle?.daren_complete === true
+          const apiFetchedOk = !carryForward.applicable
+            && bundle?.daren_complete === true
             && matches.length === 1
             && explicitStatusOk
             && Number(row?.pages) >= 1
             && Number(row?.active_identity_coverage) === 1;
+          const carryForwardAccount = carryForward.accounts?.[String(account.advertiser_id)] || null;
+          const ok = apiFetchedOk || (
+            carryForward.applicable
+            && carryForward.ok
+            && carryForwardAccount?.ok === true
+          );
+          const authority = carryForward.applicable
+            ? "受信冻结身份检查点+当日广告报表（零请求复用）"
+            : "巨量千川API";
           addMapping(state, {
             contract_id: `ads.${scope}.source.${account.advertiser_id}.daren_plan_identity`,
-            domain: "全部投流数据", authoritative_source: "巨量千川API", touchpoint_or_sell_type: `${label}·${account.name}`,
+            domain: "全部投流数据", authoritative_source: authority, touchpoint_or_sell_type: `${label}·${account.name}`,
             carrier_or_layer: "达人账号/抖音号层", due_date_or_period: sourceRange,
-            expected_table_or_api: "uni_promotion list", input_unit: true, state: ok ? "present" : "missing",
-            evidence: row ? `coverage=${row.active_identity_coverage}` : "",
+            expected_table_or_api: carryForward.applicable ? "受信检查点逐活动计划覆盖" : "uni_promotion list",
+            input_unit: true, state: ok ? "present" : "missing",
+            evidence: carryForward.applicable
+              ? `mode=trusted_checkpoint_carry_forward; sha256=${carryForward.trusted_checkpoint_sha256 || "缺失"}; active=${carryForwardAccount?.active_ad_ids?.length ?? "?"}`
+              : (row ? `coverage=${row.active_identity_coverage}` : ""),
           });
           if (!ok) {
             addIssue(state, "not_pulled", {
               contract_id: `ads.${scope}.source.${account.advertiser_id}.daren_plan_identity`, date_or_period: sourceRange,
-              domain: "全部投流数据", source: "巨量千川API", touchpoint: label, layer: "达人账号层", item: account.name,
-              reason: `uni_promotion list 状态/分页/活跃计划身份覆盖未闭合；状态=${row?.status ?? "未声明"}，记录数=${matches.length}`,
+              domain: "全部投流数据", source: authority, touchpoint: label, layer: "达人账号层", item: account.name,
+              reason: carryForward.applicable
+                ? `零请求身份复用未闭合：${[...carryForward.errors, ...(carryForwardAccount?.errors || [])].join("、") || "未知原因"}`
+                : `uni_promotion list 状态/分页/活跃计划身份覆盖未闭合；状态=${row?.status ?? "未声明"}，记录数=${matches.length}`,
             });
           }
         }
@@ -4285,7 +4640,7 @@ buildTgt();renderActions();
         });
       }
     }
-    if (state.currentContract) {
+    if (state.currentContract && !consoleSelfLiveSummary) {
       const apiVideoFacts = apiVideoFactEntries(bundle).map((entry) => ({
         ...entry,
         business_key: factBusinessKey(scope, entry.row, "bundle"),
@@ -4339,19 +4694,24 @@ buildTgt();renderActions();
     const end = windowEnd || state.target;
     const accountIds = (cfg.accounts || []).map((account) => String(account.advertiser_id));
     const allowedAccounts = new Set(accountIds);
-    const selfLiveHybridAccountEvidence = (
-      state.currentContract
-      && scope === "self_live"
-      && (cfg.store_layers || []).some((layer) => (
-        layer?.type === "acct" && layer?.source_kind === HYBRID_SOURCE_KIND
-      ))
-    )
-      ? buildSelfLiveHybridAccountEvidence(state, cfg, bundle, statusGroups, start, end)
-      : null;
+    const selfLiveHybridAccountEvidence = consoleSelfLiveSummary
+      ? buildSelfLiveConsoleSummaryEvidence(state, cfg, bundle, start, end)
+      : (
+        state.currentContract
+        && scope === "self_live"
+        && (cfg.store_layers || []).some((layer) => (
+          layer?.type === "acct" && layer?.source_kind === HYBRID_SOURCE_KIND
+        ))
+      )
+        ? buildSelfLiveHybridAccountEvidence(state, cfg, bundle, statusGroups, start, end)
+        : null;
     for (const layer of cfg.store_layers || []) {
-      const layerSourceKind = state.currentContract
+      const configuredLayerSourceKind = state.currentContract
         ? String(layer.source_kind || "")
         : API_SOURCE_KIND;
+      const layerSourceKind = consoleSelfLiveSummary && ["acct", "direct"].includes(layer.type)
+        ? CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+        : configuredLayerSourceKind;
       if (layer.required === false) {
         addMapping(state, {
           contract_id: `ads.${scope}.store.${layer.type}`, domain: "全部投流数据", authoritative_source: "中央数据",
@@ -4394,6 +4754,17 @@ buildTgt();renderActions();
           && cleanDate(meta.end) === day
           && sourceWindowStart === windowStart
           && sourceWindowEnd === windowEnd;
+        const hybridSchema = String(meta.hybrid_reconciliation_schema || "");
+        const hybridNoncomparableAccounts = Array.isArray(
+          meta.hybrid_plan_list_noncomparable_accounts,
+        ) ? meta.hybrid_plan_list_noncomparable_accounts.map((value) => String(value || "")) : null;
+        const hybridV2PlanMetadataOk = hybridSchema
+          === "gy-qianchuan-self-live-hybrid-account-reconciliation-v2"
+          && typeof meta.hybrid_plan_list_all_comparable === "boolean"
+          && hybridNoncomparableAccounts != null
+          && hybridNoncomparableAccounts.every(Boolean)
+          && new Set(hybridNoncomparableAccounts).size === hybridNoncomparableAccounts.length
+          && meta.hybrid_plan_list_all_comparable === (hybridNoncomparableAccounts.length === 0);
         const hybridMetaOk = layerSourceKind === HYBRID_SOURCE_KIND
           && scope === "self_live"
           && layer.type === "acct"
@@ -4407,10 +4778,24 @@ buildTgt();renderActions();
           && sourceWindowEnd === windowEnd
           && meta.account_daily_source === "video_plus_live_direct_plus_other_conversion"
           && meta.reconciliation_status === "complete"
-          && meta.hybrid_reconciliation_schema === "gy-qianchuan-self-live-hybrid-account-reconciliation-v1"
+          && (
+            hybridSchema === "gy-qianchuan-self-live-hybrid-account-reconciliation-v1"
+            || hybridV2PlanMetadataOk
+          )
           && cleanDate(meta?.hybrid_reconciliation_window?.start) === windowStart
           && cleanDate(meta?.hybrid_reconciliation_window?.end) === windowEnd;
-        if (!(consoleMetaOk || apiMetaOk || hybridMetaOk)) {
+        const consoleLiveAnalysisMetaOk = layerSourceKind === CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+          && scope === "self_live"
+          && ["acct", "direct"].includes(layer.type)
+          && meta.chan === cfg.channel
+          && meta.type === layer.type
+          && meta.scope === scope
+          && String(meta.source_kind || meta.source || "") === CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+          && cleanDate(meta.start) === day
+          && cleanDate(meta.end) === day
+          && sourceWindowStart === windowStart
+          && sourceWindowEnd === windowEnd;
+        if (!(consoleMetaOk || apiMetaOk || hybridMetaOk || consoleLiveAnalysisMetaOk)) {
           addIssue(state, "dimension_mismatch", {
             contract_id: `ads.${scope}.store.${layer.type}.${day}`, date_or_period: day, domain: "全部投流数据", source: "中央数据",
             touchpoint: label, layer: layer.label, item: key,
@@ -4419,6 +4804,8 @@ buildTgt();renderActions();
         }
         const bundleRows = state.currentContract && layerSourceKind === CONSOLE_SOURCE_KIND
           ? consoleFactRows(state, scope, day)
+          : layerSourceKind === CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+            ? adFactRows(bundle, scope, layer.type, day)
           : layerSourceKind === HYBRID_SOURCE_KIND
             ? selfLiveHybridAccountEvidence?.rowsByDay?.[day] || []
           : adFactRows(bundle, scope, layer.type, day);
@@ -4431,6 +4818,8 @@ buildTgt();renderActions();
         const layerFactSpec = AD_LAYER_FACTS[scope]?.[layer.type];
         const sourceStatusesOk = layerSourceKind === CONSOLE_SOURCE_KIND
           ? state.consoleScopeEvidence?.[scope]?.complete === true
+          : layerSourceKind === CONSOLE_LIVE_ANALYSIS_SOURCE_KIND
+            ? selfLiveHybridAccountEvidence?.ok === true
           : layerSourceKind === HYBRID_SOURCE_KIND
             ? selfLiveHybridAccountEvidence?.ok === true
           : Boolean(layerFactSpec) && (layerFactSpec.statusSpecs || []).every((spec) => (
@@ -4439,16 +4828,23 @@ buildTgt();renderActions();
               return rows.length === 1 && successfulStatusRow(rows[0]);
             })
           ));
+        const creatorCarryForward = scope === "creator_short_video"
+          ? creatorTrustedCheckpointEvidence(state, bundle, cfg)
+          : { applicable: false, ok: false };
         const darenZeroProofOk = layer.type !== "daren" || (
-          bundle?.daren_complete === true
-          && (cfg.accounts || []).every((account) => {
-            const rows = (bundle?.daren_statuses || []).filter((row) => String(row?.advertiser_id || "") === String(account.advertiser_id));
-            const row = rows.length === 1 ? rows[0] : null;
-            return rows.length === 1
-              && (!Object.prototype.hasOwnProperty.call(row, "status") || row.status === "ok")
-              && Number(row?.pages) >= 1
-              && Number(row?.active_identity_coverage) === 1;
-          })
+          creatorCarryForward.applicable
+            ? creatorCarryForward.ok
+            : (
+              bundle?.daren_complete === true
+              && (cfg.accounts || []).every((account) => {
+                const rows = (bundle?.daren_statuses || []).filter((row) => String(row?.advertiser_id || "") === String(account.advertiser_id));
+                const row = rows.length === 1 ? rows[0] : null;
+                return rows.length === 1
+                  && (!Object.prototype.hasOwnProperty.call(row, "status") || row.status === "ok")
+                  && Number(row?.pages) >= 1
+                  && Number(row?.active_identity_coverage) === 1;
+              })
+            )
         );
         const sourceIsTrueZero = bundleSummary.totals.cost === 0
           && bundleSummary.totals.gmv === 0
@@ -4561,6 +4957,8 @@ buildTgt();renderActions();
       task: input.task || {},
       feishu: input.feishu || null,
       adBundles: input.adBundles || {},
+      creatorIdentityCheckpointEvidence: input.creatorIdentityCheckpointEvidence || null,
+      selfLivePlanEvidence: input.selfLivePlanEvidence || null,
       platformLabels: input.platformLabels || null,
       accountRegistry: input.accountRegistry || null,
       accountRegistryConfig: input.accountRegistryConfig || null,
@@ -4644,6 +5042,8 @@ buildTgt();renderActions();
     addDays,
     daysBetween,
     mondayOf,
+    sundayOf,
+    luopanWeekKey,
     stableIssues,
     validateContract,
     evaluate,
