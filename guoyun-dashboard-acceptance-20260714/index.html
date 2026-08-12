@@ -1500,7 +1500,7 @@ buildTgt();renderActions();
   function hasStore(v){if(!v||v==='{}'||v==='null')return false;try{return Object.keys(JSON.parse(v)).length>0;}catch(e){return false;}}
   function parseSnapshot(v){if(!v)return null;if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){return null;}}if(!v||v.schema!=='gy-central-store-v1'||!v.seed||typeof v.seed.gy_import_store_v1!=='string')return null;return v;}
   function fetchCentral(){return fetch(CENTRAL_URL+'?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(v){v=parseSnapshot(v);if(!v)throw new Error('中央快照格式无效');return v;});}
-  function applySmallSeed(snapshot){var sd=snapshot&&snapshot.seed;if(!sd)return;Object.keys(sd).forEach(function(k){if(k!=='gy_import_store_v1'&&k!=='gy_tgts_v1'&&k!=='gy_ad_performance_standard_fact_v2'&&sd[k]!=null){try{localStorage.setItem(k,sd[k]);}catch(e){}}});try{window.__GY_AD_PERFORMANCE_STANDARD_FACT_V2__=sd.gy_ad_performance_standard_fact_v2?JSON.parse(sd.gy_ad_performance_standard_fact_v2):null;}catch(e){window.__GY_AD_PERFORMANCE_STANDARD_FACT_V2__=null;}try{tgtsAll=JSON.parse(sd.gy_tgts_v1||'{}')||{};}catch(e){tgtsAll={};}try{localStorage.setItem('gy_tgts_v1',JSON.stringify(tgtsAll));}catch(e){}actions=loadActions();try{concls=JSON.parse(sd.gy_imp_concl||'{}')||{};}catch(e){concls={};}buildTgt();renderActions();}
+  function applySmallSeed(snapshot){var sd=snapshot&&snapshot.seed;if(!sd)return;Object.keys(sd).forEach(function(k){if(k!=='gy_import_store_v1'&&k!=='gy_tgts_v1'&&k!=='gy_standard_fact_release_v1'&&sd[k]!=null){try{localStorage.setItem(k,sd[k]);}catch(e){}}});try{window.__GY_STANDARD_FACT_RELEASE_V1__=sd.gy_standard_fact_release_v1?JSON.parse(sd.gy_standard_fact_release_v1):null;}catch(e){window.__GY_STANDARD_FACT_RELEASE_V1__=null;}try{tgtsAll=JSON.parse(sd.gy_tgts_v1||'{}')||{};}catch(e){tgtsAll={};}try{localStorage.setItem('gy_tgts_v1',JSON.stringify(tgtsAll));}catch(e){}actions=loadActions();try{concls=JSON.parse(sd.gy_imp_concl||'{}')||{};}catch(e){concls={};}buildTgt();renderActions();}
   function boot(){
     Promise.all([idbGet('gy_import_store_v1'),idbGet(GY_CENTRAL_CACHE_KEY),fetchCentral().catch(function(){return null;})]).then(function(v){
       var localStore=v[0]||localStorage.getItem(STORE_KEY);var cached=parseSnapshot(v[1]);var fresh=parseSnapshot(v[2]);var central=fresh||cached;var embeddedSeed=window.__GY_SEED__||{},embeddedStore=embeddedSeed.gy_import_store_v1||'{}',embedded=false;var queryLocal=false;try{queryLocal=new URL(location.href).searchParams.get('mode')==='local';}catch(e){}
@@ -4908,998 +4908,531 @@ buildTgt();renderActions();
     runtimeIssues,
   };
 });
-</script><script id="__gyFullDashboardConsumer">(function initFullDashboardConsumer(root, factory) {
+</script><script id="__gyCanonicalDashboardConsumer">(function initCanonicalDashboardConsumer(root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
-  else root.GYFullDashboardConsumer = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function fullDashboardConsumerFactory() {
+  else root.GYCanonicalDashboardConsumer = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function canonicalDashboardConsumerFactory() {
   "use strict";
 
-  const FACT_SCHEMA = "gy-ad-performance-standard-fact-v2";
-  const SCHEMA = FACT_SCHEMA;
-  const VIEW_SCHEMA = "gy-dashboard-consumer-view-v2";
-  const SOURCE_STATES = Object.freeze(["accepted", "observed_zero", "missing", "schema_drift", "not_applicable"]);
+  const FACT_SCHEMA = "gy-standard-fact-release-v1";
+  const CONTRACT_VERSION = "2026-08-12.4";
+  const CONTRACT_SCHEMA_SHA256 = "0A093AC9F7A3F9F675A38A7D55DB54434EE678B185D0CD9F0902C22C007B77B6";
+  const MACHINE_CONTRACT_SHA256 = "B3DFCA2F47096F9899CC6B990C1919F364963A44A76767A653424B8B987C913A";
+  const VIEW_SCHEMA = "gy-canonical-dashboard-consumer-view-v1";
   const VALUE_STATES = Object.freeze(["observed_value", "observed_zero", "missing", "not_applicable"]);
+  const UNIT_STATES = Object.freeze(["complete", "observed_zero", "not_required", "missing", "failed", "blocked"]);
+  const AD_SCOPES = Object.freeze(["self_live", "self_shelf", "creator_short_video"]);
+  const TOUCHPOINTS = Object.freeze(["self_live", "creator_live", "self_shelf", "creator_short_video"]);
   const DIMENSIONS = Object.freeze(["video", "image", "live_frame"]);
-  const IDENTITIES = Object.freeze(["达人素材", "AI素材", "自制1组", "自制2组", "待确认"]);
-  const TOUCHPOINT_LABELS = Object.freeze({
-    self_live: "自播",
-    creator_live: "达播",
-    self_shelf: "自营货架",
-    creator_short_video: "达人短视频",
-  });
-  const TOUCHPOINT_AD_POLICIES = Object.freeze({
-    creator_live: Object.freeze({
-      state: "not_applicable",
-      code: "owner_excluded_creator_live_ads",
-      label: "负责人排除：达播广告投流不纳入看板；达播销售GMV、订单和销售目标继续保留。",
-    }),
-  });
-  const DIMENSION_LABELS = Object.freeze({ video: "视频", image: "图片", live_frame: "直播间画面" });
-  const SCOPE_APPLICABILITY = Object.freeze({
-    self_live: Object.freeze({ video: "required", image: "not_applicable", live_frame: "required" }),
-    creator_live: Object.freeze({ video: "required", image: "not_applicable", live_frame: "required" }),
-    self_shelf: Object.freeze({ video: "required", image: "required", live_frame: "not_applicable" }),
-    creator_short_video: Object.freeze({ video: "required", image: "required", live_frame: "not_applicable" }),
-  });
-  const REQUIRED_UNIT_STATE_MAP = Object.freeze({
-    accepted: "accepted",
-    reusable_success: "accepted",
-    captured_complete: "accepted",
-    observed_zero: "observed_zero",
-    captured_observed_zero: "observed_zero",
-    not_applicable: "not_applicable",
-    missing: "missing",
-    supplement_required: "missing",
-    schema_drift: "schema_drift",
-    failed: "schema_drift",
-    blocked: "schema_drift",
-  });
-  const METRIC_NAMES = Object.freeze([
+  const IDENTITIES = Object.freeze(["AI素材", "自制1组", "自制2组", "达人素材", "待确认"]);
+  const AD_METRICS = Object.freeze([
     "overall_cost", "overall_gmv", "overall_orders", "comparable_roi",
     "chengfang_composite_cost", "chengfang_marketing_roi",
     "additional_cost", "additional_gmv", "additional_roi", "additional_share",
     "base_cost", "base_gmv", "base_roi", "show", "click", "ctr", "cvr", "cpm",
   ]);
-  const IMAGE_ASSIST_NOT_APPLICABLE_METRICS = new Set([
-    "additional_cost", "additional_gmv", "additional_roi", "additional_share",
-    "base_cost", "base_gmv", "base_roi",
+  const SALES_METRICS = Object.freeze([
+    "gmv", "net_gmv", "orders", "buyers", "customer_unit_price",
+    "refund_amount_payment_time", "refund_rate_payment_time", "pay_amount",
+    "platform_subsidy", "quantity", "refund_orders_payment_time",
+    "settle_7d_amount", "settle_14d_amount", "show", "click",
   ]);
-  const METRIC_CONTRACT = Object.freeze({
-    overall_cost: Object.freeze({ scope: "combined" }),
-    overall_gmv: Object.freeze({ scope: "combined" }),
-    overall_orders: Object.freeze({ scope: "combined" }),
-    comparable_roi: Object.freeze({ scope: "combined", formula: "overall_gmv / overall_cost" }),
-    chengfang_composite_cost: Object.freeze({ scope: "chengfang_only" }),
-    chengfang_marketing_roi: Object.freeze({ scope: "chengfang_only" }),
-    additional_cost: Object.freeze({ scope: "assist" }),
-    additional_gmv: Object.freeze({ scope: "assist" }),
-    additional_roi: Object.freeze({ scope: "assist", formula: "additional_gmv / additional_cost" }),
-    additional_share: Object.freeze({ scope: "assist", formula: "additional_cost / overall_cost" }),
-    base_cost: Object.freeze({ scope: "base" }),
-    base_gmv: Object.freeze({ scope: "base", formula: "overall_gmv - additional_gmv" }),
-    base_roi: Object.freeze({ scope: "base", formula: "base_gmv / base_cost" }),
-    show: Object.freeze({ scope: "process" }),
-    click: Object.freeze({ scope: "process" }),
-    ctr: Object.freeze({ scope: "process", formula: "click / show" }),
-    cvr: Object.freeze({ scope: "process", formula: "overall_orders / click" }),
-    cpm: Object.freeze({ scope: "process", formula: "overall_cost / show * 1000" }),
+  const REFUND_METRICS = Object.freeze(["refund_amount", "refund_orders"]);
+  const OPERATIONS_METRICS = Object.freeze([
+    "exp", "view", "gmv", "cost", "pexp", "pclk", "click_rate",
+    "click_to_deal_rate", "deal", "direct_cost", "direct_gmv",
+  ]);
+  const METRIC_SCOPE = Object.freeze({
+    overall_cost: "combined", overall_gmv: "combined", overall_orders: "combined", comparable_roi: "combined",
+    chengfang_composite_cost: "chengfang_only", chengfang_marketing_roi: "chengfang_only",
+    additional_cost: "assist", additional_gmv: "assist", additional_roi: "assist", additional_share: "assist",
+    base_cost: "base", base_gmv: "base", base_roi: "base",
+    show: "process", click: "process", ctr: "process", cvr: "process", cpm: "process",
   });
-  const DIMENSION_DATASETS = Object.freeze({
-    video: "roi2_video_material_analysis",
-    image: "roi2_pic_material_analysis_v2",
-    live_frame: "roi2_live_material_analysis",
+  const FORMULAS = Object.freeze({
+    comparable_roi: "overall_gmv / overall_cost",
+    additional_roi: "additional_gmv / additional_cost",
+    additional_share: "additional_cost / overall_cost",
+    base_gmv: "overall_gmv - additional_gmv",
+    base_roi: "base_gmv / base_cost",
+    ctr: "click / show",
+    cvr: "overall_orders / click",
+    cpm: "overall_cost / show * 1000",
   });
-  const ACCOUNT_DATASETS = Object.freeze({
-    self_shelf: "roi2_product_analysis_list",
-    creator_short_video: "roi2_product_analysis_list",
-    self_live: "qianchuan_report_uni_promotion_get_v1",
-    creator_live: "qianchuan_report_uni_promotion_get_v1",
+  const TOUCHPOINT_LABELS = Object.freeze({
+    self_live: "自播", creator_live: "达播", self_shelf: "自营货架", creator_short_video: "达人短视频",
   });
-  const BASE_COST_METHODS = Object.freeze(["source_field", "formula_fallback", "missing", "not_applicable"]);
+  const SALES_TOUCHPOINT_TO_SCOPE = Object.freeze({ 自播: "self_live", 达播: "creator_live", 自营货架: "self_shelf", 达人短视频: "creator_short_video", 全部: "all" });
+  const DIMENSION_LABELS = Object.freeze({ video: "视频", image: "图片", live_frame: "直播间画面" });
+  const SOURCE_RULES = Object.freeze({
+    account: Object.freeze({
+      self_live: Object.freeze({ source_id: "push_live_account_overview", endpoint_family: "qianchuan_official_open_api", require_source_topic: true }),
+      self_shelf: Object.freeze({ source_id: "push_product_account_overview", endpoint_family: "qianchuan_official_open_api", require_source_topic: true }),
+      creator_short_video: Object.freeze({ source_id: "push_product_account_overview", endpoint_family: "qianchuan_official_open_api", require_source_topic: true }),
+    }),
+    video: Object.freeze({ source_id: "video_material", source_dataset: "roi2_video_material_analysis", endpoint_family: "qianchuan_frontend_request_replay" }),
+    image: Object.freeze({ source_id: "push_product_image_material", endpoint_family: "qianchuan_official_open_api", source_topics: Object.freeze(["ROI2_IMAGE_AGG_MATERIAL_ANALYSIS", "SITE_PROMOTION_PRODUCT_POST_DATA_IMAGE"]) }),
+    live_frame: Object.freeze({ source_id: "live_frame_material", source_dataset: "roi2_live_material_analysis", endpoint_family: "qianchuan_frontend_request_replay" }),
+  });
+  const DIMENSION_APPLICABILITY = Object.freeze({
+    self_live: Object.freeze({ video: "required", image: "not_applicable", live_frame: "required" }),
+    self_shelf: Object.freeze({ video: "required", image: "required", live_frame: "not_applicable" }),
+    creator_short_video: Object.freeze({ video: "required", image: "required", live_frame: "not_applicable" }),
+  });
+  const REQUIRED_TOP_KEYS = Object.freeze([
+    "schema", "contract_version", "release_id", "generated_at", "target_dates", "source_release_sha256",
+    "facts", "sales_facts", "refund_facts", "live_operations_facts", "required_units", "quality_summary", "external_services",
+  ]);
+  const AD_FACT_KEYS = new Set([
+    "fact_id", "business_key", "source_id", "source_dataset", "source_topic", "endpoint_family", "account_scope",
+    "advertiser_id", "date", "material_dimension", "material_id", "material_identity", "identity_rule_id", "is_aigc",
+    "source_receipt_sha256", "source_schema_sha256", "metrics", "raw_extensions_ref",
+  ]);
 
   function esc(value) {
-    return String(value == null ? "" : value).replace(/[&<>"']/g, (char) => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
-    })[char]);
+    return String(value == null ? "" : value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+  }
+  function round(value, digits = 6) { const p = 10 ** digits; return Math.round((Number(value) + Number.EPSILON) * p) / p; }
+  function isSha(value) { return /^[A-F0-9]{64}$/u.test(String(value || "")); }
+  function isDate(value) { return /^\d{8}$/u.test(String(value || "")); }
+  function assert(condition, message) { if (!condition) throw new Error(message); }
+  function assertOnlyKeys(value, allowed, prefix) {
+    Object.keys(value || {}).forEach((key) => assert(allowed.has(key), `${prefix}_unknown_field:${key}`));
   }
 
-  function round(value, digits = 2) {
-    const p = 10 ** digits;
-    return Math.round((Number(value) + Number.EPSILON) * p) / p;
-  }
-
-  function metricApplicability(dimension, unitApplicability, name) {
-    if (unitApplicability === "not_applicable") return "not_applicable";
-    if (dimension === "account" && ["show", "click", "ctr", "cvr", "cpm", "base_cost"].includes(name)) {
-      return "not_applicable";
+  function normalizeMetric(raw, expectedScope) {
+    assert(raw && typeof raw === "object" && !Array.isArray(raw), "metric_object_required");
+    assert(VALUE_STATES.includes(raw.value_state), `metric_value_state_invalid:${raw.value_state || "missing"}`);
+    assert(raw.metric_scope === expectedScope, `metric_scope_mismatch:expected=${expectedScope}:actual=${raw.metric_scope || "missing"}`);
+    assert(["source_field", "same_source_formula", "formula_fallback", "missing", "not_applicable"].includes(raw.derivation), `metric_derivation_invalid:${raw.derivation || "missing"}`);
+    if (raw.value_state === "missing" || raw.value_state === "not_applicable") {
+      assert(raw.value === null, `${raw.value_state}_requires_null`);
+      return { state: raw.value_state, value: null, stateDetail: raw.state_detail || null, derivation: raw.derivation, formula: raw.formula || null, sourceField: raw.source_field || null };
     }
-    if (dimension === "image" && IMAGE_ASSIST_NOT_APPLICABLE_METRICS.has(name)) return "not_applicable";
+    const value = Number(raw.value);
+    assert(Number.isFinite(value), "metric_value_must_be_finite");
+    assert(raw.value_state !== "observed_zero" || value === 0, "observed_zero_requires_zero");
+    assert(raw.value_state !== "observed_value" || value !== 0, "observed_value_requires_nonzero");
+    return { state: raw.value_state, value, stateDetail: raw.state_detail || null, derivation: raw.derivation, formula: raw.formula || null, sourceField: raw.source_field || null };
+  }
+  function missingMetric(detail = null) { return { state: "missing", value: null, stateDetail: detail }; }
+  function notApplicableMetric() { return { state: "not_applicable", value: null }; }
+  function observedMetric(value) { return { state: value === 0 ? "observed_zero" : "observed_value", value: round(value) }; }
+  function isObserved(metric) { return metric && (metric.state === "observed_value" || metric.state === "observed_zero"); }
+  function sameMetric(left, right, tolerance = 1e-8) {
+    if (!left || !right || left.state !== right.state) return false;
+    if (left.value == null || right.value == null) return left.value === right.value;
+    return Math.abs(left.value - right.value) <= tolerance;
+  }
+  function ratioMetric(numerator, denominator) {
+    if (!isObserved(numerator) || !isObserved(denominator)) return missingMetric("dependency_missing");
+    if (denominator.value === 0) return notApplicableMetric();
+    return observedMetric(numerator.value / denominator.value);
+  }
+  function differenceMetric(minuend, subtrahend) {
+    if (!isObserved(minuend) || !isObserved(subtrahend)) return missingMetric("dependency_missing");
+    const value = round(minuend.value - subtrahend.value);
+    if (value < 0) return missingMetric("negative_derived_difference");
+    return observedMetric(value);
+  }
+  function scaledRatioMetric(numerator, denominator, scale) {
+    const metric = ratioMetric(numerator, denominator);
+    return isObserved(metric) ? observedMetric(metric.value * scale) : metric;
+  }
+
+  function metricApplicability(dimension, name) {
+    if (dimension === "account" && ["additional_cost", "additional_gmv", "additional_roi", "additional_share", "base_cost", "base_gmv", "base_roi", "show", "click", "ctr", "cvr", "cpm"].includes(name)) return "not_applicable";
+    if (dimension === "image" && ["additional_cost", "additional_gmv", "additional_roi", "additional_share", "base_cost", "base_gmv", "base_roi"].includes(name)) return "not_applicable";
     return "required";
   }
-
-  function parseContract(input) {
-    let value = typeof input === "string" ? JSON.parse(input) : input;
-    if (Array.isArray(value)) value = { schema: FACT_SCHEMA, facts: value };
-    if (!value || typeof value !== "object" || value.schema !== FACT_SCHEMA) {
-      throw new Error(`unsupported standard fact contract: ${value && value.schema ? value.schema : "missing"}`);
-    }
-    if (!Array.isArray(value.facts)) throw new Error("dashboard consumer contract facts must be an array");
-    value.facts.forEach((fact, index) => {
-      if (!fact || fact.schema !== FACT_SCHEMA) throw new Error(`fact_schema_invalid:${index}`);
-      if (!/^\d+$/u.test(String(fact.advertiser_id || ""))) throw new Error(`fact_advertiser_id_invalid:${index}`);
-      if (!/^\d{8}$/u.test(String(fact.date || ""))) throw new Error(`fact_date_invalid:${index}`);
-      const accountScope = String(fact.account_scope || "");
-      const dimension = String(fact.material_dimension || "");
-      const sourceDataset = String(fact.source_dataset || "");
-      if (!ACCOUNT_DATASETS[accountScope]) throw new Error(`fact_account_scope_invalid:${index}:${accountScope || "missing"}`);
-      if (!["account", ...DIMENSIONS].includes(dimension)) throw new Error(`fact_material_dimension_invalid:${index}:${dimension || "missing"}`);
-      if (!sourceDataset) throw new Error(`fact_source_dataset_missing:${index}`);
-      const expectedDataset = dimension === "account" ? ACCOUNT_DATASETS[accountScope] : DIMENSION_DATASETS[dimension];
-      if (sourceDataset !== expectedDataset) {
-        throw new Error(`fact_source_dataset_mismatch:${index}:${accountScope}:${dimension}:expected=${expectedDataset}:actual=${sourceDataset}`);
-      }
-      const expectedApplicability = dimension === "account" ? "required" : SCOPE_APPLICABILITY[accountScope][dimension];
-      if (expectedApplicability === "not_applicable" && fact.unit_applicability !== "not_applicable") {
-        throw new Error(`fact_not_applicable_dimension_contract_required:${index}:${accountScope}:${dimension}`);
-      }
-      if (expectedApplicability === "required" && fact.unit_applicability === "not_applicable") {
-        throw new Error(`fact_required_dimension_marked_not_applicable:${index}:${accountScope}:${dimension}`);
-      }
-      if (dimension !== "video" && fact.attributes && fact.attributes.video_identity != null) {
-        throw new Error(`fact_video_identity_on_non_video:${index}:${dimension}`);
-      }
-      for (const name of METRIC_NAMES) {
-        const metric = fact.metrics && fact.metrics[name];
-        if (!metric || !Object.prototype.hasOwnProperty.call(metric, "value_state")) {
-          throw new Error(`fact_metric_value_state_missing:${index}:${name}`);
-        }
-        if (metric.metric_scope !== METRIC_CONTRACT[name].scope) {
-          throw new Error(`fact_metric_scope_mismatch:${index}:${name}:expected=${METRIC_CONTRACT[name].scope}:actual=${metric.metric_scope || "missing"}`);
-        }
-        if (!String(metric.derivation || "").trim()) throw new Error(`fact_metric_derivation_missing:${index}:${name}`);
-        const metricApplicabilityState = metricApplicability(dimension, expectedApplicability, name);
-        const expectedFormula = metricApplicabilityState === "not_applicable"
-          ? "not_applicable"
-          : METRIC_CONTRACT[name].formula;
-        if (expectedFormula && metric.derivation !== expectedFormula) {
-          throw new Error(`fact_metric_formula_label_mismatch:${index}:${name}:expected=${expectedFormula}:actual=${metric.derivation}`);
-        }
-        const normalized = normalizeCanonicalMetric(metric);
-        if (normalized.issue) throw new Error(`fact_metric_value_invalid:${index}:${name}:${normalized.issue}`);
-        if (metricApplicabilityState === "not_applicable" && normalized.state !== "not_applicable") {
-          throw new Error(`fact_not_applicable_metric_state_required:${index}:${name}`);
-        }
-      }
-      const baseCostMethod = fact.metrics && fact.metrics.base_cost_method;
-      if (!BASE_COST_METHODS.includes(baseCostMethod)) throw new Error(`fact_base_cost_method_invalid:${index}:${baseCostMethod || "missing"}`);
-      if (expectedApplicability === "not_applicable" && baseCostMethod !== "not_applicable") {
-        throw new Error(`fact_not_applicable_base_cost_method_required:${index}`);
-      }
-      if (dimension === "account") {
-        for (const name of ["show", "click", "ctr", "cvr", "cpm"]) {
-          const metric = fact.metrics[name];
-          if (metric.value_state !== "not_applicable" || metric.value !== null || metric.derivation !== "not_applicable") {
-            throw new Error(`fact_account_process_metric_not_applicable_required:${index}:${name}`);
-          }
-        }
-        if (fact.metrics.base_cost.value_state !== "not_applicable" || baseCostMethod !== "not_applicable") {
-          throw new Error(`fact_account_base_cost_not_applicable_required:${index}`);
-        }
-      }
-      if (dimension === "image") {
-        for (const name of IMAGE_ASSIST_NOT_APPLICABLE_METRICS) {
-          const metric = fact.metrics[name];
-          if (metric.value_state !== "not_applicable" || metric.value !== null || metric.derivation !== "not_applicable") {
-            throw new Error(`fact_image_assist_metric_not_applicable_required:${index}:${name}`);
-          }
-        }
-        if (baseCostMethod !== "not_applicable") throw new Error(`fact_image_base_cost_method_not_applicable_required:${index}`);
-      }
-      validateSameSourceFormulaMetrics(fact, index);
-      validateBaseCostContract(fact, index);
-    });
-    (value.required_units || []).forEach((unit, index) => {
-      if (!/^\d+$/u.test(String(unit.advertiser_id || ""))) throw new Error(`required_unit_advertiser_id_invalid:${index}`);
-      if (!/^\d{8}$/u.test(String(unit.date || ""))) throw new Error(`required_unit_date_invalid:${index}`);
-      const accountScope = String(unit.account_scope || "");
-      const dimension = String(unit.material_dimension || "");
-      const sourceDataset = String(unit.source_dataset || "");
-      if (!ACCOUNT_DATASETS[accountScope]) throw new Error(`required_unit_account_scope_invalid:${index}`);
-      if (!["account", ...DIMENSIONS].includes(dimension)) throw new Error(`required_unit_dimension_invalid:${index}`);
-      const expectedDataset = dimension === "account" ? ACCOUNT_DATASETS[accountScope] : DIMENSION_DATASETS[dimension];
-      if (sourceDataset !== expectedDataset) throw new Error(`required_unit_source_dataset_mismatch:${index}`);
-      const normalizedState = normalizedSourceState(unit.unit_state || unit.source_state || "missing");
-      const applicability = dimension === "account" ? "required" : SCOPE_APPLICABILITY[accountScope][dimension];
-      if (applicability === "not_applicable" && normalizedState !== "not_applicable") {
-        throw new Error(`required_unit_not_applicable_state_required:${index}`);
-      }
-      if (applicability === "required" && normalizedState === "not_applicable") {
-        throw new Error(`required_unit_required_state_invalid:${index}`);
+  function expectedDerivedMetric(metrics, name, dimension) {
+    if (metricApplicability(dimension, name) === "not_applicable") return notApplicableMetric();
+    if (name === "comparable_roi") return ratioMetric(metrics.overall_gmv, metrics.overall_cost);
+    if (name === "additional_roi") return ratioMetric(metrics.additional_gmv, metrics.additional_cost);
+    if (name === "additional_share") return ratioMetric(metrics.additional_cost, metrics.overall_cost);
+    if (name === "base_gmv") return differenceMetric(metrics.overall_gmv, metrics.additional_gmv);
+    if (name === "base_roi") return ratioMetric(metrics.base_gmv, metrics.base_cost);
+    if (name === "ctr") return ratioMetric(metrics.click, metrics.show);
+    if (name === "cvr") return ratioMetric(metrics.overall_orders, metrics.click);
+    if (name === "cpm") return scaledRatioMetric(metrics.overall_cost, metrics.show, 1000);
+    return null;
+  }
+  function validateAdMetrics(fact, index) {
+    assert(fact.metrics && typeof fact.metrics === "object" && !Array.isArray(fact.metrics), `fact_metrics_required:${index}`);
+    assertOnlyKeys(fact.metrics, new Set(AD_METRICS), `fact_metrics:${index}`);
+    const metrics = {};
+    AD_METRICS.forEach((name) => {
+      assert(Object.prototype.hasOwnProperty.call(fact.metrics, name), `fact_metric_missing:${index}:${name}`);
+      metrics[name] = normalizeMetric(fact.metrics[name], METRIC_SCOPE[name]);
+      const applicable = metricApplicability(fact.material_dimension, name);
+      if (applicable === "not_applicable") {
+        assert(metrics[name].state === "not_applicable" && metrics[name].derivation === "not_applicable", `fact_metric_not_applicable_required:${index}:${name}`);
       }
     });
-    return value;
+    Object.keys(FORMULAS).forEach((name) => {
+      if (metricApplicability(fact.material_dimension, name) === "not_applicable") return;
+      const actual = metrics[name];
+      const expected = expectedDerivedMetric(metrics, name, fact.material_dimension);
+      assert(actual.derivation === (actual.state === "missing" ? "missing" : "same_source_formula"), `fact_formula_derivation_mismatch:${index}:${name}`);
+      assert(actual.formula === FORMULAS[name], `fact_formula_label_mismatch:${index}:${name}`);
+      assert(sameMetric(actual, expected), `fact_formula_value_mismatch:${index}:${name}`);
+      if (expected.stateDetail) assert(actual.stateDetail === expected.stateDetail, `fact_formula_state_detail_mismatch:${index}:${name}`);
+    });
+    const baseCost = metrics.base_cost;
+    if (fact.material_dimension === "video") {
+      const expected = differenceMetric(metrics.overall_cost, metrics.additional_cost);
+      assert(baseCost.derivation === (baseCost.state === "missing" ? "missing" : "formula_fallback"), `fact_video_base_cost_derivation_mismatch:${index}`);
+      assert(baseCost.formula === "overall_cost - additional_cost", `fact_video_base_cost_formula_mismatch:${index}`);
+      assert(sameMetric(baseCost, expected), `fact_video_base_cost_value_mismatch:${index}`);
+    }
+    if (fact.material_dimension === "live_frame" && baseCost.state !== "missing") {
+      if (baseCost.derivation === "formula_fallback") {
+        assert(baseCost.formula === "overall_cost - additional_cost", `fact_live_frame_base_cost_formula_mismatch:${index}`);
+        assert(sameMetric(baseCost, differenceMetric(metrics.overall_cost, metrics.additional_cost)), `fact_live_frame_base_cost_value_mismatch:${index}`);
+      } else assert(baseCost.derivation === "source_field", `fact_live_frame_base_cost_derivation_mismatch:${index}`);
+    }
+    return metrics;
   }
 
-  function normalizeMetric(raw) {
-    if (!raw || typeof raw !== "object") return { state: "missing", value: null };
-    const state = String(raw.state || raw.value_state || "missing");
-    if (!VALUE_STATES.includes(state)) return { state: "missing", value: null, issue: `invalid_value_state:${state}` };
-    if (state === "missing" || state === "not_applicable") {
-      if (raw.value !== null) return { state: "missing", value: null, issue: `${state}_requires_null_value` };
-      return { state, value: null };
-    }
-    const value = typeof raw.value === "string" ? Number(raw.value.replace(/,/g, "")) : Number(raw.value);
-    if (!Number.isFinite(value)) return { state: "missing", value: null, issue: "non_finite_observed_value" };
-    if (state === "observed_zero" && value !== 0) return { state: "missing", value: null, issue: "observed_zero_nonzero_value" };
-    if (state === "observed_value" && value === 0) return { state: "missing", value: null, issue: "zero_requires_observed_zero" };
-    return { state, value };
+  function validateSource(fact, index) {
+    const dimension = fact.material_dimension;
+    const rule = dimension === "account" ? SOURCE_RULES.account[fact.account_scope] : SOURCE_RULES[dimension];
+    assert(rule, `fact_source_rule_missing:${index}`);
+    assert(fact.source_id === rule.source_id, `fact_source_id_mismatch:${index}`);
+    assert(fact.endpoint_family === rule.endpoint_family, `fact_endpoint_family_mismatch:${index}`);
+    if (rule.source_dataset) assert(fact.source_dataset === rule.source_dataset, `fact_source_dataset_mismatch:${index}`);
+    else assert(typeof fact.source_dataset === "string" && fact.source_dataset.length > 0, `fact_source_dataset_missing:${index}`);
+    if (rule.source_topics) assert(rule.source_topics.includes(fact.source_topic), `fact_source_topic_mismatch:${index}`);
+    if (rule.require_source_topic) assert(typeof fact.source_topic === "string" && fact.source_topic.length > 0, `fact_source_topic_missing:${index}`);
   }
-
-  function normalizeCanonicalMetric(raw) {
-    if (!raw || typeof raw !== "object" || !Object.prototype.hasOwnProperty.call(raw, "value_state")) {
-      return { state: "missing", value: null, issue: "canonical_value_state_missing" };
+  function validateLineage(lineage, prefix) {
+    assert(lineage && typeof lineage === "object", `${prefix}_lineage_required`);
+    assert(typeof lineage.source_id === "string" && lineage.source_id, `${prefix}_source_id_required`);
+    assert(isSha(lineage.source_receipt_sha256), `${prefix}_receipt_sha_invalid`);
+    assert(isSha(lineage.source_schema_sha256), `${prefix}_schema_sha_invalid`);
+    assert(lineage.raw_extensions_ref && isSha(lineage.raw_extensions_ref.raw_file_sha256) && String(lineage.raw_extensions_ref.row_key || ""), `${prefix}_raw_reference_invalid`);
+  }
+  function validateAdFact(fact, index) {
+    assert(fact && typeof fact === "object", `fact_invalid:${index}`);
+    assertOnlyKeys(fact, AD_FACT_KEYS, `fact:${index}`);
+    assert(String(fact.fact_id || "") && String(fact.business_key || ""), `fact_identity_missing:${index}`);
+    assert(AD_SCOPES.includes(fact.account_scope), `fact_account_scope_invalid:${index}`);
+    assert(/^\d+$/u.test(String(fact.advertiser_id || "")), `fact_advertiser_id_invalid:${index}`);
+    assert(isDate(fact.date), `fact_date_invalid:${index}`);
+    assert(["account", ...DIMENSIONS].includes(fact.material_dimension), `fact_dimension_invalid:${index}`);
+    assert(isSha(fact.source_receipt_sha256) && isSha(fact.source_schema_sha256), `fact_lineage_sha_invalid:${index}`);
+    assert(fact.raw_extensions_ref && isSha(fact.raw_extensions_ref.raw_file_sha256) && String(fact.raw_extensions_ref.row_key || ""), `fact_raw_reference_invalid:${index}`);
+    validateSource(fact, index);
+    const expectedDimension = fact.material_dimension === "account" ? "required" : DIMENSION_APPLICABILITY[fact.account_scope][fact.material_dimension];
+    assert(expectedDimension !== "not_applicable", `fact_for_not_applicable_dimension_forbidden:${index}`);
+    if (fact.material_dimension === "video") {
+      assert(IDENTITIES.includes(fact.material_identity), `fact_video_identity_invalid:${index}`);
+      assert(typeof fact.identity_rule_id === "string" && fact.identity_rule_id, `fact_video_identity_rule_missing:${index}`);
+      assert(typeof fact.is_aigc === "boolean", `fact_video_aigc_flag_invalid:${index}`);
+    } else {
+      assert(fact.material_identity === null || fact.material_identity === "not_applicable", `fact_identity_on_non_video:${index}`);
+      assert(fact.identity_rule_id === null, `fact_identity_rule_on_non_video:${index}`);
+      assert(fact.is_aigc === null, `fact_aigc_on_non_video:${index}`);
     }
-    const normalized = normalizeMetric({ state: raw.value_state, value: raw.value });
-    if (String(raw.state_detail || "").trim()) normalized.stateDetail = String(raw.state_detail);
+    return validateAdMetrics(fact, index);
+  }
+  function validateDomainMetrics(metrics, names, scope, prefix) {
+    assert(metrics && typeof metrics === "object" && !Array.isArray(metrics), `${prefix}_metrics_required`);
+    assertOnlyKeys(metrics, new Set(names), `${prefix}_metrics`);
+    const normalized = {};
+    names.forEach((name) => {
+      assert(Object.prototype.hasOwnProperty.call(metrics, name), `${prefix}_metric_missing:${name}`);
+      normalized[name] = normalizeMetric(metrics[name], scope);
+    });
     return normalized;
   }
 
-  function missingMetric() { return { state: "missing", value: null }; }
-
-  function sameMetric(actual, expected, tolerance = 1e-9) {
-    if (!actual || actual.state !== expected.state) return false;
-    if (actual.value == null || expected.value == null) return actual.value === expected.value;
-    return Math.abs(actual.value - expected.value) <= tolerance;
-  }
-
-  function validateSameSourceFormulaMetrics(fact, index) {
-    const metrics = Object.fromEntries(METRIC_NAMES.map((name) => [name, normalizeCanonicalMetric(fact.metrics[name])]));
-    const unitNotApplicable = fact.unit_applicability === "not_applicable";
-    const processNotApplicable = fact.material_dimension === "account" || fact.unit_applicability === "not_applicable";
-    const imageAssistNotApplicable = fact.material_dimension === "image" && !unitNotApplicable;
-    const expected = unitNotApplicable ? {
-      comparable_roi: { state: "not_applicable", value: null },
-      additional_roi: { state: "not_applicable", value: null },
-      additional_share: { state: "not_applicable", value: null },
-      base_gmv: { state: "not_applicable", value: null },
-      base_roi: { state: "not_applicable", value: null },
-      ctr: { state: "not_applicable", value: null },
-      cvr: { state: "not_applicable", value: null },
-      cpm: { state: "not_applicable", value: null },
-    } : {
-      comparable_roi: ratioMetric(metrics.overall_gmv, metrics.overall_cost),
-      additional_roi: imageAssistNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.additional_gmv, metrics.additional_cost),
-      additional_share: imageAssistNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.additional_cost, metrics.overall_cost),
-      base_gmv: imageAssistNotApplicable ? { state: "not_applicable", value: null } : differenceMetric(metrics.overall_gmv, metrics.additional_gmv),
-      base_roi: imageAssistNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.base_gmv, metrics.base_cost),
-      ctr: processNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.click, metrics.show),
-      cvr: processNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.overall_orders, metrics.click),
-      cpm: processNotApplicable ? { state: "not_applicable", value: null } : scaledRatioMetric(metrics.overall_cost, metrics.show, 1000),
-    };
-    for (const [name, expectedMetric] of Object.entries(expected)) {
-      if (!sameMetric(metrics[name], expectedMetric)) throw new Error(`fact_same_source_formula_mismatch:${index}:${name}`);
-      if (expectedMetric.stateDetail && fact.metrics[name].state_detail !== expectedMetric.stateDetail) {
-        throw new Error(`fact_formula_state_detail_mismatch:${index}:${name}:expected=${expectedMetric.stateDetail}`);
-      }
-    }
-  }
-
-  function validateBaseCostContract(fact, index) {
-    const dimension = fact.material_dimension;
-    const method = fact.metrics.base_cost_method;
-    const baseCost = normalizeCanonicalMetric(fact.metrics.base_cost);
-    if (dimension === "account" || fact.unit_applicability === "not_applicable") return;
-    if (dimension === "image") {
-      if (method !== "not_applicable" || baseCost.state !== "not_applicable" || fact.metrics.base_cost.derivation !== "not_applicable") {
-        throw new Error(`fact_image_base_cost_not_applicable_contract_mismatch:${index}`);
-      }
-      return;
-    }
-    const formulaBase = differenceMetric(
-      normalizeCanonicalMetric(fact.metrics.overall_cost),
-      normalizeCanonicalMetric(fact.metrics.additional_cost),
-    );
-    if (dimension === "video") {
-      if (method !== "formula_fallback"
-          || fact.metrics.base_cost.derivation !== "overall_cost - additional_cost"
-          || !sameMetric(baseCost, formulaBase)
-          || (formulaBase.stateDetail && fact.metrics.base_cost.state_detail !== formulaBase.stateDetail)) {
-        throw new Error(`fact_base_cost_formula_contract_mismatch:${index}:${dimension}`);
-      }
-      return;
-    }
-    if (dimension === "live_frame") {
-      if (method === "source_field") {
-        if (fact.metrics.base_cost.derivation !== "basic_stat_cost_for_roi2_v2"
-            || !["observed_value", "observed_zero"].includes(baseCost.state)) {
-          throw new Error(`fact_live_frame_base_cost_source_contract_mismatch:${index}`);
-        }
-      } else if (method === "formula_fallback") {
-        if (fact.metrics.base_cost.derivation !== "overall_cost - additional_cost"
-            || !sameMetric(baseCost, formulaBase)
-            || (formulaBase.stateDetail && fact.metrics.base_cost.state_detail !== formulaBase.stateDetail)) {
-          throw new Error(`fact_live_frame_base_cost_formula_contract_mismatch:${index}`);
-        }
-      } else if (method === "missing") {
-        if (baseCost.state !== "missing") throw new Error(`fact_live_frame_base_cost_missing_contract_mismatch:${index}`);
-      } else {
-        throw new Error(`fact_live_frame_base_cost_method_mismatch:${index}:${method}`);
-      }
-    }
-  }
-
-  function normalizeMetrics(metrics) {
-    const output = {};
-    METRIC_NAMES.forEach((name) => { output[name] = normalizeCanonicalMetric(metrics && metrics[name]); });
-    return output;
-  }
-
-  function normalizedSourceState(value) {
-    const state = String(value || "missing");
-    return REQUIRED_UNIT_STATE_MAP[state] || "schema_drift";
-  }
-
-  function normalizeRequiredUnit(unit) {
-    const rawState = String(unit.unit_state || unit.source_state || "missing");
-    const sourceState = normalizedSourceState(rawState);
-    return Object.assign({}, unit, {
-      raw_state: rawState,
-      normalized_source_state: sourceState,
-      blocking: sourceState === "missing" || sourceState === "schema_drift",
+  function parseContract(input) {
+    const release = typeof input === "string" ? JSON.parse(input) : input;
+    assert(release && typeof release === "object" && !Array.isArray(release), "standard_fact_release_object_required");
+    assertOnlyKeys(release, new Set(REQUIRED_TOP_KEYS), "release");
+    assert(release.schema === FACT_SCHEMA, `unsupported_standard_fact_release:${release.schema || "missing"}`);
+    assert(release.contract_version === CONTRACT_VERSION, `contract_version_mismatch:${release.contract_version || "missing"}`);
+    REQUIRED_TOP_KEYS.forEach((key) => assert(Object.prototype.hasOwnProperty.call(release, key), `release_field_missing:${key}`));
+    assert(typeof release.release_id === "string" && release.release_id, "release_id_missing");
+    assert(!Number.isNaN(Date.parse(release.generated_at)), "generated_at_invalid");
+    assert(Array.isArray(release.target_dates) && release.target_dates.length > 0 && release.target_dates.every(isDate), "target_dates_invalid");
+    assert(new Set(release.target_dates).size === release.target_dates.length, "target_dates_not_unique");
+    assert(isSha(release.source_release_sha256), "source_release_sha256_invalid");
+    ["facts", "sales_facts", "refund_facts", "live_operations_facts", "required_units"].forEach((name) => assert(Array.isArray(release[name]), `${name}_array_required`));
+    const businessKeys = new Set();
+    release.facts.forEach((fact, index) => {
+      validateAdFact(fact, index);
+      assert(!businessKeys.has(fact.business_key), `duplicate_business_key:${fact.business_key}`);
+      businessKeys.add(fact.business_key);
     });
+    const authorityGroups = new Map();
+    release.facts.forEach((fact) => {
+      const key = `${fact.date}|${fact.account_scope}|${fact.advertiser_id}`;
+      if (!authorityGroups.has(key)) authorityGroups.set(key, { accounts: [], materials: [] });
+      authorityGroups.get(key)[fact.material_dimension === "account" ? "accounts" : "materials"].push(fact);
+    });
+    authorityGroups.forEach((group, key) => {
+      const accountAllZero = group.accounts.length > 0 && group.accounts.every((fact) => ["overall_cost", "overall_gmv", "overall_orders"].every((name) => fact.metrics[name].value_state === "observed_zero"));
+      const materialHasBusiness = group.materials.some((fact) => ["overall_cost", "overall_gmv", "overall_orders"].some((name) => fact.metrics[name].value_state === "observed_value" && Number(fact.metrics[name].value) > 0));
+      assert(!(accountAllZero && materialHasBusiness), `account_zero_conflicts_with_material_nonzero:${key}`);
+    });
+    release.sales_facts.forEach((fact, index) => {
+      assert(isDate(fact.date) && ["shop", "product_channel"].includes(fact.sales_grain), `sales_fact_identity_invalid:${index}`);
+      validateLineage(fact.lineage, `sales_fact:${index}`);
+      validateDomainMetrics(fact.metrics, SALES_METRICS, "sales", `sales_fact:${index}`);
+      assert(!businessKeys.has(fact.business_key), `duplicate_business_key:${fact.business_key}`); businessKeys.add(fact.business_key);
+    });
+    release.refund_facts.forEach((fact, index) => {
+      assert(isDate(fact.date) && fact.basis === "payment_time", `refund_fact_identity_invalid:${index}`);
+      validateLineage(fact.lineage, `refund_fact:${index}`);
+      validateDomainMetrics(fact.metrics, REFUND_METRICS, "refund", `refund_fact:${index}`);
+      assert(!businessKeys.has(fact.business_key), `duplicate_business_key:${fact.business_key}`); businessKeys.add(fact.business_key);
+    });
+    release.live_operations_facts.forEach((fact, index) => {
+      assert(isDate(fact.date) && String(fact.room || "") && String(fact.host || "") && String(fact.start_time || "") && String(fact.end_time || ""), `operations_fact_identity_invalid:${index}`);
+      validateLineage(fact.lineage, `operations_fact:${index}`);
+      validateDomainMetrics(fact.metrics, OPERATIONS_METRICS, "operations", `operations_fact:${index}`);
+      assert(!businessKeys.has(fact.business_key), `duplicate_business_key:${fact.business_key}`); businessKeys.add(fact.business_key);
+    });
+    release.required_units.forEach((unit, index) => {
+      assert(String(unit.unit_id || "") && ["advertising", "sales", "refund", "live_operations"].includes(unit.domain), `required_unit_identity_invalid:${index}`);
+      assert(String(unit.source_id || "") && isDate(unit.date) && UNIT_STATES.includes(unit.state), `required_unit_state_invalid:${index}`);
+      if (unit.domain === "advertising" && unit.account_scope === "creator_live") assert(unit.state === "not_required", `creator_live_advertising_must_be_not_required:${index}`);
+      if (["complete", "observed_zero"].includes(unit.state)) assert(isSha(unit.receipt_sha256), `required_unit_receipt_required:${index}`);
+    });
+    assert(release.quality_summary && typeof release.quality_summary.ok === "boolean", "quality_summary_invalid");
+    assert(release.external_services && release.external_services.targets
+      && release.external_services.targets.schema === "gy-target-config-v1"
+      && release.external_services.targets.authority === "D1"
+      && release.external_services.targets.load_mode === "runtime_from_target_service", "target_runtime_contract_invalid");
+    return release;
   }
 
-  function deriveSourceState(fact, metrics) {
-    if (fact.unit_applicability === "not_applicable") return "not_applicable";
-    if (["accepted", "observed_zero", "missing", "schema_drift", "not_applicable"].includes(fact.source_state)) {
-      return fact.source_state;
-    }
-    const states = Object.values(metrics).map((metric) => metric.state);
-    if (states.some((state) => state === "observed_value")) return "accepted";
-    if (states.some((state) => state === "observed_zero")) return "observed_zero";
-    return "missing";
+  function selectedDates(release, selection = {}) {
+    if (Array.isArray(selection.dates) && selection.dates.length) return Array.from(new Set(selection.dates.map(String).filter(isDate))).sort();
+    if (isDate(selection.period)) return [String(selection.period)];
+    const range = String(selection.period || "").match(/^(\d{8})-(\d{8})$/u);
+    if (range) return release.target_dates.filter((date) => date >= range[1] && date <= range[2]);
+    return release.target_dates.slice().sort();
   }
-
-  function normalizeFact(fact, index) {
-    const dimension = String(fact.material_dimension || "");
-    const accountScope = String(fact.account_scope || fact.touchpoint || "");
-    const metrics = normalizeMetrics(fact.metrics || {});
-    const attributes = fact.attributes && typeof fact.attributes === "object" ? fact.attributes : {};
-    const sourceState = deriveSourceState(fact, metrics);
-    let identity = String(attributes.video_identity || "待确认");
-    let identityEvidence = String(attributes.video_identity_evidence || "标准事实");
-    if (dimension === "video" && accountScope === "creator_short_video") {
-      identity = "达人素材";
-      identityEvidence = "账户来源优先";
-    }
-    if (dimension === "video" && !IDENTITIES.includes(identity)) identity = "待确认";
-    return {
-      index,
-      period: String(fact.period || fact.date || ""),
-      date: String(fact.date || ""),
-      touchpoint: String(fact.touchpoint || accountScope),
-      accountScope,
-      accountId: String(fact.advertiser_id || ""),
-      accountName: String(attributes.account_name || fact.account_name || fact.advertiser_id || "未命名账户"),
-      materialDimension: dimension,
-      sourceDataset: String(fact.source_dataset || ""),
-      sourceState,
-      authorityLevel: String(fact.authority_level || attributes.authority_level || ""),
-      rowKind: String(attributes.row_kind || fact.row_kind || "detail"),
-      materialId: String(attributes.material_id || fact.material_id || ""),
-      materialName: String(attributes.material_name || fact.material_name || attributes.material_id || fact.material_id || ""),
-      identity,
-      identityEvidence,
-      baseCostMethod: String((fact.metrics && fact.metrics.base_cost_method) || "missing"),
-      metrics,
-    };
-  }
-
   function aggregateMetric(rows, name) {
     if (!rows.length) return missingMetric();
-    const values = rows.map((row) => row.metrics[name] || missingMetric());
-    if (values.some((item) => item.state === "missing")) {
-      const detail = values.find((item) => item.stateDetail === "negative_derived_difference")?.stateDetail
-        || values.find((item) => item.stateDetail)?.stateDetail;
-      return detail ? { state: "missing", value: null, stateDetail: detail } : missingMetric();
-    }
-    const observed = values.filter((item) => item.state === "observed_value" || item.state === "observed_zero");
-    if (!observed.length) return { state: "not_applicable", value: null };
-    const value = round(observed.reduce((sum, item) => sum + item.value, 0), 6);
-    return { state: value === 0 ? "observed_zero" : "observed_value", value };
+    const metrics = rows.map((row) => row.metrics[name]);
+    if (metrics.some((metric) => !metric || metric.state === "missing")) return missingMetric(metrics.find((metric) => metric && metric.stateDetail)?.stateDetail || null);
+    const observed = metrics.filter(isObserved);
+    if (!observed.length) return notApplicableMetric();
+    if (observed.length !== metrics.length) return missingMetric("mixed_applicability");
+    return observedMetric(observed.reduce((sum, metric) => sum + metric.value, 0));
   }
-
-  function ratioMetric(numerator, denominator) {
-    if (!numerator || !denominator || numerator.state === "missing" || denominator.state === "missing") return missingMetric();
-    if (numerator.state === "not_applicable" || denominator.state === "not_applicable") return missingMetric();
-    if (denominator.value === 0) return { state: "not_applicable", value: null };
-    const value = numerator.value / denominator.value;
-    return { state: value === 0 ? "observed_zero" : "observed_value", value };
-  }
-
-  function scaledRatioMetric(numerator, denominator, scale) {
-    const ratio = ratioMetric(numerator, denominator);
-    if (ratio.state !== "observed_value" && ratio.state !== "observed_zero") return ratio;
-    const value = round(ratio.value * scale, 6);
-    return { state: value === 0 ? "observed_zero" : "observed_value", value };
-  }
-
-  function differenceMetric(minuend, subtrahend) {
-    if (!minuend || !subtrahend || minuend.state === "missing" || subtrahend.state === "missing") {
-      return { state: "missing", value: null, stateDetail: "dependency_missing" };
-    }
-    if (minuend.state === "not_applicable" || subtrahend.state === "not_applicable") {
-      return { state: "missing", value: null, stateDetail: "dependency_missing" };
-    }
-    const value = round(minuend.value - subtrahend.value, 6);
-    if (value < 0) return { state: "missing", value: null, stateDetail: "negative_derived_difference" };
-    return { state: value === 0 ? "observed_zero" : "observed_value", value };
-  }
-
-  function weightedSourceRatio(rows, ratioName, weightName) {
+  function weightedMetric(rows, ratioName, weightName) {
     if (!rows.length) return missingMetric();
-    let numerator = 0;
-    let denominator = 0;
+    let numerator = 0; let denominator = 0;
     for (const row of rows) {
-      const ratio = row.metrics[ratioName] || missingMetric();
-      const weight = row.metrics[weightName] || missingMetric();
-      if (!["observed_value", "observed_zero"].includes(ratio.state)
-        || !["observed_value", "observed_zero"].includes(weight.state)) return missingMetric();
-      numerator += ratio.value * weight.value;
-      denominator += weight.value;
+      const ratio = row.metrics[ratioName]; const weight = row.metrics[weightName];
+      if (!isObserved(ratio) || !isObserved(weight)) return missingMetric();
+      numerator += ratio.value * weight.value; denominator += weight.value;
     }
-    if (denominator === 0) return { state: "not_applicable", value: null };
-    const value = round(numerator / denominator, 6);
-    return { state: value === 0 ? "observed_zero" : "observed_value", value };
+    return denominator === 0 ? notApplicableMetric() : observedMetric(numerator / denominator);
   }
-
-  function aggregateAccountMetrics(rows) {
-    const output = {};
-    const accountGrain = rows.length > 0 && rows.every((row) => row.materialDimension === "account");
-    const imageGrain = rows.length > 0 && rows.every((row) => row.materialDimension === "image");
-    ["overall_cost", "overall_gmv", "overall_orders", "chengfang_composite_cost", "additional_cost", "additional_gmv", "base_cost", "show", "click"].forEach((name) => {
-      output[name] = aggregateMetric(rows, name);
-    });
-    output.comparable_roi = ratioMetric(output.overall_gmv, output.overall_cost);
-    output.additional_roi = imageGrain ? { state: "not_applicable", value: null } : ratioMetric(output.additional_gmv, output.additional_cost);
-    output.additional_share = imageGrain ? { state: "not_applicable", value: null } : ratioMetric(output.additional_cost, output.overall_cost);
-    output.base_gmv = imageGrain ? { state: "not_applicable", value: null } : differenceMetric(output.overall_gmv, output.additional_gmv);
-    const baseGmvConflict = rows.some((row) => row.metrics.base_gmv?.stateDetail === "negative_derived_difference");
-    if (baseGmvConflict) output.base_gmv = { state: "missing", value: null, stateDetail: "negative_derived_difference" };
-    output.base_roi = imageGrain ? { state: "not_applicable", value: null } : ratioMetric(output.base_gmv, output.base_cost);
-    output.chengfang_marketing_roi = weightedSourceRatio(rows, "chengfang_marketing_roi", "chengfang_composite_cost");
-    output.ctr = accountGrain ? { state: "not_applicable", value: null } : ratioMetric(output.click, output.show);
-    output.cvr = accountGrain ? { state: "not_applicable", value: null } : ratioMetric(output.overall_orders, output.click);
-    output.cpm = accountGrain ? { state: "not_applicable", value: null } : scaledRatioMetric(output.overall_cost, output.show, 1000);
-    return output;
+  function aggregateAdMetrics(rows, dimension) {
+    const metrics = {};
+    ["overall_cost", "overall_gmv", "overall_orders", "chengfang_composite_cost", "additional_cost", "additional_gmv", "base_cost", "show", "click"].forEach((name) => { metrics[name] = aggregateMetric(rows, name); });
+    metrics.comparable_roi = ratioMetric(metrics.overall_gmv, metrics.overall_cost);
+    metrics.chengfang_marketing_roi = weightedMetric(rows, "chengfang_marketing_roi", "chengfang_composite_cost");
+    metrics.additional_roi = dimension === "account" || dimension === "image" ? notApplicableMetric() : ratioMetric(metrics.additional_gmv, metrics.additional_cost);
+    metrics.additional_share = dimension === "account" || dimension === "image" ? notApplicableMetric() : ratioMetric(metrics.additional_cost, metrics.overall_cost);
+    metrics.base_gmv = dimension === "account" || dimension === "image" ? notApplicableMetric() : differenceMetric(metrics.overall_gmv, metrics.additional_gmv);
+    metrics.base_roi = dimension === "account" || dimension === "image" ? notApplicableMetric() : ratioMetric(metrics.base_gmv, metrics.base_cost);
+    metrics.ctr = dimension === "account" ? notApplicableMetric() : ratioMetric(metrics.click, metrics.show);
+    metrics.cvr = dimension === "account" ? notApplicableMetric() : ratioMetric(metrics.overall_orders, metrics.click);
+    metrics.cpm = dimension === "account" ? notApplicableMetric() : scaledRatioMetric(metrics.overall_cost, metrics.show, 1000);
+    return metrics;
   }
-
-  function mergeSourceState(rows) {
-    if (!rows.length) return "missing";
-    const states = rows.map((row) => row.sourceState);
-    if (states.includes("schema_drift")) return "schema_drift";
-    if (states.includes("missing")) return "missing";
-    if (states.every((state) => state === "not_applicable")) return "not_applicable";
-    if (states.every((state) => state === "observed_zero" || state === "not_applicable")) return "observed_zero";
-    return "accepted";
+  function normalizeAdFact(fact, index) {
+    return {
+      index, businessKey: fact.business_key, sourceId: fact.source_id, sourceDataset: fact.source_dataset,
+      accountScope: fact.account_scope, advertiserId: String(fact.advertiser_id), date: fact.date,
+      dimension: fact.material_dimension, materialId: fact.material_id, identity: fact.material_identity,
+      identityRuleId: fact.identity_rule_id, isAigc: fact.is_aigc, metrics: validateAdFact(fact, index),
+    };
   }
-
-  function materialKey(row) {
-    return [row.materialDimension, row.accountId, row.materialId || row.materialName || `row-${row.index}`, row.identity].join("|");
+  function unitView(unit) {
+    const state = unit.state === "complete" ? "accepted" : unit.state === "observed_zero" ? "observed_zero" : unit.state === "not_required" ? "not_applicable" : unit.state;
+    return { ...unit, normalizedState: state, blocking: ["missing", "failed", "blocked"].includes(unit.state) };
   }
-
-  function aggregateMaterialRows(rows) {
-    const groups = new Map();
-    rows.filter((row) => row.rowKind !== "summary").forEach((row) => {
-      const key = materialKey(row);
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(row);
-    });
-    return Array.from(groups.values()).map((parts) => {
-      const first = parts[0];
-      return {
-        materialId: first.materialId,
-        materialName: first.materialName,
-        identity: first.identity,
-        identityEvidence: first.identityEvidence,
-        accountId: first.accountId,
-        accountName: first.accountName,
-        sourceDataset: first.sourceDataset,
-        sourceState: mergeSourceState(parts),
-        baseCostMethod: parts.map((part) => part.baseCostMethod).find(Boolean) || "",
-        metrics: aggregateAccountMetrics(parts),
-      };
-    });
+  function domainUnits(release, domain, dates) { return release.required_units.filter((unit) => unit.domain === domain && dates.includes(unit.date)).map(unitView); }
+  function sourceDimension(sourceId) {
+    return ({ push_product_account_overview: "account", push_live_account_overview: "account", video_material: "video", push_product_image_material: "image", live_frame_material: "live_frame" })[sourceId] || null;
   }
-
-  function notApplicableMetrics() {
-    const output = {};
-    METRIC_NAMES.forEach((name) => { output[name] = { state: "not_applicable", value: null }; });
-    return output;
+  function touchpointRows(rows, touchpoint) { return rows.filter((row) => row.accountScope === touchpoint); }
+  function blockingUnitsFor(units, touchpoint, dimension) {
+    return units.filter((unit) => unit.blocking && (!unit.account_scope || unit.account_scope === touchpoint) && (!dimension || !sourceDimension(unit.source_id) || sourceDimension(unit.source_id) === dimension));
   }
-
-  function buildDimensionModel(rows, dimension, touchpoint, blockedUnits = []) {
-    const dimensionRows = rows.filter((row) => row.materialDimension === dimension);
-    const expectedApplicability = SCOPE_APPLICABILITY[touchpoint]?.[dimension] || "required";
-    const applicabilityViolation = expectedApplicability === "not_applicable"
-      ? dimensionRows.some((row) => row.sourceState !== "not_applicable")
-      : dimensionRows.some((row) => row.sourceState === "not_applicable");
-    const materialRows = aggregateMaterialRows(dimensionRows);
-    const businessRows = materialRows.filter((row) => row.metrics.overall_cost.state === "observed_value" && row.metrics.overall_cost.value > 0);
-    const zeroRows = materialRows.filter((row) => row.metrics.overall_cost.state === "observed_zero");
-    const missingCostRows = materialRows.filter((row) => row.metrics.overall_cost.state === "missing");
+  function buildMaterialDimension(rows, units, touchpoint, dimension) {
+    const applicability = DIMENSION_APPLICABILITY[touchpoint]?.[dimension] || "not_applicable";
+    if (applicability === "not_applicable") return { dimension, applicability, state: "not_applicable", rows: [], businessRows: [], zeroCount: 0, missingCount: 0, metrics: Object.fromEntries(AD_METRICS.map((name) => [name, notApplicableMetric()])), identityBuckets: {}, aigcStatus: "not_applicable", sourceDatasets: [] };
+    const selected = rows.filter((row) => row.dimension === dimension);
+    const blocked = blockingUnitsFor(units, touchpoint, dimension);
+    const businessRows = selected.filter((row) => isObserved(row.metrics.overall_cost) && row.metrics.overall_cost.value > 0);
+    const metrics = blocked.length ? Object.fromEntries(AD_METRICS.map((name) => [name, missingMetric("required_unit_blocking")])) : aggregateAdMetrics(selected, dimension);
     const identityBuckets = {};
-    IDENTITIES.forEach((identity) => {
-      const bucketRows = businessRows.filter((row) => row.identity === identity);
-      identityBuckets[identity] = {
-        rows: bucketRows,
-        count: bucketRows.length,
-        cost: aggregateMetric(bucketRows, "overall_cost"),
-      };
-    });
-    const partialMetrics = expectedApplicability === "not_applicable" && !applicabilityViolation
-      ? notApplicableMetrics()
-      : aggregateAccountMetrics(materialRows);
-    const metrics = blockedUnits.length ? (() => {
-      const output = {};
-      METRIC_NAMES.forEach((name) => { output[name] = missingMetric(); });
-      return output;
-    })() : partialMetrics;
-    const videoCost = metrics.overall_cost;
-    const bucketCost = IDENTITIES.reduce((sum, identity) => {
-      const metric = identityBuckets[identity].cost;
-      return sum + (metric.state === "observed_value" || metric.state === "observed_zero" ? metric.value : 0);
-    }, 0);
-    const aigcAdditivityStatus = dimension !== "video"
-      ? "not_applicable"
-      : videoCost.state === "missing" || videoCost.state === "not_applicable"
-        ? "unknown"
-        : Math.abs(videoCost.value - bucketCost) < 0.01 ? "passed" : "blocked";
+    IDENTITIES.forEach((identity) => { const bucketRows = businessRows.filter((row) => row.identity === identity); identityBuckets[identity] = { rows: bucketRows, count: bucketRows.length, cost: aggregateMetric(bucketRows, "overall_cost") }; });
+    const bucketCost = IDENTITIES.reduce((sum, identity) => sum + (isObserved(identityBuckets[identity].cost) ? identityBuckets[identity].cost.value : 0), 0);
+    const aigcStatus = dimension !== "video" ? "not_applicable" : !isObserved(metrics.overall_cost) ? "unknown" : Math.abs(metrics.overall_cost.value - bucketCost) < 0.01 ? "passed" : "blocked";
     return {
-      dimension,
-      label: DIMENSION_LABELS[dimension],
-      applicability: expectedApplicability,
-      sourceState: applicabilityViolation
-        ? "schema_drift"
-        : blockedUnits.some((unit) => unit.normalized_source_state === "schema_drift") ? "schema_drift"
-          : blockedUnits.length ? "missing"
-            : expectedApplicability === "not_applicable" ? "not_applicable" : mergeSourceState(dimensionRows),
-      completeness: blockedUnits.length ? (dimensionRows.length ? "partial" : "missing") : "complete",
-      blockedUnits,
-      sourceDatasets: Array.from(new Set(dimensionRows.map((row) => row.sourceDataset).filter(Boolean))),
-      rows: materialRows,
-      businessRows,
-      zeroRowCount: zeroRows.length,
-      missingCostRowCount: missingCostRows.length,
-      identityBuckets,
-      metrics,
-      partialMetrics,
-      identityBucketCost: round(bucketCost, 2),
-      aigcAdditivityStatus,
-      aigcDuplicateFree: aigcAdditivityStatus === "passed",
+      dimension, applicability, state: blocked.length ? "missing" : selected.length ? "accepted" : "missing", blockedUnits: blocked,
+      rows: selected, businessRows, zeroCount: selected.filter((row) => row.metrics.overall_cost.state === "observed_zero").length,
+      missingCount: selected.filter((row) => row.metrics.overall_cost.state === "missing").length,
+      metrics, identityBuckets, identityBucketCost: round(bucketCost, 2), aigcStatus,
+      sourceDatasets: Array.from(new Set(selected.map((row) => row.sourceDataset))),
     };
   }
-
-  function buildOwnerExcludedDimensionModel(dimension) {
-    const identityBuckets = {};
-    IDENTITIES.forEach((identity) => {
-      identityBuckets[identity] = {
-        rows: [],
-        count: 0,
-        cost: { state: "not_applicable", value: null },
-      };
-    });
+  function buildAdvertising(release, dates, touchpoint) {
+    const units = domainUnits(release, "advertising", dates);
+    if (touchpoint === "creator_live") return {
+      touchpoint, label: TOUCHPOINT_LABELS[touchpoint], state: "not_applicable", ownerExcluded: true,
+      exclusionReason: "负责人排除：达播广告投流永久不要求；达播销售、订单和销售目标继续保留。",
+      account: { state: "not_applicable", metrics: Object.fromEntries(AD_METRICS.map((name) => [name, notApplicableMetric()])), rows: [] },
+      dimensions: Object.fromEntries(DIMENSIONS.map((dimension) => [dimension, buildMaterialDimension([], units, touchpoint, dimension)])), units,
+    };
+    const allRows = release.facts.map(normalizeAdFact).filter((row) => dates.includes(row.date));
+    const rows = touchpointRows(allRows, touchpoint);
+    const accountRows = rows.filter((row) => row.dimension === "account");
+    const blocked = blockingUnitsFor(units, touchpoint, "account");
+    const materialRows = rows.filter((row) => row.dimension !== "account");
+    const accountAllZero = accountRows.length > 0 && accountRows.every((row) => ["overall_cost", "overall_gmv", "overall_orders"].every((name) => row.metrics[name].state === "observed_zero"));
+    const materialHasBusiness = materialRows.some((row) => ["overall_cost", "overall_gmv", "overall_orders"].some((name) => isObserved(row.metrics[name]) && row.metrics[name].value > 0));
+    const authorityConflict = accountAllZero && materialHasBusiness;
+    const accountBlocked = blocked.length > 0 || authorityConflict;
+    const accountMetrics = accountBlocked
+      ? Object.fromEntries(AD_METRICS.map((name) => [name, missingMetric(authorityConflict ? "account_zero_conflicts_with_material_nonzero" : "required_unit_blocking")]))
+      : aggregateAdMetrics(accountRows, "account");
     return {
-      dimension,
-      label: DIMENSION_LABELS[dimension],
-      applicability: "not_applicable",
-      sourceState: "not_applicable",
-      completeness: "complete",
-      blockedUnits: [],
-      sourceDatasets: [],
-      rows: [],
-      businessRows: [],
-      zeroRowCount: 0,
-      missingCostRowCount: 0,
-      identityBuckets,
-      metrics: notApplicableMetrics(),
-      partialMetrics: notApplicableMetrics(),
-      identityBucketCost: null,
-      aigcAdditivityStatus: "not_applicable",
-      aigcDuplicateFree: false,
+      touchpoint, label: TOUCHPOINT_LABELS[touchpoint], state: accountBlocked ? "missing" : accountRows.length ? "accepted" : "missing", ownerExcluded: false,
+      account: { state: accountBlocked ? "missing" : accountRows.length ? "accepted" : "missing", metrics: accountMetrics, rows: accountRows, blockedUnits: blocked, authorityConflict },
+      dimensions: Object.fromEntries(DIMENSIONS.map((dimension) => [dimension, buildMaterialDimension(rows, units, touchpoint, dimension)])), units,
     };
   }
-
-  function uniqueDates(values) {
-    return Array.from(new Set((values || []).map(String).filter((value) => /^\d{8}$/u.test(value)))).sort();
+  function aggregateDomainRows(rows, names) {
+    const output = {}; names.forEach((name) => { output[name] = aggregateMetric(rows, name); }); return output;
   }
-
-  function allContractDates(contract) {
-    return uniqueDates([
-      ...contract.facts.map((fact) => fact.date),
-      ...(contract.required_units || []).map((unit) => unit.date),
-      ...(contract.evidence_references || []).map((item) => item.date),
-      ...(contract.product_coverage || []).map((item) => item.date),
-    ]);
+  function buildSales(release, dates) {
+    const units = domainUnits(release, "sales", dates); const blocking = units.filter((unit) => unit.blocking);
+    const rows = release.sales_facts.filter((fact) => dates.includes(fact.date)).map((fact, index) => ({ ...fact, metrics: validateDomainMetrics(fact.metrics, SALES_METRICS, "sales", `sales_fact:${index}`) }));
+    const shopRows = rows.filter((row) => row.sales_grain === "shop");
+    const productRows = rows.filter((row) => row.sales_grain === "product_channel");
+    return { state: blocking.length ? "missing" : shopRows.length ? "accepted" : "missing", units, blocking, shop: { rows: shopRows, metrics: blocking.length ? Object.fromEntries(SALES_METRICS.map((name) => [name, missingMetric("required_unit_blocking")])) : aggregateDomainRows(shopRows, SALES_METRICS) }, productRows, creatorLiveRows: productRows.filter((row) => SALES_TOUCHPOINT_TO_SCOPE[row.touchpoint] === "creator_live") };
   }
-
-  function declaredPeriodDates(contract, period) {
-    const entries = Array.isArray(contract.periods) ? contract.periods : [];
-    const entry = entries.find((item) => item && typeof item === "object" && String(item.id || item.key || item.period || "") === period);
-    if (entry && Array.isArray(entry.dates)) return uniqueDates(entry.dates);
-    const map = contract.period_definitions && typeof contract.period_definitions === "object" ? contract.period_definitions : {};
-    if (Array.isArray(map[period])) return uniqueDates(map[period]);
-    if (map[period] && Array.isArray(map[period].dates)) return uniqueDates(map[period].dates);
-    return [];
+  function buildRefund(release, dates) {
+    const units = domainUnits(release, "refund", dates); const blocking = units.filter((unit) => unit.blocking);
+    const rows = release.refund_facts.filter((fact) => dates.includes(fact.date)).map((fact, index) => ({ ...fact, metrics: validateDomainMetrics(fact.metrics, REFUND_METRICS, "refund", `refund_fact:${index}`) }));
+    return { state: blocking.length ? "missing" : rows.length ? "accepted" : "missing", units, blocking, rows, metrics: blocking.length ? Object.fromEntries(REFUND_METRICS.map((name) => [name, missingMetric("required_unit_blocking")])) : aggregateDomainRows(rows, REFUND_METRICS) };
   }
-
-  function resolveSelectionDates(contract, selection, period) {
-    if (Array.isArray(selection.dates) && selection.dates.length) return uniqueDates(selection.dates);
-    const declared = declaredPeriodDates(contract, period);
-    if (declared.length) return declared;
-    if (/^\d{8}$/u.test(period)) return [period];
-    const range = period.match(/^(\d{8})-(\d{8})$/u);
-    if (range) return allContractDates(contract).filter((date) => date >= range[1] && date <= range[2]);
-    const matching = [];
-    for (const item of [...contract.facts, ...(contract.required_units || [])]) {
-      if (String(item.period || "") === period && /^\d{8}$/u.test(String(item.date || ""))) matching.push(item.date);
+  function buildOperations(release, dates) {
+    const units = domainUnits(release, "live_operations", dates); const blocking = units.filter((unit) => unit.blocking);
+    const rows = release.live_operations_facts.filter((fact) => dates.includes(fact.date)).map((fact, index) => ({ ...fact, metrics: validateDomainMetrics(fact.metrics, OPERATIONS_METRICS, "operations", `operations_fact:${index}`) }));
+    const metrics = blocking.length ? Object.fromEntries(OPERATIONS_METRICS.map((name) => [name, missingMetric("required_unit_blocking")])) : aggregateDomainRows(rows, OPERATIONS_METRICS);
+    if (!blocking.length && rows.length) {
+      metrics.click_rate = ratioMetric(metrics.pclk, metrics.pexp);
+      metrics.click_to_deal_rate = ratioMetric(metrics.deal, metrics.pclk);
     }
-    return uniqueDates(matching);
+    return { state: blocking.length ? "missing" : rows.length ? "accepted" : "missing", units, blocking, rows, metrics };
   }
-
-  function matchesSelection(item, period, selectedDates) {
-    const date = String(item.date || "");
-    if (/^\d{8}$/u.test(date) && selectedDates.length) return selectedDates.includes(date);
-    return String(item.period || date) === period;
-  }
-
-  function resolvePeriods(contract) {
-    const declared = Array.isArray(contract.periods) ? contract.periods.map((item) => String(item && typeof item === "object" ? item.id || item.key || item.period || "" : item)).filter(Boolean) : [];
-    const fromFacts = contract.facts.map((fact) => String(fact.date || "")).filter(Boolean);
-    const defaults = contract.default_period ? [String(contract.default_period)] : [];
-    return Array.from(new Set(defaults.concat(declared.length ? declared : fromFacts)));
-  }
-
-  function resolveTouchpoints(contract, period, selectedDates = resolveSelectionDates(contract, {}, period)) {
-    const fromFacts = contract.facts.filter((fact) => matchesSelection(fact, period, selectedDates)).map((fact) => String(fact.touchpoint || fact.account_scope || "")).filter(Boolean);
-    const required = (contract.required_units || []).filter((unit) => matchesSelection(unit, period, selectedDates)).map((unit) => String(unit.touchpoint || unit.account_scope || "")).filter(Boolean);
-    const evidence = (contract.evidence_references || []).filter((item) => matchesSelection(item, period, selectedDates)).map((item) => String(item.touchpoint || item.account_scope || "")).filter(Boolean);
-    return Array.from(new Set(fromFacts.concat(required, evidence, Object.keys(TOUCHPOINT_AD_POLICIES))));
-  }
-
-  function buildEvidenceReferences(contract, period, selectedDates, touchpoint) {
-    return (contract.evidence_references || []).filter((item) => {
-      return matchesSelection(item, period, selectedDates)
-        && String(item.touchpoint || item.account_scope || "") === touchpoint;
-    }).map((item) => ({
-      materialDimension: String(item.material_dimension || ""),
-      metricName: String(item.metric_name || "overall_cost"),
-      metric: normalizeCanonicalMetric(item.metric || {}),
-      authority: String(item.authority || "non_authoritative"),
-      evidenceKind: String(item.evidence_kind || "reference_only"),
-      sourceDataset: String(item.source_dataset || ""),
-      note: String(item.note || ""),
-    }));
-  }
-
-  function buildProductCoverage(contract, period, selectedDates) {
-    const item = (contract.product_coverage || []).find((entry) => matchesSelection(entry, period, selectedDates));
-    if (!item) return null;
-    const metrics = normalizeMetrics(item.metrics || {});
-    const overviewGmv = normalizeMetric(item.overview_gmv);
-    const detailGmv = normalizeMetric(item.detail_gmv);
-    const residualGmv = normalizeMetric(item.residual_gmv);
-    const overviewOrders = normalizeMetric(item.overview_orders);
-    const detailOrders = normalizeMetric(item.detail_orders);
-    const residualOrders = normalizeMetric(item.residual_orders);
+  function buildDashboardModel(input, selection = {}) {
+    const release = parseContract(input); const dates = selectedDates(release, selection); const touchpoint = TOUCHPOINTS.includes(selection.touchpoint) ? selection.touchpoint : "self_live";
+    const required = release.required_units.filter((unit) => dates.includes(unit.date)).map(unitView);
+    const blocking = required.filter((unit) => unit.blocking);
     return {
-      sourceDataset: String(item.source_dataset || ""),
-      overviewGmv,
-      detailGmv,
-      residualGmv,
-      coverageRate: ratioMetric(detailGmv, overviewGmv),
-      overviewOrders,
-      detailOrders,
-      residualOrders,
-      metrics,
-    };
-  }
-
-  function pushLiveClosure(rows, touchpoint, requiredMissing) {
-    const closure = { status: "blocked", reasons: [], delta: null, evidenceGroups: [] };
-    const accountDataset = "qianchuan_report_uni_promotion_get_v1";
-    const official = {
-      account: rows.filter((row) => row.materialDimension === "account" && row.sourceDataset === accountDataset),
-      video: rows.filter((row) => row.materialDimension === "video" && row.sourceDataset === "roi2_video_material_analysis"),
-      live_frame: rows.filter((row) => row.materialDimension === "live_frame" && row.sourceDataset === "roi2_live_material_analysis"),
-    };
-    const key = (row) => `${row.accountId}|${row.date}`;
-    const group = (items) => {
-      const output = new Map();
-      items.forEach((row) => {
-        const itemKey = key(row);
-        if (!output.has(itemKey)) output.set(itemKey, []);
-        output.get(itemKey).push(row);
-      });
-      return output;
-    };
-    const groups = { account: group(official.account), video: group(official.video), live_frame: group(official.live_frame) };
-    if (!official.account.length) closure.reasons.push("账户总盘同级权威未返回");
-    const wrongAccountSource = rows.some((row) => row.materialDimension === "account" && row.sourceDataset !== accountDataset && ["accepted", "observed_zero"].includes(row.sourceState));
-    if (wrongAccountSource) closure.reasons.push("账户总盘来源不是推直播间同级权威");
-    requiredMissing.filter((unit) => ["account", "video", "live_frame", ""].includes(String(unit.material_dimension || ""))).forEach((unit) => {
-      closure.reasons.push(`${unit.advertiser_id}/${unit.date}/${unit.material_dimension || "required-unit"} 未取得受信事实`);
-    });
-    let totalDelta = 0;
-    for (const [itemKey, accountRows] of groups.account.entries()) {
-      const videoRows = groups.video.get(itemKey) || [];
-      const liveRows = groups.live_frame.get(itemKey) || [];
-      const [advertiserId, date] = itemKey.split("|");
-      if (!/^\d{8}$/u.test(date)) closure.reasons.push(`${advertiserId}/${date} 不是单自然日证据`);
-      if (!videoRows.length) closure.reasons.push(`${advertiserId}/${date} 缺官方视频素材事实`);
-      if (!liveRows.length) closure.reasons.push(`${advertiserId}/${date} 缺官方直播间画面事实`);
-      const accountCost = aggregateMetric(accountRows, "overall_cost");
-      const videoCost = aggregateMetric(videoRows, "overall_cost");
-      const liveCost = aggregateMetric(liveRows, "overall_cost");
-      const complete = [accountCost, videoCost, liveCost].every((metric) => ["observed_value", "observed_zero"].includes(metric.state));
-      if (!complete) closure.reasons.push(`${advertiserId}/${date} 三层消耗字段未完整返回`);
-      const delta = complete ? round(accountCost.value - videoCost.value - liveCost.value, 2) : null;
-      if (delta != null) {
-        totalDelta = round(totalDelta + delta, 2);
-        if (Math.abs(delta) >= 0.01) closure.reasons.push(`${advertiserId}/${date} 三层相差 ${delta.toFixed(2)} 元`);
-      }
-      closure.evidenceGroups.push({ advertiserId, date, accountCost, videoCost, liveCost, delta });
-    }
-    for (const dimension of ["video", "live_frame"]) {
-      for (const itemKey of groups[dimension].keys()) {
-        if (!groups.account.has(itemKey)) closure.reasons.push(`${itemKey} 的${DIMENSION_LABELS[dimension]}事实缺同日同账户总盘`);
-      }
-    }
-    closure.reasons = Array.from(new Set(closure.reasons));
-    closure.delta = closure.evidenceGroups.length ? totalDelta : null;
-    if (closure.evidenceGroups.length && !closure.reasons.length) closure.status = "passed";
-    return closure;
-  }
-
-  function buildTouchpointModel(input, selection = {}) {
-    const contract = parseContract(input);
-    const periods = resolvePeriods(contract);
-    const period = String(selection.period || contract.default_period || periods[0] || "");
-    const selectedDates = resolveSelectionDates(contract, selection, period);
-    const touchpoints = resolveTouchpoints(contract, period, selectedDates);
-    const touchpoint = String(selection.touchpoint || contract.default_touchpoint || touchpoints[0] || "");
-    const businessExclusion = TOUCHPOINT_AD_POLICIES[touchpoint] || null;
-    const rows = businessExclusion ? [] : contract.facts.map(normalizeFact).filter((row) => matchesSelection(row, period, selectedDates) && row.touchpoint === touchpoint);
-    const accountRows = rows.filter((row) => row.materialDimension === "account");
-    const selectedRequiredUnits = businessExclusion ? [] : (contract.required_units || []).filter((unit) => matchesSelection(unit, period, selectedDates)
-      && String(unit.touchpoint || unit.account_scope || "") === touchpoint).map(normalizeRequiredUnit);
-    const requiredMissing = selectedRequiredUnits.filter((unit) => unit.blocking);
-    const accountRequiredMissing = requiredMissing.filter((unit) => !unit.material_dimension || unit.material_dimension === "account");
-    const accountSourceState = businessExclusion ? "not_applicable"
-      : accountRequiredMissing.some((unit) => unit.normalized_source_state === "schema_drift")
-        ? "schema_drift" : accountRequiredMissing.length ? "missing" : mergeSourceState(accountRows);
-    const accountMetrics = businessExclusion ? notApplicableMetrics()
-      : accountRequiredMissing.length ? aggregateAccountMetrics([]) : aggregateAccountMetrics(accountRows);
-    const dimensions = {};
-    DIMENSIONS.forEach((dimension) => {
-      dimensions[dimension] = businessExclusion
-        ? buildOwnerExcludedDimensionModel(dimension)
-        : buildDimensionModel(rows, dimension, touchpoint, requiredMissing.filter((unit) => unit.material_dimension === dimension));
-    });
-    const closure = touchpoint === "self_live"
-      ? pushLiveClosure(rows, touchpoint, requiredMissing)
-      : { status: "not_applicable", reasons: [], delta: null, evidenceGroups: [] };
-    const evidenceReferences = buildEvidenceReferences(contract, period, selectedDates, touchpoint);
-    return {
-      schema: VIEW_SCHEMA,
-      sourceSchema: FACT_SCHEMA,
-      contractVersion: String(contract.contract_version || ""),
-      fixtureKind: String(contract.fixture_kind || "production_candidate"),
-      adapterStatus: String(contract.adapter_status || "ready"),
-      period,
-      selectedDates,
-      periods,
-      touchpoint,
-      touchpoints,
-      touchpointLabel: TOUCHPOINT_LABELS[touchpoint] || touchpoint,
-      businessExclusion,
-      account: {
-        sourceState: accountSourceState,
-        completeness: businessExclusion ? "complete" : accountRequiredMissing.length ? (accountRows.length ? "partial" : "missing") : "complete",
-        sourceDatasets: Array.from(new Set(accountRows.map((row) => row.sourceDataset).filter(Boolean))),
-        metrics: accountMetrics,
-        accounts: accountRows.map((row) => ({ id: row.accountId, name: row.accountName, state: row.sourceState })),
-      },
-      dimensions,
-      closure,
-      requiredMissing,
-      requiredUnits: selectedRequiredUnits,
-      evidenceReferences,
-      productCoverage: buildProductCoverage(contract, period, selectedDates),
+      schema: VIEW_SCHEMA, sourceSchema: FACT_SCHEMA, contractVersion: CONTRACT_VERSION, contractSchemaSha256: CONTRACT_SCHEMA_SHA256,
+      machineContractSha256: MACHINE_CONTRACT_SHA256, releaseId: release.release_id, sourceReleaseSha256: release.source_release_sha256,
+      dates, touchpoint, touchpoints: TOUCHPOINTS.slice(), advertising: buildAdvertising(release, dates, touchpoint),
+      sales: buildSales(release, dates), refund: buildRefund(release, dates), liveOperations: buildOperations(release, dates),
+      requiredUnits: required, blockingUnits: blocking, qualitySummary: release.quality_summary,
+      complete: release.quality_summary.ok === true && blocking.length === 0,
+      targets: { authority: "D1", loadMode: "runtime_from_target_service", embedded: false },
     };
   }
 
   function metricText(metric, format = "money") {
-    const item = metric || missingMetric();
-    if (item.state === "missing") return "未返回";
-    if (item.state === "not_applicable") return "不适用";
-    if (format === "integer") return Math.round(item.value).toLocaleString("zh-CN");
-    if (format === "ratio") return item.value.toFixed(2);
-    if (format === "percent") return `${(item.value * 100).toFixed(1)}%`;
-    return `¥${item.value.toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (!metric || metric.state === "missing") return "未返回";
+    if (metric.state === "not_applicable") return "不适用";
+    if (format === "integer") return Math.round(metric.value).toLocaleString("zh-CN");
+    if (format === "ratio") return metric.value.toFixed(2);
+    if (format === "percent") return `${(metric.value * 100).toFixed(1)}%`;
+    return `¥${metric.value.toLocaleString("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
-
-  function metricStateDetailText(metric) {
-    const detail = String((metric || {}).stateDetail || "");
-    if (detail === "negative_derived_difference") return "源字段矛盾，暂不计算";
-    if (detail === "dependency_missing") return "依赖字段未返回，暂不计算";
-    if (detail === "non_finite_derived_difference") return "源字段不可解析，暂不计算";
-    return "";
+  function stateText(state) { return ({ accepted: "已验收", observed_zero: "真零", not_applicable: "不适用", missing: "缺失", failed: "失败", blocked: "阻断" })[state] || state; }
+  function card(label, metric, format = "money") { return `<div class="gyc-card" data-value-state="${esc(metric?.state || "missing")}"><small>${esc(label)}</small><b>${esc(metricText(metric, format))}</b>${metric?.stateDetail ? `<em>${esc(metric.stateDetail === "negative_derived_difference" ? "源字段矛盾，暂不计算" : metric.stateDetail)}</em>` : ""}</div>`; }
+  function renderRows(rows, dimension) {
+    const visible = rows.filter((row) => isObserved(row.metrics.overall_cost) && row.metrics.overall_cost.value > 0);
+    if (!visible.length) return `<div class="gyc-empty">没有消耗大于0的业务素材；真零和缺失只保留在审计计数。</div>`;
+    return `<table class="gyc-table"><thead><tr><th>素材ID</th>${dimension === "video" ? "<th>视频身份</th><th>AIGC标签</th>" : ""}<th>消耗</th><th>GMV</th><th>订单</th><th>ROI</th></tr></thead><tbody>${visible.map((row) => `<tr><td>${esc(row.materialId || "—")}</td>${dimension === "video" ? `<td>${esc(row.identity)}</td><td>${row.isAigc ? "是（不重复计）" : "否"}</td>` : ""}<td>${esc(metricText(row.metrics.overall_cost))}</td><td>${esc(metricText(row.metrics.overall_gmv))}</td><td>${esc(metricText(row.metrics.overall_orders, "integer"))}</td><td>${esc(metricText(row.metrics.comparable_roi, "ratio"))}</td></tr>`).join("")}</tbody></table>`;
   }
-
-  function baseCostMethodText(method) {
-    return ({
-      source_field: "官方源字段",
-      formula_fallback: "公式回退",
-      missing: "未返回（未使用公式回退）",
-      not_applicable: "不适用",
-    })[String(method || "missing")] || "未返回（未使用公式回退）";
-  }
-
-  function sourceStateText(state) {
-    return ({ accepted: "已验收", observed_zero: "真零", missing: "数据缺失", schema_drift: "字段异常", not_applicable: "不适用" })[state] || "数据缺失";
-  }
-
-  function stateClass(state) {
-    return state === "accepted" || state === "observed_zero" ? "ok" : state === "not_applicable" ? "na" : "bad";
-  }
-
-  function completenessText(sourceState, completeness) {
-    if (completeness === "partial") return "部分数据（不作为周期总值）";
-    return sourceStateText(sourceState);
-  }
-
-  function renderMetricCard(label, metric, format, note) {
-    const stateNote = metricStateDetailText(metric);
-    const visibleNote = [note, stateNote].filter(Boolean).join("｜");
-    return `<div class="gy2-metric" data-value-state="${esc((metric || {}).state || "missing")}" data-state-detail="${esc((metric || {}).stateDetail || "")}"><div class="gy2-label">${esc(label)}</div><div class="gy2-value">${esc(metricText(metric, format))}</div>${visibleNote ? `<div class="gy2-note">${esc(visibleNote)}</div>` : ""}</div>`;
-  }
-
-  function renderProductCoverage(coverage) {
-    if (!coverage) return "";
-    return `<section class="gy2-section" data-section="product-coverage"><div class="gy2-title">📦 商品明细覆盖（成交概览仍是总盘权威）</div><div class="gy2-grid">${renderMetricCard("成交概览GMV", coverage.overviewGmv, "money")}${renderMetricCard("商品六表覆盖GMV", coverage.detailGmv, "money")}${renderMetricCard("商品GMV覆盖率", coverage.coverageRate, "percent")}${renderMetricCard("未解释GMV残差", coverage.residualGmv, "money")}${renderMetricCard("成交概览订单", coverage.overviewOrders, "integer")}${renderMetricCard("商品六表覆盖订单", coverage.detailOrders, "integer")}${renderMetricCard("未解释订单残差", coverage.residualOrders, "integer")}</div></section>`;
-  }
-
   function renderHtml(model, selection = {}) {
     const dimension = DIMENSIONS.includes(selection.dimension) ? selection.dimension : "video";
-    const identity = selection.identity === "all" || IDENTITIES.includes(selection.identity) ? selection.identity : "all";
-    const dm = model.dimensions[dimension];
-    const rows = dimension === "video" && identity !== "all" ? dm.businessRows.filter((row) => row.identity === identity) : dm.businessRows;
-    const fixtureBanner = model.fixtureKind !== "production_candidate"
-      ? `<div class="gy2-banner warn">隔离验收样例｜${esc(model.fixtureKind)}｜不可用于生产发布</div>` : "";
-    const adapterBanner = model.adapterStatus !== "ready"
-      ? `<div class="gy2-banner warn">数据生产线标准事实适配器待最终同版对接：当前只接受 ${FACT_SCHEMA}，不会用旧字段猜值。</div>` : "";
-    const exclusionBanner = model.businessExclusion
-      ? `<div class="gy2-banner na" data-business-exclusion="${esc(model.businessExclusion.code)}"><b>${esc(model.touchpointLabel)}广告投流不适用</b>｜${esc(model.businessExclusion.label)}</div>` : "";
-    const missingBanner = model.requiredMissing.length
-      ? `<div class="gy2-banner bad" data-red-gate="required-unit-missing"><b>${esc(model.touchpointLabel)}数据不完整</b>｜已返回部分仅作明细审计，不作为周期总值｜${model.requiredMissing.map((unit) => `${esc(unit.advertiser_id || "未标账户")} · ${esc(unit.date || unit.period || model.period)} · ${esc(unit.raw_state || unit.source_state || unit.unit_state || "missing")}`).join("；")}</div>` : "";
-    const evidenceBanner = model.evidenceReferences.length
-      ? `<div class="gy2-banner warn" data-evidence-authority="reference-only"><b>参考证据，不参与闭合</b>｜${model.evidenceReferences.map((item) => `${esc(DIMENSION_LABELS[item.materialDimension] || item.materialDimension)} ${esc(metricText(item.metric, "money"))} · ${esc(item.sourceDataset || item.evidenceKind)}${item.note ? ` · ${esc(item.note)}` : ""}`).join("；")}</div>` : "";
-    const accountSource = model.account.sourceDatasets.length ? model.account.sourceDatasets.join("、") : "未返回";
-    const closure = model.closure.status === "passed"
-      ? `<span class="gy2-pill ok" data-closure="passed">三层闭合通过</span>`
-      : model.closure.status === "blocked"
-        ? `<span class="gy2-pill bad" data-closure="blocked">闭合未通过：${esc(model.closure.reasons.join("；") || "证据不完整")}</span>` : "";
-    const dimensionTabs = DIMENSIONS.map((key) => `<button type="button" data-gy2-dimension="${key}" class="${key === dimension ? "on" : ""}">${DIMENSION_LABELS[key]}<small>${completenessText(model.dimensions[key].sourceState, model.dimensions[key].completeness)}</small></button>`).join("");
-    const identityTabs = dimension === "video" ? `<div class="gy2-tabs gy2-identities"><button type="button" data-gy2-identity="all" class="${identity === "all" ? "on" : ""}>全部<small>${dm.businessRows.length} 条</small></button>${IDENTITIES.map((key) => `<button type="button" data-gy2-identity="${esc(key)}" class="${key === identity ? "on" : ""}>${esc(key)}<small>${dm.identityBuckets[key].count} 条</small></button>`).join("")}</div>` : "";
-    const rowsHtml = rows.map((row) => `<tr data-material-row="business" data-identity="${esc(row.identity)}"><td>${esc(row.materialName || row.materialId || "未命名")}</td><td>${esc(row.materialId || "—")}</td>${dimension === "video" ? `<td>${esc(row.identity)}<small>${esc(row.identityEvidence)}</small></td>` : ""}<td>${esc(metricText(row.metrics.overall_cost, "money"))}</td><td>${esc(metricText(row.metrics.overall_gmv, "money"))}</td><td>${esc(metricText(row.metrics.overall_orders, "integer"))}</td><td>${esc(metricText(row.metrics.comparable_roi, "ratio"))}</td><td>${esc(metricText(row.metrics.chengfang_marketing_roi, "ratio"))}</td><td>${esc(metricText(row.metrics.additional_cost, "money"))}</td><td>${esc(metricText(row.metrics.base_cost, "money"))}<small>${esc(baseCostMethodText(row.baseCostMethod))}${metricStateDetailText(row.metrics.base_cost) ? `｜${esc(metricStateDetailText(row.metrics.base_cost))}` : ""}</small></td><td>${esc(metricText(row.metrics.base_gmv, "money"))}${metricStateDetailText(row.metrics.base_gmv) ? `<small>${esc(metricStateDetailText(row.metrics.base_gmv))}</small>` : ""}</td><td>${esc(metricText(row.metrics.base_roi, "ratio"))}</td></tr>`).join("");
-    const noRows = !rows.length ? `<tr><td colspan="12" class="gy2-empty">${dm.sourceState === "missing" ? "未返回" : dm.sourceState === "not_applicable" ? "不适用" : "没有消耗大于0的业务素材"}</td></tr>` : "";
-    const identityCostMetric = dm.aigcAdditivityStatus === "not_applicable"
-      ? { state: "not_applicable", value: null }
-      : dm.aigcAdditivityStatus === "unknown"
-      ? missingMetric()
-      : { state: dm.identityBucketCost === 0 ? "observed_zero" : "observed_value", value: dm.identityBucketCost };
-    const identityStatusText = ({ passed: "通过", blocked: "未通过", unknown: "待视频总值返回后判定", not_applicable: "不适用" })[dm.aigcAdditivityStatus] || "未通过";
-    const identityAudit = dimension === "video" ? `<div class="gy2-audit" data-aigc-additive="false" data-aigc-additivity-status="${esc(dm.aigcAdditivityStatus)}">视频总额已包含 AI 素材；AI 仅是视频身份子集，不再横向相加。五档业务消耗合计 ${metricText(identityCostMetric, "money")}；一致性 ${identityStatusText}。</div>` : "";
-    const baseMethods = Array.from(new Set(dm.rows.map((row) => row.baseCostMethod).filter(Boolean))).map(baseCostMethodText);
-    return `<div class="gy2-root" data-contract="${FACT_SCHEMA}" data-view-schema="${VIEW_SCHEMA}" data-period="${esc(model.period)}" data-selected-dates="${esc(model.selectedDates.join(","))}" data-touchpoint="${esc(model.touchpoint)}">
-<style>.gy2-root{font-family:inherit;color:#3f3728;display:grid;gap:10px}.gy2-toolbar,.gy2-tabs{display:flex;flex-wrap:wrap;gap:6px}.gy2-toolbar button,.gy2-tabs button{border:1px solid #dfcfad;background:#fff;padding:7px 10px;border-radius:8px;color:#62553d;cursor:pointer}.gy2-toolbar button.on,.gy2-tabs button.on{background:#d6a711;color:#fff;border-color:#d6a711}.gy2-toolbar small,.gy2-tabs small{display:block;font-size:9px;opacity:.8}.gy2-banner{padding:9px 12px;border-radius:8px;font-size:12px}.gy2-banner.warn{background:#fff8e8;border:1px solid #e4c56c}.gy2-banner.bad{background:#fbe8e3;border:1px solid #d98770;color:#8b2f22}.gy2-banner.na{background:#f2f4f7;border:1px solid #cfd4dc;color:#525866}.gy2-section{background:#fff;border:1px solid #eadfc9;border-radius:10px;padding:12px}.gy2-title{font-weight:700;margin-bottom:8px}.gy2-sub{font-size:11px;color:#82745c}.gy2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:7px}.gy2-metric{background:#faf7f0;border:1px solid #eee3cf;border-radius:8px;padding:8px}.gy2-label{font-size:10px;color:#8a7d66}.gy2-value{font-size:18px;font-weight:700;margin-top:3px}.gy2-note{font-size:9px;color:#9a8e78;margin-top:3px}.gy2-pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:10px}.gy2-pill.ok{background:#e8f5eb;color:#2e7d46}.gy2-pill.bad{background:#fbe8e3;color:#a23b2d}.gy2-pill.na{background:#eee;color:#666}.gy2-table-wrap{overflow:auto}.gy2-table{border-collapse:collapse;width:100%;font-size:10px}.gy2-table th,.gy2-table td{border-bottom:1px solid #eee3cf;padding:7px;text-align:right;white-space:nowrap}.gy2-table th:first-child,.gy2-table td:first-child{text-align:left;max-width:300px;overflow:hidden;text-overflow:ellipsis}.gy2-table td small{display:block;color:#9a8e78}.gy2-empty{text-align:center!important;color:#9a8e78;padding:18px!important}.gy2-audit{margin-top:7px;padding:7px 9px;background:#f5f7fa;border-radius:7px;color:#667085;font-size:10px}</style>
-${fixtureBanner}${adapterBanner}${exclusionBanner}${missingBanner}${evidenceBanner}
-<div class="gy2-toolbar">${model.periods.map((item) => `<button type="button" data-gy2-period="${esc(item)}" class="${item === model.period ? "on" : ""}">${esc(item)}</button>`).join("")}${model.touchpoints.map((item) => `<button type="button" data-gy2-touchpoint="${esc(item)}" class="${item === model.touchpoint ? "on" : ""}">${esc(TOUCHPOINT_LABELS[item] || item)}</button>`).join("")}</div>
-<section class="gy2-section" data-section="account-total"><div class="gy2-title">🧾 ${esc(model.touchpointLabel)}账户总盘 ${closure}</div><div class="gy2-sub">日期：${esc(model.selectedDates.join("、") || model.period)}｜权威来源：${esc(accountSource)}｜状态：<span class="gy2-pill ${stateClass(model.account.sourceState)}">${completenessText(model.account.sourceState, model.account.completeness)}</span>｜素材维度只作解释，不替代账户总盘。</div><div class="gy2-grid" style="margin-top:8px">${renderMetricCard("整体消耗｜乘方+全域", model.account.metrics.overall_cost, "money")}${renderMetricCard("支付GMV｜乘方+全域", model.account.metrics.overall_gmv, "money")}${renderMetricCard("成交订单｜乘方+全域", model.account.metrics.overall_orders, "integer")}${renderMetricCard("整体支付ROI｜乘方+全域", model.account.metrics.comparable_roi, "ratio")}${renderMetricCard("综合成本｜仅乘方", model.account.metrics.chengfang_composite_cost, "money")}${renderMetricCard("综合营销ROI｜仅乘方", model.account.metrics.chengfang_marketing_roi, "ratio")}</div></section>
-<section class="gy2-section" data-section="additional-base"><div class="gy2-title">🧭 追投 / 底盘（与整体口径分开）</div><div class="gy2-grid">${renderMetricCard("追投消耗", model.account.metrics.additional_cost, "money")}${renderMetricCard("追投GMV", model.account.metrics.additional_gmv, "money")}${renderMetricCard("追投ROI", model.account.metrics.additional_roi, "ratio")}${renderMetricCard("追投占比", model.account.metrics.additional_share, "percent")}${renderMetricCard("底盘消耗", model.account.metrics.base_cost, "money")}${renderMetricCard("底盘GMV", model.account.metrics.base_gmv, "money")}${renderMetricCard("底盘ROI", model.account.metrics.base_roi, "ratio")}</div></section>
-<section class="gy2-section" data-section="material-dimensions"><div class="gy2-title">🎯 素材归因维度（互斥查看，禁止横向合计）</div><div class="gy2-tabs">${dimensionTabs}</div>${identityTabs}<div class="gy2-sub" style="margin:8px 0">当前维度：${esc(dm.label)}｜来源：${esc(dm.sourceDatasets.join("、") || "未返回")}｜状态：<span class="gy2-pill ${stateClass(dm.sourceState)}">${completenessText(dm.sourceState, dm.completeness)}</span>${baseMethods.length ? `｜底盘消耗来源：${esc(baseMethods.join("、"))}` : ""}</div><div class="gy2-grid">${renderMetricCard("维度消耗", dm.metrics.overall_cost, "money")}${renderMetricCard("维度GMV", dm.metrics.overall_gmv, "money")}${renderMetricCard("整体支付ROI", dm.metrics.comparable_roi, "ratio")}${renderMetricCard("乘方综合营销ROI", dm.metrics.chengfang_marketing_roi, "ratio")}${renderMetricCard("维度底盘消耗", dm.metrics.base_cost, "money", baseMethods.length ? `来源：${baseMethods.join("、")}` : "")}${renderMetricCard("维度底盘GMV", dm.metrics.base_gmv, "money")}${renderMetricCard("维度底盘ROI", dm.metrics.base_roi, "ratio")}</div><div class="gy2-table-wrap"><table class="gy2-table"><thead><tr><th>素材</th><th>ID</th>${dimension === "video" ? "<th>身份</th>" : ""}<th>整体消耗</th><th>支付GMV</th><th>订单</th><th>整体ROI</th><th>乘方ROI</th><th>追投消耗</th><th>底盘消耗</th><th>底盘GMV</th><th>底盘ROI</th></tr></thead><tbody>${rowsHtml}${noRows}</tbody></table></div><div class="gy2-audit" data-zero-filter-count="${dm.zeroRowCount}" data-missing-cost-count="${dm.missingCostRowCount}">业务列表仅显示消耗大于0：已过滤真零 ${dm.zeroRowCount} 条；消耗未返回 ${dm.missingCostRowCount} 条。二者仍留在审计计数，不进入业务排行。</div>${identityAudit}</section>
-${renderProductCoverage(model.productCoverage)}</div>`;
+    const ad = model.advertising; const dm = ad.dimensions[dimension];
+    const blocking = model.blockingUnits.length || !model.qualitySummary.ok;
+    return `<div class="gyc-root" data-contract="${FACT_SCHEMA}" data-contract-version="${CONTRACT_VERSION}" data-contract-sha256="${CONTRACT_SCHEMA_SHA256}" data-release-id="${esc(model.releaseId)}" data-source-release-sha256="${esc(model.sourceReleaseSha256)}">
+<style>.gyc-root{font-family:inherit;color:#403829;display:grid;gap:10px}.gyc-banner,.gyc-section{border:1px solid #e6d9bf;border-radius:10px;padding:11px;background:#fff}.gyc-banner.bad{background:#fbe9e5;border-color:#d98770;color:#8b2f22}.gyc-banner.ok{background:#edf8ef;border-color:#acd0af;color:#28673a}.gyc-banner.na{background:#f2f4f7;border-color:#cfd4dc;color:#525866}.gyc-tabs{display:flex;gap:6px;flex-wrap:wrap}.gyc-tabs button{border:1px solid #d8c7a5;background:#fff;border-radius:7px;padding:6px 9px;cursor:pointer}.gyc-tabs button.on{background:#bd910c;color:#fff}.gyc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px;margin-top:8px}.gyc-card{background:#faf7f0;border:1px solid #eee3cf;border-radius:8px;padding:8px;display:grid;gap:3px}.gyc-card small{color:#7e725e}.gyc-card b{font-size:18px}.gyc-card em{font-size:10px;color:#a23b2d;font-style:normal}.gyc-sub{font-size:11px;color:#776b57}.gyc-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11px}.gyc-table th,.gyc-table td{padding:7px;border-bottom:1px solid #eee3cf;text-align:right}.gyc-table th:first-child,.gyc-table td:first-child{text-align:left}.gyc-empty{padding:14px;text-align:center;color:#8c816f}.gyc-pill{display:inline-block;padding:3px 7px;border-radius:999px;background:#eee;font-size:10px}.gyc-pill.bad{background:#fbe9e5;color:#8b2f22}</style>
+<div class="gyc-banner ${blocking ? "bad" : "ok"}" data-release-complete="${model.complete}"><b>${blocking ? "标准日包存在阻断，部分值不得冒充周期总值" : "标准日包四域完整"}</b>｜${esc(model.dates.join("、"))}｜合同 ${CONTRACT_VERSION} / ${CONTRACT_SCHEMA_SHA256.slice(0, 12)}…</div>
+<div class="gyc-tabs">${model.touchpoints.map((item) => `<button type="button" data-gyc-touchpoint="${item}" class="${item === model.touchpoint ? "on" : ""}">${esc(TOUCHPOINT_LABELS[item])}</button>`).join("")}</div>
+${ad.ownerExcluded ? `<div class="gyc-banner na" data-owner-excluded="creator_live_advertising">${esc(ad.exclusionReason)}</div>` : `<section class="gyc-section" data-section="advertising-account"><b>${esc(ad.label)}广告账户总盘</b><div class="gyc-sub">账户总盘只取账户权威，绝不由视频/图片/直播间画面求和替代。状态：${stateText(ad.account.state)}</div><div class="gyc-grid">${card("整体消耗", ad.account.metrics.overall_cost)}${card("整体GMV", ad.account.metrics.overall_gmv)}${card("订单", ad.account.metrics.overall_orders, "integer")}${card("整体ROI", ad.account.metrics.comparable_roi, "ratio")}${card("乘方综合成本", ad.account.metrics.chengfang_composite_cost)}${card("乘方营销ROI", ad.account.metrics.chengfang_marketing_roi, "ratio")}</div></section>
+<section class="gyc-section" data-section="advertising-material"><b>素材维度互斥查看（禁止视频/图片/直播间画面横加）</b><div class="gyc-tabs">${DIMENSIONS.map((item) => `<button type="button" data-gyc-dimension="${item}" class="${item === dimension ? "on" : ""}">${esc(DIMENSION_LABELS[item])} · ${stateText(ad.dimensions[item].state)}</button>`).join("")}</div><div class="gyc-grid">${card("维度消耗", dm.metrics.overall_cost)}${card("维度GMV", dm.metrics.overall_gmv)}${card("展示", dm.metrics.show, "integer")}${card("点击", dm.metrics.click, "integer")}${card("底盘消耗", dm.metrics.base_cost)}${card("追投消耗", dm.metrics.additional_cost)}</div>${renderRows(dm.rows, dimension)}<div class="gyc-sub" data-aigc-status="${dm.aigcStatus}">AIGC只作为视频身份标签，不与五桶重复相加；视频身份一致性：${esc(dm.aigcStatus)}。真零 ${dm.zeroCount} 条，缺失 ${dm.missingCount} 条。</div></section>`}
+<section class="gyc-section" data-section="sales"><b>罗盘销售</b><div class="gyc-sub">全店总盘只取 shop 权威；商品六表只作渠道/商品解释，不替代全店总盘。达播销售保留 ${model.sales.creatorLiveRows.length} 条。</div><div class="gyc-grid">${card("成交GMV", model.sales.shop.metrics.gmv)}${card("净GMV", model.sales.shop.metrics.net_gmv)}${card("订单", model.sales.shop.metrics.orders, "integer")}${card("买家", model.sales.shop.metrics.buyers, "integer")}${card("退款金额（支付时间）", model.sales.shop.metrics.refund_amount_payment_time)}</div></section>
+<section class="gyc-section" data-section="refund"><b>罗盘退款（支付时间口径）</b><div class="gyc-grid">${card("退款金额", model.refund.metrics.refund_amount)}${card("退款订单", model.refund.metrics.refund_orders, "integer")}</div></section>
+<section class="gyc-section" data-section="live-operations"><b>飞书直播运营</b><div class="gyc-sub">只作运营事实，不代替千川广告或罗盘销售。</div><div class="gyc-grid">${card("曝光", model.liveOperations.metrics.exp, "integer")}${card("观看", model.liveOperations.metrics.view, "integer")}${card("运营GMV", model.liveOperations.metrics.gmv)}${card("运营成本", model.liveOperations.metrics.cost)}${card("商品点击率", model.liveOperations.metrics.click_rate, "percent")}${card("点击成交率", model.liveOperations.metrics.click_to_deal_rate, "percent")}</div></section>
+<div class="gyc-banner na" data-target-authority="D1">销售目标不在经营事实包中；页面运行时只读 D1 目标服务。</div></div>`;
   }
-
   function renderInto(element, input, selection = {}) {
-    const contract = parseContract(input);
-    const state = Object.assign({ period: contract.default_period || resolvePeriods(contract)[0], touchpoint: contract.default_touchpoint || "self_live", dimension: "video", identity: "all" }, element.__gy2Selection || {}, selection || {});
-    const model = buildTouchpointModel(contract, state);
-    state.period = model.period;
-    state.dates = model.selectedDates;
-    state.touchpoint = model.touchpoint;
-    element.__gy2Selection = state;
-    element.innerHTML = renderHtml(model, state);
-    element.querySelectorAll("[data-gy2-period]").forEach((button) => button.addEventListener("click", () => {
-      state.period = button.getAttribute("data-gy2-period");
-      state.dates = resolveSelectionDates(contract, {}, state.period);
-      state.touchpoint = resolveTouchpoints(contract, state.period, state.dates)[0] || state.touchpoint;
-      renderInto(element, contract, state);
-    }));
-    element.querySelectorAll("[data-gy2-touchpoint]").forEach((button) => button.addEventListener("click", () => { state.touchpoint = button.getAttribute("data-gy2-touchpoint"); renderInto(element, contract, state); }));
-    element.querySelectorAll("[data-gy2-dimension]").forEach((button) => button.addEventListener("click", () => { state.dimension = button.getAttribute("data-gy2-dimension"); state.identity = "all"; renderInto(element, contract, state); }));
-    element.querySelectorAll("[data-gy2-identity]").forEach((button) => button.addEventListener("click", () => { state.identity = button.getAttribute("data-gy2-identity"); renderInto(element, contract, state); }));
+    const state = Object.assign({ touchpoint: "self_live", dimension: "video" }, element.__gyCanonicalSelection || {}, selection);
+    const model = buildDashboardModel(input, state); element.__gyCanonicalSelection = state; element.innerHTML = renderHtml(model, state);
+    element.querySelectorAll("[data-gyc-touchpoint]").forEach((button) => button.addEventListener("click", () => { state.touchpoint = button.getAttribute("data-gyc-touchpoint"); renderInto(element, input, state); }));
+    element.querySelectorAll("[data-gyc-dimension]").forEach((button) => button.addEventListener("click", () => { state.dimension = button.getAttribute("data-gyc-dimension"); renderInto(element, input, state); }));
     return model;
   }
-
-  function isExplicitPreviewMode(pageRoot) {
-    if (pageRoot.__GY_FULL_DASHBOARD_PREVIEW_MODE__ === true) return true;
-    try { return new URL(pageRoot.location.href).searchParams.get("gy2preview") === "1"; } catch { return false; }
+  function loadPageRelease(pageRoot) {
+    return pageRoot.__GY_STANDARD_FACT_RELEASE_V1__ ? parseContract(pageRoot.__GY_STANDARD_FACT_RELEASE_V1__) : null;
   }
-
-  function loadPageContract(pageRoot) {
-    if (pageRoot.__GY_AD_PERFORMANCE_STANDARD_FACT_V2__) return parseContract(pageRoot.__GY_AD_PERFORMANCE_STANDARD_FACT_V2__);
-    if (isExplicitPreviewMode(pageRoot)) {
-      try {
-        const raw = pageRoot.localStorage && pageRoot.localStorage.getItem("gy_ad_performance_standard_fact_v2_preview");
-        if (raw) return parseContract(raw);
-      } catch {}
-    }
-    return null;
-  }
-
   function installPage(pageRoot) {
-    if (!pageRoot || !pageRoot.document || pageRoot.__GY_FULL_DASHBOARD_CONSUMER_INSTALLED__) return false;
-    pageRoot.__GY_FULL_DASHBOARD_CONSUMER_INSTALLED__ = true;
+    if (!pageRoot || !pageRoot.document || pageRoot.__GY_CANONICAL_DASHBOARD_CONSUMER_INSTALLED__) return false;
+    pageRoot.__GY_CANONICAL_DASHBOARD_CONSUMER_INSTALLED__ = true;
     const touchpointMap = { zibo: "self_live", dabo: "creator_live", zy_shelf: "self_shelf", dy_short: "creator_short_video" };
-    function contract() { try { return loadPageContract(pageRoot); } catch (error) { pageRoot.__GY_FULL_DASHBOARD_UI_STATE__ = { installed: true, rendered: false, error: error.message }; return null; } }
+    function release() { try { return loadPageRelease(pageRoot); } catch (error) { pageRoot.__GY_CANONICAL_DASHBOARD_STATE__ = { installed: true, rendered: false, error: error.message }; return null; } }
     function mountPreview() {
-      const current = contract();
-      if (!current) return;
-      let host = pageRoot.document.getElementById("gyFullDashboardReworkPreview");
-      if (!host) {
-        host = pageRoot.document.createElement("div");
-        host.id = "gyFullDashboardReworkPreview";
-        host.style.cssText = "padding:18px;max-width:1500px;margin:0 auto";
-        pageRoot.document.body.appendChild(host);
-      }
-      renderInto(host, current, {});
-      pageRoot.__GY_FULL_DASHBOARD_UI_STATE__ = { installed: true, rendered: true, mode: "isolated_preview", schema: current.schema };
+      const current = release(); if (!current) return;
+      let host = pageRoot.document.getElementById("gyCanonicalDashboardPreview");
+      if (!host) { host = pageRoot.document.createElement("div"); host.id = "gyCanonicalDashboardPreview"; host.style.cssText = "padding:18px;max-width:1500px;margin:0 auto"; pageRoot.document.body.appendChild(host); }
+      renderInto(host, current, {}); pageRoot.__GY_CANONICAL_DASHBOARD_STATE__ = { installed: true, rendered: true, mode: "isolated_preview", schema: current.schema };
     }
-    const preview = isExplicitPreviewMode(pageRoot);
-    if (preview) {
-      if (pageRoot.document.readyState === "loading") pageRoot.document.addEventListener("DOMContentLoaded", mountPreview, { once: true });
-      else mountPreview();
-    }
+    let preview = pageRoot.__GY_CANONICAL_DASHBOARD_PREVIEW_MODE__ === true;
+    try { preview = preview || new URL(pageRoot.location.href).searchParams.get("gycanonicalpreview") === "1"; } catch {}
+    if (preview) { if (pageRoot.document.readyState === "loading") pageRoot.document.addEventListener("DOMContentLoaded", mountPreview, { once: true }); else mountPreview(); }
     const original = pageRoot.renderTouliu;
     if (typeof original === "function") {
-      pageRoot.renderTouliu = function renderTouliuWithV2Consumer() {
-        const result = original.apply(this, arguments);
-        const current = contract();
-        const element = pageRoot.document.getElementById("touliuMod");
+      pageRoot.renderTouliu = function renderTouliuWithCanonicalConsumer() {
+        const result = original.apply(this, arguments); const current = release(); const element = pageRoot.document.getElementById("touliuMod");
         if (current && element) {
-          const touchpoint = touchpointMap[String(pageRoot.ch || "")] || current.default_touchpoint;
-          const period = String(pageRoot.per || current.default_period || resolvePeriods(current)[0] || "");
-          const dashboardDates = pageRoot.D && pageRoot.D.periods && pageRoot.D.periods[period] && Array.isArray(pageRoot.D.periods[period].dates)
-            ? pageRoot.D.periods[period].dates : resolveSelectionDates(current, {}, period);
-          const model = renderInto(element, current, { period, dates: dashboardDates, touchpoint });
-          pageRoot.__GY_FULL_DASHBOARD_UI_STATE__ = { installed: true, rendered: true, mode: "dashboard", period, selected_dates: model.selectedDates, touchpoint, schema: current.schema };
+          const touchpoint = touchpointMap[String(pageRoot.ch || "")] || "self_live";
+          const period = String(pageRoot.per || "");
+          const dates = pageRoot.D && pageRoot.D.periods && pageRoot.D.periods[period] && Array.isArray(pageRoot.D.periods[period].dates) ? pageRoot.D.periods[period].dates : current.target_dates;
+          const model = renderInto(element, current, { period, dates, touchpoint });
+          pageRoot.__GY_CANONICAL_DASHBOARD_STATE__ = { installed: true, rendered: true, mode: "dashboard", dates: model.dates, touchpoint, schema: current.schema };
         }
         return result;
       };
     }
-    if (!pageRoot.__GY_FULL_DASHBOARD_UI_STATE__) pageRoot.__GY_FULL_DASHBOARD_UI_STATE__ = { installed: true, rendered: false, reason: "v2_contract_not_present" };
+    if (!pageRoot.__GY_CANONICAL_DASHBOARD_STATE__) pageRoot.__GY_CANONICAL_DASHBOARD_STATE__ = { installed: true, rendered: false, reason: "canonical_release_not_present" };
     return true;
   }
 
   return Object.freeze({
-    SCHEMA, FACT_SCHEMA, VIEW_SCHEMA, SOURCE_STATES, VALUE_STATES, DIMENSIONS, IDENTITIES,
-    parseContract, normalizeMetric, normalizedSourceState, normalizeRequiredUnit, resolveSelectionDates,
-    metricText, buildTouchpointModel, renderHtml, renderInto, loadPageContract, installPage,
+    FACT_SCHEMA, CONTRACT_VERSION, CONTRACT_SCHEMA_SHA256, MACHINE_CONTRACT_SHA256, VIEW_SCHEMA,
+    VALUE_STATES, UNIT_STATES, TOUCHPOINTS, DIMENSIONS, IDENTITIES,
+    parseContract, normalizeMetric, selectedDates, buildDashboardModel, metricText, renderHtml, renderInto, loadPageRelease, installPage,
   });
 });
-</script><script id="__gyFullDashboardConsumerInstall">if(window.GYFullDashboardConsumer){window.GYFullDashboardConsumer.installPage(window);}</script></body></html>
+</script><script id="__gyCanonicalDashboardConsumerInstall">if(window.GYCanonicalDashboardConsumer){window.GYCanonicalDashboardConsumer.installPage(window);}</script></body></html>
 
 
