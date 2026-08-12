@@ -4961,6 +4961,10 @@ buildTgt();renderActions();
     "additional_cost", "additional_gmv", "additional_roi", "additional_share",
     "base_cost", "base_gmv", "base_roi", "show", "click", "ctr", "cvr", "cpm",
   ]);
+  const IMAGE_ASSIST_NOT_APPLICABLE_METRICS = new Set([
+    "additional_cost", "additional_gmv", "additional_roi", "additional_share",
+    "base_cost", "base_gmv", "base_roi",
+  ]);
   const METRIC_CONTRACT = Object.freeze({
     overall_cost: Object.freeze({ scope: "combined" }),
     overall_gmv: Object.freeze({ scope: "combined" }),
@@ -5005,6 +5009,15 @@ buildTgt();renderActions();
     return Math.round((Number(value) + Number.EPSILON) * p) / p;
   }
 
+  function metricApplicability(dimension, unitApplicability, name) {
+    if (unitApplicability === "not_applicable") return "not_applicable";
+    if (dimension === "account" && ["show", "click", "ctr", "cvr", "cpm", "base_cost"].includes(name)) {
+      return "not_applicable";
+    }
+    if (dimension === "image" && IMAGE_ASSIST_NOT_APPLICABLE_METRICS.has(name)) return "not_applicable";
+    return "required";
+  }
+
   function parseContract(input) {
     let value = typeof input === "string" ? JSON.parse(input) : input;
     if (Array.isArray(value)) value = { schema: FACT_SCHEMA, facts: value };
@@ -5045,16 +5058,16 @@ buildTgt();renderActions();
           throw new Error(`fact_metric_scope_mismatch:${index}:${name}:expected=${METRIC_CONTRACT[name].scope}:actual=${metric.metric_scope || "missing"}`);
         }
         if (!String(metric.derivation || "").trim()) throw new Error(`fact_metric_derivation_missing:${index}:${name}`);
-        const expectedFormula = expectedApplicability === "not_applicable"
+        const metricApplicabilityState = metricApplicability(dimension, expectedApplicability, name);
+        const expectedFormula = metricApplicabilityState === "not_applicable"
           ? "not_applicable"
-          : (dimension === "account" && ["ctr", "cvr", "cpm"].includes(name))
-            ? "not_applicable" : METRIC_CONTRACT[name].formula;
+          : METRIC_CONTRACT[name].formula;
         if (expectedFormula && metric.derivation !== expectedFormula) {
           throw new Error(`fact_metric_formula_label_mismatch:${index}:${name}:expected=${expectedFormula}:actual=${metric.derivation}`);
         }
         const normalized = normalizeCanonicalMetric(metric);
         if (normalized.issue) throw new Error(`fact_metric_value_invalid:${index}:${name}:${normalized.issue}`);
-        if (expectedApplicability === "not_applicable" && normalized.state !== "not_applicable") {
+        if (metricApplicabilityState === "not_applicable" && normalized.state !== "not_applicable") {
           throw new Error(`fact_not_applicable_metric_state_required:${index}:${name}`);
         }
       }
@@ -5073,6 +5086,15 @@ buildTgt();renderActions();
         if (fact.metrics.base_cost.value_state !== "not_applicable" || baseCostMethod !== "not_applicable") {
           throw new Error(`fact_account_base_cost_not_applicable_required:${index}`);
         }
+      }
+      if (dimension === "image") {
+        for (const name of IMAGE_ASSIST_NOT_APPLICABLE_METRICS) {
+          const metric = fact.metrics[name];
+          if (metric.value_state !== "not_applicable" || metric.value !== null || metric.derivation !== "not_applicable") {
+            throw new Error(`fact_image_assist_metric_not_applicable_required:${index}:${name}`);
+          }
+        }
+        if (baseCostMethod !== "not_applicable") throw new Error(`fact_image_base_cost_method_not_applicable_required:${index}`);
       }
       validateSameSourceFormulaMetrics(fact, index);
       validateBaseCostContract(fact, index);
@@ -5135,6 +5157,7 @@ buildTgt();renderActions();
     const metrics = Object.fromEntries(METRIC_NAMES.map((name) => [name, normalizeCanonicalMetric(fact.metrics[name])]));
     const unitNotApplicable = fact.unit_applicability === "not_applicable";
     const processNotApplicable = fact.material_dimension === "account" || fact.unit_applicability === "not_applicable";
+    const imageAssistNotApplicable = fact.material_dimension === "image" && !unitNotApplicable;
     const expected = unitNotApplicable ? {
       comparable_roi: { state: "not_applicable", value: null },
       additional_roi: { state: "not_applicable", value: null },
@@ -5146,10 +5169,10 @@ buildTgt();renderActions();
       cpm: { state: "not_applicable", value: null },
     } : {
       comparable_roi: ratioMetric(metrics.overall_gmv, metrics.overall_cost),
-      additional_roi: ratioMetric(metrics.additional_gmv, metrics.additional_cost),
-      additional_share: ratioMetric(metrics.additional_cost, metrics.overall_cost),
-      base_gmv: differenceMetric(metrics.overall_gmv, metrics.additional_gmv),
-      base_roi: ratioMetric(metrics.base_gmv, metrics.base_cost),
+      additional_roi: imageAssistNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.additional_gmv, metrics.additional_cost),
+      additional_share: imageAssistNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.additional_cost, metrics.overall_cost),
+      base_gmv: imageAssistNotApplicable ? { state: "not_applicable", value: null } : differenceMetric(metrics.overall_gmv, metrics.additional_gmv),
+      base_roi: imageAssistNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.base_gmv, metrics.base_cost),
       ctr: processNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.click, metrics.show),
       cvr: processNotApplicable ? { state: "not_applicable", value: null } : ratioMetric(metrics.overall_orders, metrics.click),
       cpm: processNotApplicable ? { state: "not_applicable", value: null } : scaledRatioMetric(metrics.overall_cost, metrics.show, 1000),
@@ -5167,11 +5190,17 @@ buildTgt();renderActions();
     const method = fact.metrics.base_cost_method;
     const baseCost = normalizeCanonicalMetric(fact.metrics.base_cost);
     if (dimension === "account" || fact.unit_applicability === "not_applicable") return;
+    if (dimension === "image") {
+      if (method !== "not_applicable" || baseCost.state !== "not_applicable" || fact.metrics.base_cost.derivation !== "not_applicable") {
+        throw new Error(`fact_image_base_cost_not_applicable_contract_mismatch:${index}`);
+      }
+      return;
+    }
     const formulaBase = differenceMetric(
       normalizeCanonicalMetric(fact.metrics.overall_cost),
       normalizeCanonicalMetric(fact.metrics.additional_cost),
     );
-    if (["video", "image"].includes(dimension)) {
+    if (dimension === "video") {
       if (method !== "formula_fallback"
           || fact.metrics.base_cost.derivation !== "overall_cost - additional_cost"
           || !sameMetric(baseCost, formulaBase)
@@ -5328,16 +5357,17 @@ buildTgt();renderActions();
   function aggregateAccountMetrics(rows) {
     const output = {};
     const accountGrain = rows.length > 0 && rows.every((row) => row.materialDimension === "account");
+    const imageGrain = rows.length > 0 && rows.every((row) => row.materialDimension === "image");
     ["overall_cost", "overall_gmv", "overall_orders", "chengfang_composite_cost", "additional_cost", "additional_gmv", "base_cost", "show", "click"].forEach((name) => {
       output[name] = aggregateMetric(rows, name);
     });
     output.comparable_roi = ratioMetric(output.overall_gmv, output.overall_cost);
-    output.additional_roi = ratioMetric(output.additional_gmv, output.additional_cost);
-    output.additional_share = ratioMetric(output.additional_cost, output.overall_cost);
-    output.base_gmv = differenceMetric(output.overall_gmv, output.additional_gmv);
+    output.additional_roi = imageGrain ? { state: "not_applicable", value: null } : ratioMetric(output.additional_gmv, output.additional_cost);
+    output.additional_share = imageGrain ? { state: "not_applicable", value: null } : ratioMetric(output.additional_cost, output.overall_cost);
+    output.base_gmv = imageGrain ? { state: "not_applicable", value: null } : differenceMetric(output.overall_gmv, output.additional_gmv);
     const baseGmvConflict = rows.some((row) => row.metrics.base_gmv?.stateDetail === "negative_derived_difference");
     if (baseGmvConflict) output.base_gmv = { state: "missing", value: null, stateDetail: "negative_derived_difference" };
-    output.base_roi = ratioMetric(output.base_gmv, output.base_cost);
+    output.base_roi = imageGrain ? { state: "not_applicable", value: null } : ratioMetric(output.base_gmv, output.base_cost);
     output.chengfang_marketing_roi = weightedSourceRatio(rows, "chengfang_marketing_roi", "chengfang_composite_cost");
     output.ctr = accountGrain ? { state: "not_applicable", value: null } : ratioMetric(output.click, output.show);
     output.cvr = accountGrain ? { state: "not_applicable", value: null } : ratioMetric(output.overall_orders, output.click);
