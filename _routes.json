@@ -3,6 +3,7 @@
   "include": [
     "/data/store.json",
     "/hashes.txt",
+    "/api/targets",
     "/api/admin/*"
   ],
   "exclude": []
