@@ -1,0 +1,98 @@
+name: Guoyun exact mirror sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: Compact target date (YYYYMMDD)
+        required: true
+        type: string
+      revision:
+        description: Exact workbench revision
+        required: true
+        type: string
+      store_sha256:
+        description: Exact SHA-256 of data/store.json
+        required: true
+        type: string
+      hashes_sha256:
+        description: Exact SHA-256 of hashes.txt
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: guoyun-exact-mirror-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TARGET_DATE: ${{ inputs.target_date }}
+      REVISION: ${{ inputs.revision }}
+      STORE_SHA256: ${{ inputs.store_sha256 }}
+      HASHES_SHA256: ${{ inputs.hashes_sha256 }}
+      STORE_URL: https://guoyun-dashboard-20260710.pages.dev/data/store.json
+      HASHES_URL: https://guoyun-dashboard-20260710.pages.dev/hashes.txt
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download and verify exact public bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TARGET_DATE" =~ ^20[0-9]{6}$ ]]
+          [[ "$REVISION" =~ ^wb-auto-[A-Za-z0-9-]+$ ]]
+          [[ "$STORE_SHA256" =~ ^[A-F0-9]{64}$ ]]
+          [[ "$HASHES_SHA256" =~ ^[A-F0-9]{64}$ ]]
+
+          cache_bust="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          curl --fail --location --silent --show-error --retry 0 \
+            "${STORE_URL}?_gy_mirror=${cache_bust}" -o /tmp/store.json
+          curl --fail --location --silent --show-error --retry 0 \
+            "${HASHES_URL}?_gy_mirror=${cache_bust}" -o /tmp/hashes.txt
+
+          test "$(sha256sum /tmp/store.json | awk '{print toupper($1)}')" = "$STORE_SHA256"
+          test "$(sha256sum /tmp/hashes.txt | awk '{print toupper($1)}')" = "$HASHES_SHA256"
+          node -e '
+            const fs = require("fs");
+            const store = JSON.parse(fs.readFileSync("/tmp/store.json", "utf8"));
+            if (store?.workbench?.revision !== process.env.REVISION) {
+              throw new Error("mirror_store_revision_mismatch");
+            }
+            if (!String(fs.readFileSync("/tmp/hashes.txt", "utf8")).includes(process.env.STORE_SHA256)) {
+              throw new Error("mirror_hashes_store_sha_missing");
+            }
+          '
+
+      - name: Commit exact mirror bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data
+          cp /tmp/store.json data/store.json
+          cp /tmp/hashes.txt hashes.txt
+          git config user.name "Guoyun Dashboard Automation"
+          git config user.email "guoyun-dashboard-automation@users.noreply.github.com"
+          git add -- data/store.json hashes.txt
+          if git diff --cached --quiet; then
+            echo "Mirror already contains the exact bytes."
+            exit 0
+          fi
+          git commit -m "sync(workbench): ${REVISION}"
+          git push origin HEAD:main
+
+      - name: Verify committed bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(sha256sum data/store.json | awk '{print toupper($1)}')" = "$STORE_SHA256"
+          test "$(sha256sum hashes.txt | awk '{print toupper($1)}')" = "$HASHES_SHA256"
+          test "$(git ls-tree -r --name-only HEAD | grep -c '^data/store.json$')" = "1"
+          test "$(git ls-tree -r --name-only HEAD | grep -c '^hashes.txt$')" = "1"
